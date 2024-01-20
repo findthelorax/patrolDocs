@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 const AreaSchema = require('./areaModel');
-const EquipmentSchema = require('./equipmentModel');
+const EquipmentSchema = require('../equipment/equipmentModel');
+const PaperworkSchema = require('./paperworkModel');
 
 const HutSchema = new mongoose.Schema({
     name: String,
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain' },
     area: AreaSchema,
     equipment: [EquipmentSchema],
+    paperwork: PaperworkSchema,
     cleaningLog: [{
         cleanedOn: Date,
         cleanedBy: { type: Schema.Types.ObjectId, ref: 'Patroller' },

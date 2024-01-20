@@ -1,10 +1,10 @@
 const Conditions = {
-    POWDER: 'P',
-    SOFT: 'S',
-    HARD: 'H',
-    VARIABLE: 'V',
-    GROOMED: 'G',
-    MOGULS: 'M',
+    Powder: false,
+    Soft: false,
+    Hard: false,
+    Variable: false,
+    Groomed: false,
+    Moguls: false,
 };
 
 module.exports = Conditions;

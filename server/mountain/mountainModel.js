@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const RunSchema = require('./runModel');
+const RunSchema = require('../run/runModel');
 
 const AreaSchema = new mongoose.Schema({
 	name: String,

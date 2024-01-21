@@ -11,7 +11,7 @@ exports.getAllEquipments = async (req, res) => {
 
 exports.getEquipment = async (req, res) => {
     try {
-        const equipment = await Equipment.findById(req.params.id).populate('checkLog.checkedBy');
+        const equipment = await Equipment.findById(req.params.equipmentId).populate('checkLog.checkedBy');
         if (!equipment) return res.status(404).json({ message: 'No equipment found with this ID' });
         res.status(200).json(equipment);
     } catch (err) {
@@ -20,18 +20,22 @@ exports.getEquipment = async (req, res) => {
 };
 
 exports.createEquipment = async (req, res) => {
+    const equipment = new Equipment(req.body);
     try {
-        const newEquipment = new Equipment(req.body);
-        const equipment = await newEquipment.save();
-        res.status(201).json(equipment);
+        const newEquipment = await equipment.save();
+        res.status(201).json(newEquipment);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        if (err.code === 11000) {
+            res.status(400).json({ message: 'Equipment idNumber must be unique' });
+        } else {
+            res.status(400).json({ message: err.message });
+        }
     }
 };
 
 exports.updateEquipment = async (req, res) => {
     try {
-        const updatedEquipment = await Equipment.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedEquipment = await Equipment.findByIdAndUpdate(req.params.equipmentId, req.body, { new: true });
         if (!updatedEquipment) return res.status(404).json({ message: 'No equipment found with this ID' });
         res.status(200).json(updatedEquipment);
     } catch (err) {
@@ -41,7 +45,7 @@ exports.updateEquipment = async (req, res) => {
 
 exports.deleteEquipment = async (req, res) => {
     try {
-        const equipment = await Equipment.findByIdAndDelete(req.params.id);
+        const equipment = await Equipment.findByIdAndDelete(req.params.equipmentId);
         if (!equipment) return res.status(404).json({ message: 'No equipment found with this ID' });
         res.status(204).json(null);
     } catch (err) {

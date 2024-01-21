@@ -11,7 +11,7 @@ exports.getAllPatrollers = async (req, res) => {
 
 exports.getPatroller = async (req, res) => {
     try {
-        const patroller = await Patroller.findById(req.params.id).populate('mountain');
+        const patroller = await Patroller.findById(req.params.patrollerId).populate('mountain');
         if (patroller == null) {
             return res.status(404).json({ message: 'Cannot find patroller' });
         }
@@ -22,23 +22,22 @@ exports.getPatroller = async (req, res) => {
 };
 
 exports.addPatroller = async (req, res) => {
-    const patroller = new Patroller({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        position: req.body.position,
-        mountain: req.body.mountain
-    });
+    const patroller = new Patroller(req.body);
     try {
         const newPatroller = await patroller.save();
         res.status(201).json(newPatroller);
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        if (err.code === 11000) {
+            res.status(400).json({ message: 'A patroller with the same first and last name already exists' });
+        } else {
+            res.status(400).json({ message: err.message });
+        }
     }
 };
 
 exports.updatePatroller = async (req, res) => {
     try {
-        const updatedPatroller = await Patroller.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedPatroller = await Patroller.findByIdAndUpdate(req.params.patrollerId, req.body, { new: true });
         res.status(200).json(updatedPatroller);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -47,7 +46,7 @@ exports.updatePatroller = async (req, res) => {
 
 exports.deletePatroller = async (req, res) => {
     try {
-        await Patroller.findByIdAndRemove(req.params.id);
+        await Patroller.findByIdAndRemove(req.params.patrollerId);
         res.status(200).json({ message: 'Deleted Patroller' });
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -56,7 +55,7 @@ exports.deletePatroller = async (req, res) => {
 
 exports.addMountainToPatroller = async (req, res) => {
     try {
-        const patroller = await Patroller.findById(req.params.id);
+        const patroller = await Patroller.findById(req.params.patrollerId);
         patroller.mountains.push(req.params.mountainId);
         const updatedPatroller = await patroller.save();
         res.status(200).json(updatedPatroller);
@@ -67,7 +66,7 @@ exports.addMountainToPatroller = async (req, res) => {
 
 exports.removeMountainFromPatroller = async (req, res) => {
     try {
-        const patroller = await Patroller.findById(req.params.id);
+        const patroller = await Patroller.findById(req.params.patrollerId);
         const index = patroller.mountains.indexOf(req.params.mountainId);
         if (index > -1) {
             patroller.mountains.splice(index, 1);

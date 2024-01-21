@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const HutSchema = new mongoose.Schema({
-    name: String,
+    name: { type: String, unique: true },
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     equipment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Equipment' }],

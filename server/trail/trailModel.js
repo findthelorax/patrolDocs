@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const TrailSchema = new mongoose.Schema({
-    name: String,
+    name: { type: String, required: true, unique: true },
     difficulty: String,
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },

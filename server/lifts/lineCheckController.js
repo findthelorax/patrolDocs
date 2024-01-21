@@ -11,9 +11,7 @@ exports.getAllLineChecks = async (req, res) => {
 
 exports.getLineCheck = async (req, res) => {
     try {
-        const mountainId = req.params.mountainId;
-        const liftId = req.params.id;
-        const lineCheck = await LineCheck.findOne({ _id: req.params.lineCheckId, mountain: mountainId, lift: liftId }).populate('mountain area lift patroller');
+        const lineCheck = await LineCheck.findOne({ _id: req.params.lineCheckId, mountain: req.params.mountainId, lift: req.params.liftId }).populate('mountain area lift patroller');
         if (!lineCheck) return res.status(404).json({ message: 'No line check found with this ID' });
         res.status(200).json(lineCheck);
     } catch (err) {
@@ -23,9 +21,7 @@ exports.getLineCheck = async (req, res) => {
 
 exports.createLineCheck = async (req, res) => {
     try {
-        const mountainId = req.params.mountainId;
-        const liftId = req.params.id;
-        const newLineCheck = new LineCheck({ ...req.body, mountain: mountainId, lift: liftId });
+        const newLineCheck = new LineCheck({ ...req.body, mountain: req.params.mountainId, lift: req.params.liftId });
         const lineCheck = await newLineCheck.save();
 
         // Find the lift and add the new line check to its lineChecks array
@@ -41,9 +37,7 @@ exports.createLineCheck = async (req, res) => {
 
 exports.updateLineCheck = async (req, res) => {
     try {
-        const mountainId = req.params.mountainId;
-        const liftId = req.params.id;
-        const updatedLineCheck = await LineCheck.findOneAndUpdate({ _id: req.params.lineCheckId, mountain: mountainId, lift: liftId }, req.body, { new: true });
+        const updatedLineCheck = await LineCheck.findOneAndUpdate({ _id: req.params.lineCheckId, mountain: req.params.mountainId, lift: req.params.liftId }, req.body, { new: true });
         if (!updatedLineCheck) return res.status(404).json({ message: 'No line check found with this ID' });
         res.status(200).json(updatedLineCheck);
     } catch (err) {
@@ -53,9 +47,7 @@ exports.updateLineCheck = async (req, res) => {
 
 exports.deleteLineCheck = async (req, res) => {
     try {
-        const mountainId = req.params.mountainId;
-        const liftId = req.params.id;
-        const lineCheck = await LineCheck.findOneAndDelete({ _id: req.params.lineCheckId, mountain: mountainId, lift: liftId });
+        const lineCheck = await LineCheck.findOneAndDelete({ _id: req.params.lineCheckId, mountain: req.params.mountainId, lift: req.params.liftId });
         if (!lineCheck) return res.status(404).json({ message: 'No line check found with this ID' });
         res.status(204).json(null);
     } catch (err) {

@@ -12,7 +12,7 @@ exports.getAllLifts = async (req, res) => {
 
 exports.getLift = async (req, res) => {
     try {
-        const lift = await Lift.findById(req.params.id);
+        const lift = await Lift.findById(req.params.liftId);
         if (!lift) return res.status(404).json({ message: 'No lift found with this ID' });
         res.status(200).json(lift);
     } catch (err) {
@@ -53,7 +53,7 @@ exports.createLift = async (req, res) => {
 
 exports.updateLift = async (req, res) => {
     try {
-        const updatedLift = await Lift.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedLift = await Lift.findByIdAndUpdate(req.params.liftId, req.body, { new: true });
         if (!updatedLift) return res.status(404).json({ message: 'No lift found with this ID' });
         res.status(200).json(updatedLift);
     } catch (err) {
@@ -63,8 +63,32 @@ exports.updateLift = async (req, res) => {
 
 exports.deleteLift = async (req, res) => {
     try {
-        const lift = await Lift.findByIdAndDelete(req.params.id);
+        const lift = await Lift.findById(req.params.liftId);
         if (!lift) return res.status(404).json({ message: 'No lift found with this ID' });
+
+        // Find the mountain that contains the lift and remove the lift's reference
+        const mountain = await Mountain.findOne({ lifts: lift._id });
+        if (mountain) {
+            const index = mountain.lifts.indexOf(lift._id);
+            if (index > -1) {
+                mountain.lifts.splice(index, 1);
+                await mountain.save();
+            }
+        }
+
+        // Find the area that contains the lift and remove the lift's reference
+        const area = await Area.findOne({ lifts: lift._id });
+        if (area) {
+            const index = area.lifts.indexOf(lift._id);
+            if (index > -1) {
+                area.lifts.splice(index, 1);
+                await area.save();
+            }
+        }
+
+        // Delete the lift
+        await Lift.findByIdAndDelete(req.params.liftId);
+
         res.status(204).json(null);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -86,6 +110,11 @@ exports.addLiftToArea = async (req, res) => {
     try {
         const mountain = await Mountain.findById(req.params.mountainId);
         const area = mountain.areas.id(req.params.areaId);
+
+        if (area.lifts.includes(req.body.liftId)) {
+            return res.status(400).json({ message: 'Lift already exists in this area' });
+        }
+
         area.lifts.push(req.body.liftId);
         await mountain.save();
         res.status(200).json(mountain);
@@ -102,6 +131,11 @@ exports.moveLiftToArea = async (req, res) => {
             mountain.lifts.splice(index, 1);
         }
         const area = mountain.areas.id(req.params.areaId);
+
+        if (area.lifts.includes(req.body.liftId)) {
+            return res.status(400).json({ message: 'Lift already exists in this area' });
+        }
+
         area.lifts.push(req.body.liftId);
         await mountain.save();
         res.status(200).json(mountain);

@@ -3,12 +3,12 @@ const patrollerController = require('./patrollerController');
 const router = express.Router();
 
 router.get('/', patrollerController.getAllPatrollers);
-router.get('/:id', patrollerController.getPatroller);
+router.get('/:patrollerId', patrollerController.getPatroller);
 router.post('/', patrollerController.addPatroller);
-router.put('/:id', patrollerController.updatePatroller);
-router.delete('/:id', patrollerController.deletePatroller);
+router.put('/:patrollerId', patrollerController.updatePatroller);
+router.delete('/:patrollerId', patrollerController.deletePatroller);
 
-router.put('/:id/addMountain/:mountainId', patrollerController.addMountainToPatroller);
-router.put('/:id/removeMountain/:mountainId', patrollerController.removeMountainFromPatroller);
+router.put('/:patrollerId/addMountain/:mountainId', patrollerController.addMountainToPatroller);
+router.put('/:patrollerId/removeMountain/:mountainId', patrollerController.removeMountainFromPatroller);
 
 module.exports = router;

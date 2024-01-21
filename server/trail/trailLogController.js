@@ -11,7 +11,7 @@ exports.getAllTrailLogs = async (req, res) => {
 
 exports.getOneTrailLog = async (req, res) => {
     try {
-        const trailLog = await TrailLog.findById(req.params.id);
+        const trailLog = await TrailLog.findById(req.params.trailLogId);
         if (!trailLog) {
             return res.status(404).json({ message: 'Trail log not found' });
         }
@@ -33,7 +33,7 @@ exports.addTrailLog = async (req, res) => {
 
 exports.updateTrailLog = async (req, res) => {
     try {
-        const trailLog = await TrailLog.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const trailLog = await TrailLog.findByIdAndUpdate(req.params.trailLogId, req.body, { new: true });
         res.status(200).json(trailLog);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -42,7 +42,7 @@ exports.updateTrailLog = async (req, res) => {
 
 exports.deleteTrailLog = async (req, res) => {
     try {
-        await TrailLog.findByIdAndDelete(req.params.id);
+        await TrailLog.findByIdAndDelete(req.params.trailLogId);
         res.status(200).json({ message: 'Deleted Trail Log' });
     } catch (err) {
         res.status(500).json({ message: err.message });

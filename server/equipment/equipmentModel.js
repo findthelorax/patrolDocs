@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const EquipmentSchema = new Schema({
     name: String,
     type: String,
-    idNumber: String,
+    idNumber: { type: String, unique: true },
     inServiceDate: Date,
     outOfServiceDate: Date,
     checkLog: [{

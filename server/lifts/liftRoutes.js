@@ -9,18 +9,18 @@ router
     .post(liftController.createLift);
 
 router
-    .route('/:mountainId/lift/:id')
+    .route('/:mountainId/lift/:liftId')
     .get(liftController.getLift)
     .patch(liftController.updateLift)
     .delete(liftController.deleteLift);
 
 router
-    .route('/:mountainId/lift/:id/linecheck')
+    .route('/:mountainId/lift/:liftId/linecheck')
     .get(lineCheckController.getAllLineChecks)
     .post(lineCheckController.createLineCheck);
 
 router
-    .route('/:mountainId/lift/:id/linecheck/:lineCheckId')
+    .route('/:mountainId/lift/:liftId/linecheck/:lineCheckId')
     .get(lineCheckController.getLineCheck)
     .patch(lineCheckController.updateLineCheck)
     .delete(lineCheckController.deleteLineCheck);

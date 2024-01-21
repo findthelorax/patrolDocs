@@ -8,7 +8,7 @@ router
     .post(dispatcherLogController.createLog);
 
 router
-    .route('/:patrollerId/dispatcher/:id')
+    .route('/:patrollerId/dispatcher/:dispatcherId')
     .get(dispatcherLogController.getLog)
     .patch(dispatcherLogController.updateLog)
     .delete(dispatcherLogController.deleteLog);

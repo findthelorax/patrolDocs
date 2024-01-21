@@ -11,7 +11,7 @@ exports.getAllPaperworks = async (req, res) => {
 
 exports.getPaperwork = async (req, res) => {
     try {
-        const paperwork = await Paperwork.findById(req.params.id);
+        const paperwork = await Paperwork.findById(req.params.paperworkId);
         if (!paperwork) return res.status(404).json({ message: 'No paperwork found with this ID' });
         res.status(200).json(paperwork);
     } catch (err) {
@@ -31,7 +31,7 @@ exports.createPaperwork = async (req, res) => {
 
 exports.updatePaperwork = async (req, res) => {
     try {
-        const updatedPaperwork = await Paperwork.findByIdAndUpdate(req.params.id
+        const updatedPaperwork = await Paperwork.findByIdAndUpdate(req.params.paperworkId
 
 ,
 
@@ -45,7 +45,7 @@ exports.updatePaperwork = async (req, res) => {
 
 exports.deletePaperwork = async (req, res) => {
     try {
-        const paperwork = await Paperwork.findByIdAndDelete(req.params.id);
+        const paperwork = await Paperwork.findByIdAndDelete(req.params.paperworkId);
         if (!paperwork) return res.status(404).json({ message: 'No paperwork found with this ID' });
         res.status(204).json(null);
     } catch (err) {

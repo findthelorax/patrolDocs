@@ -8,7 +8,7 @@ router
     .post(incidentLogController.createLog);
 
 router
-    .route('/:id')
+    .route('/:incidentLogId')
     .get(incidentLogController.getLog)
     .patch(incidentLogController.updateLog)
     .delete(incidentLogController.deleteLog);

@@ -3,10 +3,10 @@ const mountainController = require('./mountainController');
 const router = express.Router();
 
 router.get('/', mountainController.getAllMountains);
-router.get('/:id', mountainController.getMountain);
+router.get('/:mountainId', mountainController.getMountain);
 router.post('/', mountainController.addMountain);
-router.put('/:id', mountainController.updateMountain);
-router.delete('/:id', mountainController.deleteMountain);
+router.put('/:mountainId', mountainController.updateMountain);
+router.delete('/:mountainId', mountainController.deleteMountain);
 
 router.get('/:mountainId/areas', mountainController.getAllAreas);
 router.get('/:mountainId/areas/:areaId', mountainController.getArea);

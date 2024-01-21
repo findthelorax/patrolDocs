@@ -6,7 +6,7 @@ exports.getAllLogs = async (req, res) => {
 };
 
 exports.getLog = async (req, res) => {
-    const log = await PatrolLog.findById(req.params.id);
+    const log = await PatrolLog.findById(req.params.incidentLogId);
     res.status(200).json(log);
 };
 
@@ -17,11 +17,11 @@ exports.createLog = async (req, res) => {
 };
 
 exports.updateLog = async (req, res) => {
-    const updatedLog = await PatrolLog.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedLog = await PatrolLog.findByIdAndUpdate(req.params.incidentLogId, req.body, { new: true });
     res.status(200).json(updatedLog);
 };
 
 exports.deleteLog = async (req, res) => {
-    await PatrolLog.findByIdAndDelete(req.params.id);
+    await PatrolLog.findByIdAndDelete(req.params.incidentLogId);
     res.status(204).json(null);
 };

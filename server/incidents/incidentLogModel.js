@@ -4,8 +4,9 @@ const Schema = mongoose.Schema;
 const IncidentSchema = new Schema({
     time: Date,
     type: String,
-    run: { type: Schema.Types.ObjectId, ref: 'Run' },
-    patrollers: [{ type: Schema.Types.ObjectId, ref: 'Patroller' }],
+    mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
+    trail: { type: Schema.Types.ObjectId, ref: 'Trail' },
+    patrollers: [{ type: Schema.Types.ObjectId, ref: 'Patroller', required: true }],
     onSceneTime: Date,
     stableTime: Date,
     transportTime: Date,

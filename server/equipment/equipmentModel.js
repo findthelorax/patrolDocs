@@ -11,6 +11,7 @@ const EquipmentSchema = new Schema({
         checkedOn: Date,
         checkedBy: { type: Schema.Types.ObjectId, ref: 'Patroller' },
     }],
+    comments: String,
 });
 
 const Equipment = mongoose.model('Equipment', EquipmentSchema);

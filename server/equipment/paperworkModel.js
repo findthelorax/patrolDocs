@@ -10,6 +10,6 @@ const PaperworkSchema = new Schema({
     rentalForms: { type: Boolean, default: false },
 });
 
-const Paperwork = mongoose.model('Paperwork', PaperworkSchema);
+const Paperwork = mongoose.model('Paperwork', PaperworkSchema, 'paperwork');
 
 module.exports = Paperwork;

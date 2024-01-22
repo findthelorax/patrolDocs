@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -18,15 +17,18 @@ const equipmentRoutes = require('./equipment/equipmentRoutes');
 const paperworkRoutes = require('./equipment/paperworkRoutes');
 
 const app = express();
-const DB = process.env.MONGODB_DBNAME;
 const IP = process.env.IP;
 const BPORT = process.env.BACKEND_PORT;
 const FPORT = process.env.FRONTEND_PORT;
+const { MONGODB, DB_NAME } = process.env;
 
-mongoose
-	.connect(`${process.env.MONGODB_URL}${DB}`)
-	.then(() => console.log('MongoDB connected'))
-	.catch((err) => console.error(err));
+const db = require('./helpers/db');
+
+db()
+    .then(() => {
+        console.log(`Database connected to: ${MONGODB}/${DB_NAME}`);
+    })
+    .catch((err) => console.error(err));
 
 app.use(
 	cors({

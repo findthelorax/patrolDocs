@@ -9,7 +9,7 @@ const LiftSchema = new mongoose.Schema({
     lineChecks: [{ type: Schema.Types.ObjectId, ref: 'LineCheck' }],
 });
 
-const LineCheckSchema = new mongoose.Schema({
+const LiftLineCheckSchema = new mongoose.Schema({
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     lift: { type: Schema.Types.ObjectId, ref: 'Lift', required: true },
@@ -20,5 +20,5 @@ const LineCheckSchema = new mongoose.Schema({
 
 module.exports = {
     Lift: mongoose.model('Lift', LiftSchema),
-    LineCheck: mongoose.model('LineCheck', LineCheckSchema)
+    LiftLineCheck: mongoose.model('LiftLineCheck', LiftLineCheckSchema)
 };

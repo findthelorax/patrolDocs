@@ -13,4 +13,15 @@ router
     .patch(equipmentController.updateEquipment)
     .delete(equipmentController.deleteEquipment);
 
+router
+    .route('/:mountainId/equipment/:equipmentId/log')
+    .get(equipmentController.getEquipmentLog)
+    .post(equipmentController.addEquipmentLog);
+
+router
+    .route('/:mountainId/equipment/:equipmentId/log/:logId')
+    .get(equipmentController.getEquipmentLog)
+    .patch(equipmentController.updateEquipmentLog)
+    .delete(equipmentController.deleteEquipmentLog);
+
 module.exports = router;

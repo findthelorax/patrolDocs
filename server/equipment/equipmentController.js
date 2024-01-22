@@ -52,3 +52,92 @@ exports.deleteEquipment = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+exports.checkEquipment = async (req, res) => {
+    try {
+        const equipment = await Equipment.findById(req.params.equipmentId);
+        if (!equipment) return res.status(404).json({ message: 'No equipment found with this ID' });
+
+        equipment.checkLog.push({
+            checkedBy: req.body.checkedBy,
+            date: req.body.date,
+            condition: req.body.condition,
+            notes: req.body.notes,
+        });
+        await equipment.save();
+
+        res.status(200).json(equipment);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+exports.uncheckEquipment = async (req, res) => {
+    try {
+        const equipment = await Equipment.findById(req.params.equipmentId);
+        if (!equipment) return res.status(404).json({ message: 'No equipment found with this ID' });
+
+        equipment.checkLog.pop();
+        await equipment.save();
+
+        res.status(200).json(equipment);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+exports.getEquipmentLog = async (req, res) => {
+    try {
+        const log = await EquipmentLog.findById(req.params.logId);
+        if (log) {
+            res.status(200).json(log);
+        } else {
+            res.status(404).json({ message: 'Log not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+exports.addEquipmentLog = async (req, res) => {
+    try {
+        const equipment = await Equipment.findById(req.params.equipmentId);
+        if (equipment) {
+            const log = new EquipmentLog({ ...req.body, equipment: equipment._id });
+            const savedLog = await log.save();
+            equipment.checkLog = savedLog._id;
+            await equipment.save();
+            res.status(201).json(savedLog);
+        } else {
+            res.status(404).json({ message: 'Equipment not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+exports.updateEquipmentLog = async (req, res) => {
+    try {
+        const updatedLog = await EquipmentLog.findByIdAndUpdate(req.params.logId, req.body, { new: true });
+        if (updatedLog) {
+            res.status(200).json(updatedLog);
+        } else {
+            res.status(404).json({ message: 'Log not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+exports.deleteEquipmentLog = async (req, res) => {
+    try {
+        const log = await EquipmentLog.findByIdAndDelete(req.params.logId);
+        if (log) {
+            res.status(204).json(null);
+        } else {
+            res.status(404).json({ message: 'Log not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

@@ -1,6 +1,5 @@
 const express = require('express');
 const liftController = require('./liftController');
-const lineCheckController = require('./lineCheckController');
 const router = express.Router({ mergeParams: true });
 
 router
@@ -16,13 +15,18 @@ router
 
 router
     .route('/:mountainId/lift/:liftId/linecheck')
-    .get(lineCheckController.getAllLineChecks)
-    .post(lineCheckController.createLineCheck);
+    .get(liftController.getAllLineChecks)
+    .post(liftController.createLineCheck);
 
 router
     .route('/:mountainId/lift/:liftId/linecheck/:lineCheckId')
-    .get(lineCheckController.getLineCheck)
-    .patch(lineCheckController.updateLineCheck)
-    .delete(lineCheckController.deleteLineCheck);
+    .get(liftController.getLineCheck)
+    .patch(liftController.updateLineCheck)
+    .delete(liftController.deleteLineCheck);
+
+router
+    .route('/:mountainId/lift/:liftId/:areaId')
+    .post(liftController.addLiftToArea)
+    .delete(liftController.removeLiftFromArea);
 
 module.exports = router;

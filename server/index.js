@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-const mountainRoutes = require('./mountain/mountainRoutes');
-const hutRoutes = require('./hut/hutRoutes');
-const trailRoutes = require('./trail/trailRoutes');
+const mountainRoutes = require('./mountains/mountainRoutes');
+const hutRoutes = require('./huts/hutRoutes');
 
 const liftRoutes = require('./lifts/liftRoutes');
 
-const patrollerRoutes = require('./patroller/patrollerRoutes');
-const dispatcherLogRoutes = require('./patroller/dispatcherLogRoutes');
+const trailRoutes = require('./trails/trailRoutes');
+
+const patrollerRoutes = require('./patrollers/patrollerRoutes');
 
 const incidentRoutes = require('./incidents/incidentRoutes');
 
@@ -39,16 +39,16 @@ app.use(express.json());
 
 app.use('/api/mountain', mountainRoutes);
 app.use('/api/mountain', hutRoutes);
-app.use('/api/mountain', trailRoutes);
 
 app.use('/api/mountain', liftRoutes);
+
+app.use('/api/mountain', trailRoutes);
 
 app.use('/api/mountain', equipmentRoutes);
 
 app.use('/api/paperwork', paperworkRoutes);
 
 app.use('/api/patroller', patrollerRoutes);
-app.use('/api/patroller', dispatcherLogRoutes);
 
 app.use('/api/incident', incidentRoutes);
 

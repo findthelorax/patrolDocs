@@ -1,4 +1,4 @@
-const { Lift } = require('./liftModel');
+const { Lift, LiftLineCheck } = require('./liftModel');
 const { Mountain } = require('../mountains/mountainModel');
 
 exports.getAllLifts = async (req, res) => {
@@ -22,10 +22,9 @@ exports.getLift = async (req, res) => {
 
 exports.createLift = async (req, res) => {
     try {
-        // Create a new lift
         const newLift = new Lift({
             ...req.body,
-            mountain: req.params.mountainId,  // Use the mountainId from the URL
+            mountain: req.params.mountainId,
         });
         const lift = await newLift.save();
 
@@ -96,16 +95,33 @@ exports.deleteLift = async (req, res) => {
 exports.addLiftToArea = async (req, res) => {
     try {
         const mountain = await Mountain.findById(req.params.mountainId);
+        if (!mountain) {
+            return res.status(404).json({ message: 'No mountain found with this ID' });
+        }
+
         const area = mountain.areas.id(req.params.areaId);
+        if (!area || !area.lifts) {
+            return res.status(404).json({ message: 'No area found with this ID' });
+        }
 
         if (area.lifts.includes(req.params.liftId)) {
             return res.status(400).json({ message: 'Lift already exists in this area' });
         }
 
+        // Find the lift and add the area to it
+        const lift = await Lift.findById(req.params.liftId);
+        if (!lift) {
+            console.log(`Lift not found with ID: ${req.params.liftId}`);
+            return res.status(404).json({ message: 'No lift found with this ID' });
+        }
+        lift.area = area._id;
+        await lift.save();
+
         area.lifts.push(req.params.liftId);
         await mountain.save();
         res.status(200).json(area);
     } catch (err) {
+        console.error(err);
         res.status(500).json({ message: err.message });
     }
 };
@@ -114,10 +130,22 @@ exports.removeLiftFromArea = async (req, res) => {
     try {
         const mountain = await Mountain.findById(req.params.mountainId);
         const area = mountain.areas.id(req.params.areaId);
+        if (!area || !area.lifts) {
+            return res.status(404).json({ message: 'No area found with this ID' });
+        }
         const index = area.lifts.indexOf(req.params.liftId);
         if (index > -1) {
             area.lifts.splice(index, 1);
         }
+
+        // Find the lift and remove the area from it
+        const lift = await Lift.findById(req.params.liftId);
+        if (!lift) {
+            return res.status(404).json({ message: 'No lift found with this ID' });
+        }
+        lift.area = null;
+        await lift.save();
+
         await mountain.save();
         res.status(200).json(area);
     } catch (err) {
@@ -128,7 +156,7 @@ exports.removeLiftFromArea = async (req, res) => {
 // Lift Line Checks
 exports.getAllLineChecks = async (req, res) => {
     try {
-        const lineChecks = await LineCheck.find();
+        const lineChecks = await LiftLineCheck.find();
         res.status(200).json(lineChecks);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -147,14 +175,8 @@ exports.getLineCheck = async (req, res) => {
 
 exports.createLineCheck = async (req, res) => {
     try {
-        const newLineCheck = new LineCheck({ ...req.body, mountain: req.params.mountainId, lift: req.params.liftId });
+        const newLineCheck = new LiftLineCheck({ ...req.body, mountain: req.params.mountainId, lift: req.params.liftId });
         const lineCheck = await newLineCheck.save();
-
-        // Find the lift and add the new line check to its lineChecks array
-        const lift = await Lift.findById(liftId);
-        lift.lineChecks.push(lineCheck._id);
-        await lift.save();
-
         res.status(201).json(lineCheck);
     } catch (err) {
         res.status(500).json({ message: err.message });

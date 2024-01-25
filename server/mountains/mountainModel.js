@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const AreaSchema = new Schema({
     name: { type: String, required: true, unique: true },
     description: String,
-    mountain: { type: Schema.Types.ObjectId, ref: 'Mountain', required: true },
     lifts: [{ type: Schema.Types.ObjectId, ref: 'Lift' }],
     trails: [{ type: Schema.Types.ObjectId, ref: 'Trail' }],
     huts: [{ type: Schema.Types.ObjectId, ref: 'Hut' }],
@@ -20,6 +19,7 @@ const MountainSchema = new Schema({
     lifts: [{ type: Schema.Types.ObjectId, ref: 'Lift' }],
     trails: [{ type: Schema.Types.ObjectId, ref: 'Trail' }],
     huts: [{ type: Schema.Types.ObjectId, ref: 'Hut' }],
+    patrollers: [{ type: Schema.Types.ObjectId, ref: 'Patroller' }],
 });
 
 const Mountain = mongoose.model('Mountain', MountainSchema);

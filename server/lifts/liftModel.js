@@ -6,7 +6,6 @@ const LiftSchema = new mongoose.Schema({
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain' },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     status: { type: String, default: 'closed' },
-    lineChecks: [{ type: Schema.Types.ObjectId, ref: 'LineCheck' }],
 });
 
 const LiftLineCheckSchema = new mongoose.Schema({

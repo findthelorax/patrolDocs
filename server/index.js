@@ -38,21 +38,15 @@ app.use(
 );
 app.use(express.json());
 
+app.use('/mountain', mountainRoutes);
+app.use('/mountain', hutRoutes);
+app.use('/mountain', liftRoutes);
+app.use('/mountain', trailRoutes);
+app.use('/mountain', equipmentRoutes);
+app.use('/mountain', incidentRoutes);
+app.use('/mountain', paperworkRoutes);
 
-app.use('/api/mountain', mountainRoutes);
-app.use('/api/mountain', hutRoutes);
-
-app.use('/api/mountain', liftRoutes);
-
-app.use('/api/mountain', trailRoutes);
-
-app.use('/api/mountain', equipmentRoutes);
-
-app.use('/api/paperwork', paperworkRoutes);
-
-app.use('/api/patroller', patrollerRoutes);
-
-app.use('/api/incident', incidentRoutes);
+app.use('/patroller', patrollerRoutes);
 
 app.listen(BPORT, () => {
 	console.log(`Server is running on ${IP}:${BPORT}`);

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const HutLogSchema = new mongoose.Schema({
+    hut: { type: mongoose.Schema.Types.ObjectId, ref: 'Hut', required: true },
     paperwork: { type: mongoose.Schema.Types.ObjectId, ref: 'Paperwork' },
     equipmentCheckedLog: [{
         equipment: { type: mongoose.Schema.Types.ObjectId, ref: 'Equipment' },
@@ -19,7 +20,6 @@ const HutSchema = new mongoose.Schema({
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     equipment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Equipment' }],
-    log: { type: mongoose.Schema.Types.ObjectId, ref: 'HutLog' },
     comments: String,
 });
 

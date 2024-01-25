@@ -94,7 +94,7 @@ exports.getArea = async (req, res) => {
 	}
 };
 
-exports.addArea = async (req, res) => {
+exports.createArea = async (req, res) => {
 	try {
 		const mountain = await Mountain.findById(req.params.mountainId);
 		if (!mountain) {
@@ -109,12 +109,15 @@ exports.addArea = async (req, res) => {
 
 		const area = req.body;
 		area.mountain = req.params.mountainId;
-		mountain.areas.push(area);
+
+		// Create the area and add it to the mountain
+		const newArea = mountain.areas.create(area);
+		mountain.areas.push(newArea);
 
 		await mountain.save();
-		res.status(201).json(area);
+
+		res.status(201).json(newArea);
 	} catch (err) {
-		console.log("🚀 ~ file: mountainController.js:100 ~ exports.addArea= ~ err:", err)
 		if (err.name === 'ValidationError') {
 			res.status(400).json({ message: 'A mountain is required for an area' });
 		} else {

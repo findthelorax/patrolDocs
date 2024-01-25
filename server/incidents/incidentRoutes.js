@@ -3,12 +3,12 @@ const incidentLogController = require('./incidentLogController');
 const router = express.Router();
 
 router
-    .route('/')
+    .route('/:mountainId/incident')
     .get(incidentLogController.getAllLogs)
     .post(incidentLogController.createLog);
 
 router
-    .route('/:incidentLogId')
+    .route('/:mountainId/incident/:incidentLogId')
     .get(incidentLogController.getLog)
     .patch(incidentLogController.updateLog)
     .delete(incidentLogController.deleteLog);

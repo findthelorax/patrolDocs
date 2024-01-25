@@ -1,4 +1,4 @@
-const Equipment = require('./equipmentModel');
+const { Equipment, EquipmentLog } = require('./equipmentModel');
 
 exports.getAllEquipments = async (req, res) => {
     try {

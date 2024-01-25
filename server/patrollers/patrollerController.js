@@ -1,8 +1,9 @@
-const Patroller = require('./patrollerModel');
+const { Patroller, PatrolDispatcherLog } = require('./patrollerModel');
+
 
 exports.getAllPatrollers = async (req, res) => {
     try {
-        const patrollers = await Patroller.find().populate('mountain');
+        const patrollers = await Patroller.find();
         res.status(200).json(patrollers);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -11,7 +12,7 @@ exports.getAllPatrollers = async (req, res) => {
 
 exports.getPatroller = async (req, res) => {
     try {
-        const patroller = await Patroller.findById(req.params.patrollerId).populate('mountain');
+        const patroller = await Patroller.findById(req.params.patrollerId);
         if (patroller == null) {
             return res.status(404).json({ message: 'Cannot find patroller' });
         }
@@ -80,8 +81,8 @@ exports.removeMountainFromPatroller = async (req, res) => {
 
 exports.getAllLogs = async (req, res) => {
     try {
-        const patroller = await Patroller.findById(req.params.patrollerId);
-        res.status(200).json(patroller.logs);
+        const logs = await PatrolDispatcherLog.find({ patroller: req.params.patrollerId });
+        res.status(200).json(logs);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -89,8 +90,7 @@ exports.getAllLogs = async (req, res) => {
 
 exports.getLog = async (req, res) => {
     try {
-        const patroller = await Patroller.findById(req.params.patrollerId);
-        const log = patroller.logs.id(req.params.logId);
+        const log = await PatrolDispatcherLog.findById(req.params.logId);
         if (!log) {
             return res.status(404).json({ message: 'Log not found' });
         }
@@ -105,8 +105,10 @@ exports.getLogsForDate = async (req, res) => {
         const date = new Date(req.params.date);
         const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         const end = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-        const patroller = await Patroller.findById(req.params.patrollerId);
-        const logs = patroller.logs.filter(log => log.date >= start && log.date < end);
+        const logs = await PatrolDispatcherLog.find({
+            patroller: req.params.patrollerId,
+            date: { $gte: start, $lt: end }
+        });
         res.status(200).json(logs);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -115,10 +117,9 @@ exports.getLogsForDate = async (req, res) => {
 
 exports.createLog = async (req, res) => {
     try {
-        const patroller = await Patroller.findById(req.params.patrollerId);
-        patroller.logs.push(req.body);
-        const updatedPatroller = await patroller.save();
-        res.status(201).json(updatedPatroller.logs[updatedPatroller.logs.length - 1]);
+        const log = new PatrolDispatcherLog({ ...req.body, patroller: req.params.patrollerId });
+        const savedLog = await log.save();
+        res.status(201).json(savedLog);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -126,11 +127,8 @@ exports.createLog = async (req, res) => {
 
 exports.updateLog = async (req, res) => {
     try {
-        const patroller = await Patroller.findById(req.params.patrollerId);
-        const log = patroller.logs.id(req.params.dispatcherId);
-        Object.assign(log, req.body);
-        updatedPatroller = await patroller.save();
-        res.status(200).json(log);
+        const updatedLog = await PatrolDispatcherLog.findByIdAndUpdate(req.params.logId, req.body, { new: true });
+        res.status(200).json(updatedLog);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -138,9 +136,7 @@ exports.updateLog = async (req, res) => {
 
 exports.deleteLog = async (req, res) => {
     try {
-        const patroller = await Patroller.findById(req.params.patrollerId);
-        patroller.logs.id(req.params.dispatcherId).remove();
-        await patroller.save();
+        await PatrolDispatcherLog.findByIdAndRemove(req.params.logId);
         res.status(204).json(null);
     } catch (err) {
         res.status(500).json({ message: err.message });

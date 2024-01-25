@@ -15,7 +15,7 @@ router.route('/:mountainId')
 // Area routes
 router.route('/:mountainId/areas')
     .get(mountainController.getAllAreas)
-    .post(mountainController.addArea);
+    .post(mountainController.createArea);
 
 router.route('/:mountainId/areas/:areaId')
     .get(mountainController.getArea)

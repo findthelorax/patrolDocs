@@ -1,27 +1,27 @@
-const PatrolLog = require('./incidentLogModel');
+const IncidentLog = require('./incidentLogModel');
+
+exports.createLog = async (req, res) => {
+    const incidentLog = new IncidentLog(req.body);
+    const savedIncidentLog = await incidentLog.save();
+    res.status(201).json(savedIncidentLog);
+};
 
 exports.getAllLogs = async (req, res) => {
-    const logs = await PatrolLog.find();
-    res.status(200).json(logs);
+    const incidentLogs = await IncidentLog.find();
+    res.status(200).json(incidentLogs);
 };
 
 exports.getLog = async (req, res) => {
-    const log = await PatrolLog.findById(req.params.incidentLogId);
-    res.status(200).json(log);
-};
-
-exports.createLog = async (req, res) => {
-    const newLog = new PatrolLog(req.body);
-    const log = await newLog.save();
-    res.status(201).json(log);
+    const incidentLog = await IncidentLog.findById(req.params.incidentLogId);
+    res.status(200).json(incidentLog);
 };
 
 exports.updateLog = async (req, res) => {
-    const updatedLog = await PatrolLog.findByIdAndUpdate(req.params.incidentLogId, req.body, { new: true });
-    res.status(200).json(updatedLog);
+    const updatedIncidentLog = await IncidentLog.findByIdAndUpdate(req.params.incidentLogId, req.body, { new: true });
+    res.status(200).json(updatedIncidentLog);
 };
 
 exports.deleteLog = async (req, res) => {
-    await PatrolLog.findByIdAndDelete(req.params.incidentLogId);
-    res.status(204).json(null);
+    await IncidentLog.findByIdAndDelete(req.params.incidentLogId);
+    res.status(204).send();
 };

@@ -11,7 +11,6 @@ const center = {
     lng: -72.7277
 };
 
-console.log("🚀 ~ file: MountainMap.jsx:18 ~ MountainMap ~ process.env.G_MAPS_API_KEY:", process.env.REACT_APP_G_MAPS_API_KEY)
 function MountainMap() {
     return (
         <LoadScript
@@ -21,6 +20,19 @@ function MountainMap() {
                 mapContainerStyle={containerStyle}
                 center={center}
                 zoom={13}
+                options={{
+                    maxZoom: 15, // Maximum zoom level
+                    restriction: {
+                        latLngBounds: {
+                            north: center.lat + 0.01,
+                            south: center.lat - 0.01,
+                            east: center.lng + 0.01,
+                            west: center.lng - 0.01,
+                        },
+                        strictBounds: true,
+                    }, // Restrict the viewable area
+                    mapTypeId: 'satellite' // Set map type to satellite
+                }}
             >
                 {/* You can add markers or other components here */}
             </GoogleMap>

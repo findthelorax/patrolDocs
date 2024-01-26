@@ -20,13 +20,13 @@ const app = express();
 const IP = process.env.IP;
 const BPORT = process.env.BACKEND_PORT;
 const FPORT = process.env.FRONTEND_PORT;
-const { MONGODB, DB_NAME } = process.env;
+const { MONGODB_URL, MONGODB_DB_NAME } = process.env;
 
 const db = require('./helpers/db');
 
 db()
     .then(() => {
-        console.log(`Database connected to: ${MONGODB}/${DB_NAME}`);
+        console.log(`Database connected to: ${MONGODB_URL}/${MONGODB_DB_NAME}`);
     })
     .catch((err) => console.error(err));
 

@@ -1,10 +1,26 @@
-// CustomHeader.js
 import React from 'react';
 import { MdAccessTime } from 'react-icons/md';
 
-const CustomHeader = (props) => {
+const IncidentTableHeader = (props) => {
     const handleClick = () => {
-        props.onClick();
+        // Get the first row node
+        const firstRowNode = props.api.getDisplayedRowAtIndex(0);
+
+        // Create a new date object
+        const date = new Date();
+
+        // Format the date to a locale string
+        const formattedDate = date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
+
+        // Update the respective field of the first row with the formatted date
+        firstRowNode.setDataValue(props.column.colId, formattedDate);
+
+        // If you want to refresh the cell after updating the data
+        props.api.refreshCells({ rowNodes: [firstRowNode], columns: [props.column.colId], force: true });
     };
 
     return (
@@ -17,4 +33,4 @@ const CustomHeader = (props) => {
     );
 };
 
-export default CustomHeader;
+export default IncidentTableHeader;

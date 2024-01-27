@@ -5,7 +5,7 @@ const PORT = process.env.REACT_APP_PORT;
 export const api = {
     async getAllEquipments(mountainId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${mountainId}/equipment`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/equipment`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching all equipments for mountain with id ${mountainId}`, error);
@@ -15,7 +15,7 @@ export const api = {
 
     async createEquipment(mountainId, equipment) {
         try {
-            const response = await axios.post(`${IP}:${PORT}/${mountainId}/equipment`, equipment);
+            const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/equipment`, equipment);
             return response.data;
         } catch (error) {
             console.error(`Error creating equipment for mountain with id ${mountainId}`, error);
@@ -25,7 +25,7 @@ export const api = {
 
     async getEquipment(mountainId, id) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${mountainId}/equipment/${id}`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/equipment/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching equipment with id ${id} for mountain with id ${mountainId}`, error);
@@ -35,7 +35,7 @@ export const api = {
 
     async updateEquipment(mountainId, id, updatedEquipment) {
         try {
-            const response = await axios.patch(`${IP}:${PORT}/${mountainId}/equipment/${id}`, updatedEquipment);
+            const response = await axios.patch(`${IP}:${PORT}/mountain/${mountainId}/equipment/${id}`, updatedEquipment);
             return response.data;
         } catch (error) {
             console.error(`Error updating equipment with id ${id} for mountain with id ${mountainId}`, error);
@@ -45,7 +45,7 @@ export const api = {
 
     async deleteEquipment(mountainId, id) {
         try {
-            const response = await axios.delete(`${IP}:${PORT}/${mountainId}/equipment/${id}`);
+            const response = await axios.delete(`${IP}:${PORT}/mountain/${mountainId}/equipment/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting equipment with id ${id} for mountain with id ${mountainId}`, error);
@@ -55,7 +55,7 @@ export const api = {
 
     async getEquipmentLog(mountainId, equipmentId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${mountainId}/equipment/${equipmentId}/log`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/equipment/${equipmentId}/log`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching log for equipment with id ${equipmentId} for mountain with id ${mountainId}`, error);
@@ -65,7 +65,7 @@ export const api = {
 
     async addEquipmentLog(mountainId, equipmentId, log) {
         try {
-            const response = await axios.post(`${IP}:${PORT}/${mountainId}/equipment/${equipmentId}/log`, log);
+            const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/equipment/${equipmentId}/log`, log);
             return response.data;
         } catch (error) {
             console.error(`Error adding log for equipment with id ${equipmentId} for mountain with id ${mountainId}`, error);
@@ -75,7 +75,7 @@ export const api = {
 
     async getEquipmentLog(mountainId, equipmentId, logId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${mountainId}/equipment/${equipmentId}/log/${logId}`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/equipment/${equipmentId}/log/${logId}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching log with id ${logId} for equipment with id ${equipmentId} for mountain with id ${mountainId}`, error);
@@ -85,7 +85,7 @@ export const api = {
 
     async updateEquipmentLog(mountainId, equipmentId, logId, updatedLog) {
         try {
-            const response = await axios.patch(`${IP}:${PORT}/${mountainId}/equipment/${equipmentId}/log/${logId}`, updatedLog);
+            const response = await axios.patch(`${IP}:${PORT}/mountain/${mountainId}/equipment/${equipmentId}/log/${logId}`, updatedLog);
             return response.data;
         } catch (error) {
             console.error(`Error updating log with id ${logId} for equipment with id ${equipmentId} for mountain with id ${mountainId}`, error);
@@ -95,7 +95,7 @@ export const api = {
 
     async deleteEquipmentLog(mountainId, equipmentId, logId) {
         try {
-            const response = await axios.delete(`${IP}:${PORT}/${mountainId}/equipment/${equipmentId}/log/${logId}`);
+            const response = await axios.delete(`${IP}:${PORT}/mountain/${mountainId}/equipment/${equipmentId}/log/${logId}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting log with id ${logId} for equipment with id ${equipmentId} for mountain with id ${mountainId}`, error);

@@ -3,30 +3,30 @@ const patrollerController = require('./patrollerController');
 const router = express.Router();
 
 // Patroller routes
-router.route('/')
+router.route('/patroller')
     .get(patrollerController.getAllPatrollers)
     .post(patrollerController.addPatroller);
 
-router.route('/:patrollerId')
+router.route('/patroller/:patrollerId')
     .get(patrollerController.getPatroller)
     .put(patrollerController.updatePatroller)
     .delete(patrollerController.deletePatroller);
 
 // Dispatcher routes
-router.route('/:patrollerId/dispatcher')
+router.route('/patroller/:patrollerId/dispatcher')
     .get(patrollerController.getAllLogs)
     .post(patrollerController.createLog);
 
-router.route('/:patrollerId/dispatcher/:dispatcherId')
+router.route('/patroller/:patrollerId/dispatcher/:dispatcherId')
     .get(patrollerController.getLog)
     .patch(patrollerController.updateLog)
     .delete(patrollerController.deleteLog);
 
 // Mountain routes
-router.route('/:patrollerId/addMountain/:mountainId')
+router.route('/patroller/:patrollerId/addMountain/:mountainId')
     .put(patrollerController.addMountainToPatroller);
 
-router.route('/:patrollerId/removeMountain/:mountainId')
+router.route('/patroller/:patrollerId/removeMountain/:mountainId')
     .put(patrollerController.removeMountainFromPatroller);
 
 module.exports = router;

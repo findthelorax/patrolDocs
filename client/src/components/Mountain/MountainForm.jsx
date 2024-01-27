@@ -49,6 +49,8 @@ const AddMountainForm = () => {
                                 setState(newValue);
                             }}
                             options={states}
+                            autoHighlight
+                            autoSelect
                             renderInput={(params) => <TextField {...params} label="State" required />}
                         />
                         <Button type="submit" variant="contained">Add Mountain</Button>

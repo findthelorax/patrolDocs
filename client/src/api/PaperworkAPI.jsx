@@ -5,7 +5,7 @@ const PORT = process.env.REACT_APP_PORT;
 export const api = {
     async getAllPaperworks() {
         try {
-            const response = await axios.get(`${IP}:${PORT}/`);
+            const response = await axios.get(`${IP}:${PORT}/mountain`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching all paperworks`, error);
@@ -15,7 +15,7 @@ export const api = {
 
     async createPaperwork(paperwork) {
         try {
-            const response = await axios.post(`${IP}:${PORT}/`, paperwork);
+            const response = await axios.post(`${IP}:${PORT}/mountain`, paperwork);
             return response.data;
         } catch (error) {
             console.error(`Error creating paperwork`, error);
@@ -25,7 +25,7 @@ export const api = {
 
     async getPaperwork(id) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${id}`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching paperwork with id ${id}`, error);
@@ -35,7 +35,7 @@ export const api = {
 
     async updatePaperwork(id, updatedPaperwork) {
         try {
-            const response = await axios.patch(`${IP}:${PORT}/${id}`, updatedPaperwork);
+            const response = await axios.patch(`${IP}:${PORT}/mountain/${id}`, updatedPaperwork);
             return response.data;
         } catch (error) {
             console.error(`Error updating paperwork with id ${id}`, error);
@@ -45,7 +45,7 @@ export const api = {
 
     async deletePaperwork(id) {
         try {
-            const response = await axios.delete(`${IP}:${PORT}/${id}`);
+            const response = await axios.delete(`${IP}:${PORT}/mountain/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting paperwork with id ${id}`, error);

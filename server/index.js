@@ -4,15 +4,12 @@ require('dotenv').config();
 
 const mountainRoutes = require('./mountains/mountainRoutes');
 const hutRoutes = require('./huts/hutRoutes');
-
 const liftRoutes = require('./lifts/liftRoutes');
-
 const trailRoutes = require('./trails/trailRoutes');
 
 const patrollerRoutes = require('./patrollers/patrollerRoutes');
 
 const incidentRoutes = require('./incidents/incidentRoutes');
-
 const equipmentRoutes = require('./equipment/equipmentRoutes');
 const paperworkRoutes = require('./equipment/paperworkRoutes');
 
@@ -38,15 +35,16 @@ app.use(
 );
 app.use(express.json());
 
-app.use('/mountain', mountainRoutes);
-app.use('/mountain', hutRoutes);
-app.use('/mountain', liftRoutes);
-app.use('/mountain', trailRoutes);
-app.use('/mountain', equipmentRoutes);
-app.use('/mountain', incidentRoutes);
-app.use('/mountain', paperworkRoutes);
+app.use(mountainRoutes);
+app.use(hutRoutes);
+app.use(liftRoutes);
+app.use(trailRoutes);
 
-app.use('/patroller', patrollerRoutes);
+app.use(equipmentRoutes);
+app.use(incidentRoutes);
+app.use(paperworkRoutes);
+
+app.use(patrollerRoutes);
 
 app.listen(BPORT, () => {
 	console.log(`Server is running on ${IP}:${BPORT}`);

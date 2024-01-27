@@ -35,11 +35,12 @@ const AddTrailForm = () => {
                                 onChange={(e) => setAreaId(e.target.value)}
                                 label="Area"
                             >
-                                {/* {areas.map((area) => (
-                                    <MenuItem key={area.id} value={area.id}>
-                                        {area.name}
-                                    </MenuItem>
-                                ))} */}
+								{areas &&
+									areas.map((area) => (
+										<MenuItem key={area.id} value={area}>
+											{area.name}
+										</MenuItem>
+									))}
                             </Select>
                         </FormControl>
                         <Button type="submit" variant="contained">Add Trail</Button>

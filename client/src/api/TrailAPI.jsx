@@ -5,7 +5,7 @@ const PORT = process.env.REACT_APP_PORT;
 export const api = {
     async getAllTrails(mountainId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${mountainId}/trail`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/trail`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching trails for mountain with id ${mountainId}`, error);
@@ -15,7 +15,7 @@ export const api = {
 
     async addTrail(mountainId, trail) {
         try {
-            const response = await axios.post(`${IP}:${PORT}/${mountainId}/trail`, trail);
+            const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/trail`, trail);
             return response.data;
         } catch (error) {
             console.error(`Error adding trail for mountain with id ${mountainId}`, error);
@@ -25,7 +25,7 @@ export const api = {
 
     async getOneTrail(mountainId, trailId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${mountainId}/trail/${trailId}`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching trail with id ${trailId} for mountain with id ${mountainId}`, error);
@@ -35,7 +35,7 @@ export const api = {
 
     async updateTrail(mountainId, trailId, updatedTrail) {
         try {
-            const response = await axios.put(`${IP}:${PORT}/${mountainId}/trail/${trailId}`, updatedTrail);
+            const response = await axios.put(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}`, updatedTrail);
             return response.data;
         } catch (error) {
             console.error(`Error updating trail with id ${trailId} for mountain with id ${mountainId}`, error);
@@ -45,7 +45,7 @@ export const api = {
 
     async deleteTrail(mountainId, trailId) {
         try {
-            const response = await axios.delete(`${IP}:${PORT}/${mountainId}/trail/${trailId}`);
+            const response = await axios.delete(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting trail with id ${trailId} for mountain with id ${mountainId}`, error);
@@ -55,7 +55,7 @@ export const api = {
 
     async getAllTrailLogs(mountainId, trailId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${mountainId}/trail/${trailId}/log`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}/log`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching trail logs for trail with id ${trailId} and mountain with id ${mountainId}`, error);
@@ -65,7 +65,7 @@ export const api = {
 
     async addTrailLog(mountainId, trailId, log) {
         try {
-            const response = await axios.post(`${IP}:${PORT}/${mountainId}/trail/${trailId}/log`, log);
+            const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}/log`, log);
             return response.data;
         } catch (error) {
             console.error(`Error adding trail log for trail with id ${trailId} and mountain with id ${mountainId}`, error);
@@ -75,7 +75,7 @@ export const api = {
 
     async getOneTrailLog(mountainId, trailId, logId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${mountainId}/trail/${trailId}/log/${logId}`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}/log/${logId}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching trail log with id ${logId} for trail with id ${trailId} and mountain with id ${mountainId}`, error);
@@ -85,7 +85,7 @@ export const api = {
 
     async updateTrailLog(mountainId, trailId, logId, updatedLog) {
         try {
-            const response = await axios.put(`${IP}:${PORT}/${mountainId}/trail/${trailId}/log/${logId}`, updatedLog);
+            const response = await axios.put(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}/log/${logId}`, updatedLog);
             return response.data;
         } catch (error) {
             console.error(`Error updating trail log with id ${logId} for trail with id ${trailId} and mountain with id ${mountainId}`, error);
@@ -95,7 +95,7 @@ export const api = {
 
     async deleteTrailLog(mountainId, trailId, logId) {
         try {
-            const response = await axios.delete(`${IP}:${PORT}/${mountainId}/trail/${trailId}/log/${logId}`);
+            const response = await axios.delete(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}/log/${logId}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting trail log with id ${logId} for trail with id ${trailId} and mountain with id ${mountainId}`, error);

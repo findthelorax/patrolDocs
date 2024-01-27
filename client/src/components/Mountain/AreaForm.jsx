@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
 	TextField,
 	Button,
@@ -6,10 +6,13 @@ import {
 	Card,
 	CardContent,
 	Stack,
-	Select,
 	MenuItem,
 	InputLabel,
 	FormControl,
+	Modal,
+	Snackbar,
+	Alert,
+	Autocomplete
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { MountainContext } from '../../contexts/MountainContext';
@@ -17,18 +20,31 @@ import { MountainContext } from '../../contexts/MountainContext';
 const AddAreaForm = () => {
 	const [name, setName] = useState('');
 	const [description, setDescription] = useState('');
-	const [selectedMountain, setSelectedMountain] = useState('');
+	const [selectedMountain, setSelectedMountain] = useState(null);
 	const { mountains, fetchMountains, api } = useContext(MountainContext);
 	const theme = useTheme();
+
+	const [openModal, setOpenModal] = useState(false);
+	const [openSnackbar, setOpenSnackbar] = useState(false);
+
+	useEffect(() => {
+		if (mountains.length === 0) {
+			setOpenModal(true);
+			setOpenSnackbar(true);
+		}
+	}, [mountains]);
+
+	const handleCloseModal = () => setOpenModal(false);
+	const handleCloseSnackbar = () => setOpenSnackbar(false);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
 			const area = { name, description };
-			await api.addArea(selectedMountain, area);
+			await api.addArea(selectedMountain._id, area);
 			setName('');
 			setDescription('');
-			setSelectedMountain('');
+			setSelectedMountain(null);
 			fetchMountains();
 		} catch (error) {
 			console.error('Error adding area', error);
@@ -41,19 +57,18 @@ const AddAreaForm = () => {
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
 						<FormControl fullWidth required>
-							<InputLabel id="mountain-label">Mountain</InputLabel>
-							<Select
-								labelId="mountain-label"
+							<Autocomplete
+								id="mountain-autocomplete"
+								options={mountains}
+								getOptionLabel={(option) => option.name}
 								value={selectedMountain}
-								label="Mountain"
-								onChange={(e) => setSelectedMountain(e.target.value)}
-							>
-								{/* {mountains && mountains.map((mountain) => (
-                                    <MenuItem key={mountain.id} value={mountain.id}>
-                                        {mountain.name}
-                                    </MenuItem>
-                                ))} */}
-							</Select>
+								onChange={(event, newValue) => {
+									setSelectedMountain(newValue);
+								}}
+								autoHighlight
+								autoSelect
+								renderInput={(params) => <TextField {...params} label="Mountain" required />}
+							/>
 						</FormControl>
 						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
 						<Button

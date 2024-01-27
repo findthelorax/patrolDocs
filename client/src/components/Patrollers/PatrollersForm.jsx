@@ -7,18 +7,16 @@ const AddPatrollerForm = () => {
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [position, setPosition] = useState('');
-	const [mountainId, setMountainId] = useState('');
 	const { mountains, fetchPatrollers } = useContext(MountainContext); // Use MountainContext
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const patroller = { firstName, lastName, position, mountainId }; // Associate patroller with selected mountain
+			const patroller = { firstName, lastName, position }; // Associate patroller with selected mountain
 			await patrollerApi.addPatroller(patroller);
 			setFirstName('');
 			setLastName('');
 			setPosition('');
-			setMountainId('');
 			fetchPatrollers();
 		} catch (error) {
 			console.error('Error adding patroller', error);

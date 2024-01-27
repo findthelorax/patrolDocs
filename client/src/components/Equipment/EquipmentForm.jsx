@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { TextField, Button, Box, Stack, Card, CardContent } from '@mui/material';
+import { Autocomplete, TextField, Button, Box, Stack, Card, CardContent } from '@mui/material';
 import { api as equipmentApi } from '../../api/EquipmentAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 
@@ -38,13 +38,15 @@ const AddEquipmentForm = () => {
 
 const AddEquipmentLogForm = () => {
     const [log, setLog] = useState('');
-    const { selectedMountain, fetchMountains } = useContext(MountainContext);
+    const [equipment, setEquipment] = useState(null);
+    const { selectedMountain, fetchMountains, equipments } = useContext(MountainContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await equipmentApi.addEquipmentLog(selectedMountain.id, selectedEquipment.id, { log });
+            await equipmentApi.addEquipmentLog(selectedMountain.id, equipment.id, { log });
             setLog('');
+            setEquipment(null);
             fetchMountains(); // fetch the updated list of mountains
         } catch (error) {
             console.error('Error adding equipment log', error);
@@ -56,6 +58,18 @@ const AddEquipmentLogForm = () => {
             <CardContent>
                 <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
                     <Stack spacing={2}>
+                        <Autocomplete
+                            id="equipment-autocomplete"
+                            options={equipments}
+                            getOptionLabel={(option) => option.name}
+                            value={equipment}
+                            onChange={(event, newValue) => {
+                                setEquipment(newValue);
+                            }}
+                            autoHighlight
+                            autoSelect
+                            renderInput={(params) => <TextField {...params} label="Equipment" required />}
+                        />
                         <TextField label="Log" value={log} onChange={(e) => setLog(e.target.value)} required multiline />
                         <Button type="submit" variant="contained">Add Equipment Log</Button>
                     </Stack>

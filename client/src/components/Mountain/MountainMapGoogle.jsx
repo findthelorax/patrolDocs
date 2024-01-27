@@ -11,7 +11,7 @@ const center = {
     lng: -72.7277
 };
 
-function MountainMap() {
+function MountainMapGoogle() {
     return (
         <LoadScript
             googleMapsApiKey={process.env.REACT_APP_G_MAPS_API_KEY}
@@ -40,4 +40,4 @@ function MountainMap() {
     )
 }
 
-export default React.memo(MountainMap);
+export default React.memo(MountainMapGoogle);

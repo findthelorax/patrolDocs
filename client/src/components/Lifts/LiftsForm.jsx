@@ -3,19 +3,17 @@ import { TextField, Button, Box, Stack, Card, CardContent } from '@mui/material'
 import { api as liftApi } from '../../api/LiftAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 
-const AddLiftForm = () => {
+const AddLiftForm = ({ coordinates }) => {
     const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
     const { selectedMountain, fetchMountains } = useContext(MountainContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const lift = { name, description };
+            const lift = { name, coordinates };
             await liftApi.createLift(selectedMountain.id, lift);
             setName('');
-            setDescription('');
-            fetchMountains(); // fetch the updated list of mountains
+            fetchMountains();
         } catch (error) {
             console.error('Error adding lift', error);
         }

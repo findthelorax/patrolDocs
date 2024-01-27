@@ -5,7 +5,7 @@ const PORT = process.env.REACT_APP_PORT;
 export const api = {
     async getAllPatrollers() {
         try {
-            const response = await axios.get(`${IP}:${PORT}/`);
+            const response = await axios.get(`${IP}:${PORT}/patroller`);
             return response.data;
         } catch (error) {
             console.error('Error fetching patrollers', error);
@@ -15,7 +15,7 @@ export const api = {
 
     async addPatroller(patroller) {
         try {
-            const response = await axios.post(`${IP}:${PORT}/`, patroller);
+            const response = await axios.post(`${IP}:${PORT}/patroller`, patroller);
             return response.data;
         } catch (error) {
             console.error('Error adding patroller', error);
@@ -25,7 +25,7 @@ export const api = {
 
     async getPatroller(patrollerId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${patrollerId}`);
+            const response = await axios.get(`${IP}:${PORT}/patroller/${patrollerId}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching patroller with id ${patrollerId}`, error);
@@ -35,7 +35,7 @@ export const api = {
 
     async updatePatroller(patrollerId, updatedPatroller) {
         try {
-            const response = await axios.put(`${IP}:${PORT}/${patrollerId}`, updatedPatroller);
+            const response = await axios.put(`${IP}:${PORT}/patroller/${patrollerId}`, updatedPatroller);
             return response.data;
         } catch (error) {
             console.error(`Error updating patroller with id ${patrollerId}`, error);
@@ -45,7 +45,7 @@ export const api = {
 
     async deletePatroller(patrollerId) {
         try {
-            const response = await axios.delete(`${IP}:${PORT}/${patrollerId}`);
+            const response = await axios.delete(`${IP}:${PORT}/patroller/${patrollerId}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting patroller with id ${patrollerId}`, error);
@@ -55,7 +55,7 @@ export const api = {
 
     async getAllLogs(patrollerId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${patrollerId}/dispatcher`);
+            const response = await axios.get(`${IP}:${PORT}/patroller/${patrollerId}/dispatcher`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching logs for patroller with id ${patrollerId}`, error);
@@ -65,7 +65,7 @@ export const api = {
 
     async createLog(patrollerId, log) {
         try {
-            const response = await axios.post(`${IP}:${PORT}/${patrollerId}/dispatcher`, log);
+            const response = await axios.post(`${IP}:${PORT}/patroller/${patrollerId}/dispatcher`, log);
             return response.data;
         } catch (error) {
             console.error(`Error creating log for patroller with id ${patrollerId}`, error);
@@ -75,7 +75,7 @@ export const api = {
 
     async getLog(patrollerId, dispatcherId) {
         try {
-            const response = await axios.get(`${IP}:${PORT}/${patrollerId}/dispatcher/${dispatcherId}`);
+            const response = await axios.get(`${IP}:${PORT}/patroller/${patrollerId}/dispatcher/${dispatcherId}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching log with id ${dispatcherId} for patroller with id ${patrollerId}`, error);
@@ -85,7 +85,7 @@ export const api = {
 
     async updateLog(patrollerId, dispatcherId, updatedLog) {
         try {
-            const response = await axios.patch(`${IP}:${PORT}/${patrollerId}/dispatcher/${dispatcherId}`, updatedLog);
+            const response = await axios.patch(`${IP}:${PORT}/patroller/${patrollerId}/dispatcher/${dispatcherId}`, updatedLog);
             return response.data;
         } catch (error) {
             console.error(`Error updating log with id ${dispatcherId} for patroller with id ${patrollerId}`, error);
@@ -95,7 +95,7 @@ export const api = {
 
     async deleteLog(patrollerId, dispatcherId) {
         try {
-            const response = await axios.delete(`${IP}:${PORT}/${patrollerId}/dispatcher/${dispatcherId}`);
+            const response = await axios.delete(`${IP}:${PORT}/patroller/${patrollerId}/dispatcher/${dispatcherId}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting log with id ${dispatcherId} for patroller with id ${patrollerId}`, error);
@@ -105,7 +105,7 @@ export const api = {
 
     async addMountainToPatroller(patrollerId, mountainId) {
         try {
-            const response = await axios.put(`${IP}:${PORT}/${patrollerId}/addMountain/${mountainId}`);
+            const response = await axios.put(`${IP}:${PORT}/patroller/${patrollerId}/addMountain/${mountainId}`);
             return response.data;
         } catch (error) {
             console.error(`Error adding mountain with id ${mountainId} to patroller with id ${patrollerId}`, error);
@@ -115,7 +115,7 @@ export const api = {
 
     async removeMountainFromPatroller(patrollerId, mountainId) {
         try {
-            const response = await axios.put(`${IP}:${PORT}/${patrollerId}/removeMountain/${mountainId}`);
+            const response = await axios.put(`${IP}:${PORT}/patroller/${patrollerId}/removeMountain/${mountainId}`);
             return response.data;
         } catch (error) {
             console.error(`Error removing mountain with id ${mountainId} from patroller with id ${patrollerId}`, error);

@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import SearchAppBar from './dashboard/appBar/appBar';
 import { PermanentDrawerLeft } from './dashboard/drawer/Drawer';
 import Dashboard from './Dashboard';
+import Map from './map/Map';
 import { Routes, Route } from 'react-router-dom';
 
 function MainLayout() {
@@ -28,6 +29,7 @@ function MainLayout() {
 					<Box component="main" sx={{ p: { xs: 2, sm: 3 } }}>
 						<Routes>
 							<Route path="/dashboard" element={<Dashboard />} />
+							<Route path="/map" element={<Map />} />
 							<Route path="*" element={<Dashboard />} />
 						</Routes>
 					</Box>

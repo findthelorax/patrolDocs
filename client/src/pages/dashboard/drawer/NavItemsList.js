@@ -19,6 +19,12 @@ export const MainListItems = () => (
 export const SecondaryListItems = () => (
 	<React.Fragment>
 		<ListSubheader component="div">Logs</ListSubheader>
+		<ListItemButton component={Link} to="/map">
+			<ListItemIcon>
+				<AiOutlineDashboard />
+			</ListItemIcon>
+			<ListItemText primary="Map" />
+		</ListItemButton>
 	</React.Fragment>
 );
 

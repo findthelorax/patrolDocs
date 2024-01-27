@@ -1,6 +1,6 @@
 import axios from 'axios';
 const IP = process.env.REACT_APP_IP;
-const PORT = process.env.REACT_APP_PORT;
+const PORT = process.env.REACT_APP_BACKEND_PORT;
 
 export const api = {
     async getAllPatrollers() {

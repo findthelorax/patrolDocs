@@ -1,14 +1,11 @@
 import axios from 'axios';
 const IP = process.env.REACT_APP_IP;
-console.log("🚀 ~ file: MountainAPI.jsx:3 ~ IP:", IP)
 const PORT = process.env.REACT_APP_BACKEND_PORT;
-console.log("🚀 ~ file: MountainAPI.jsx:5 ~ PORT:", PORT)
 
 export const api = {
     async getAllMountains() {
         try {
             const response = await axios.get(`${IP}:${PORT}/mountain`);
-            console.log("🚀 ~ file: MountainAPI.jsx:16 ~ getAllMountains ~ response.data:", response.data)
             return response.data;
         } catch (error) {
             console.error('Error fetching mountains', error);

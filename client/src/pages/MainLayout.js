@@ -4,6 +4,7 @@ import SearchAppBar from './dashboard/appBar/appBar';
 import { PermanentDrawerLeft } from './dashboard/drawer/Drawer';
 import Dashboard from './Dashboard';
 import Map from './map/Map';
+import Log from './logs/Logs';
 import { Routes, Route } from 'react-router-dom';
 
 function MainLayout() {
@@ -30,6 +31,7 @@ function MainLayout() {
 						<Routes>
 							<Route path="/dashboard" element={<Dashboard />} />
 							<Route path="/map" element={<Map />} />
+							<Route path="/logs" element={<Log />} />
 							<Route path="*" element={<Dashboard />} />
 						</Routes>
 					</Box>

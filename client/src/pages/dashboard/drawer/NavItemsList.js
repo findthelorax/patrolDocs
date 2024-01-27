@@ -18,7 +18,7 @@ export const MainListItems = () => (
 
 export const SecondaryListItems = () => (
 	<React.Fragment>
-		<ListSubheader component="div">Logs</ListSubheader>
+		<ListSubheader component="div">Map</ListSubheader>
 		<ListItemButton component={Link} to="/map">
 			<ListItemIcon>
 				<AiOutlineDashboard />
@@ -30,6 +30,12 @@ export const SecondaryListItems = () => (
 
 export const SettingsListItems = () => (
 	<React.Fragment>
-		<ListSubheader component="div">Settings</ListSubheader>
+		<ListSubheader component="div">Logs</ListSubheader>
+		<ListItemButton component={Link} to="/logs">
+			<ListItemIcon>
+				<AiOutlineDashboard />
+			</ListItemIcon>
+			<ListItemText primary="Logs" />
+		</ListItemButton>
 	</React.Fragment>
 );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import AddMountainForm from '../components/Mountain/MountainForm';
-import AddAreaForm from '../components/Mountain/AreaForm';
+import AddAreaForm from '../components/Areas/AreaForm';
 // import AddLodgeForm from '../components/Lodges/LodgesForm';
 import { AddHutForm, AddHutLogForm } from '../components/Huts/HutsForm';
 import AddLiftForm from '../components/Lifts/LiftsForm';

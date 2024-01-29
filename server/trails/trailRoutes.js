@@ -5,17 +5,22 @@ const router = express.Router({ mergeParams: true });
 // Trail routes
 router.route('/mountain/:mountainId/trail')
     .get(trailController.getAllTrails)
-    .post(trailController.addTrail);
+    .post(trailController.createTrail);
 
 router.route('/mountain/:mountainId/trail/:trailId')
     .get(trailController.getOneTrail)
     .put(trailController.updateTrail)
     .delete(trailController.deleteTrail);
 
+// Trail area routes
+router.route('/mountain/:mountainId/trail/:trailId/:areaId')
+    .post(trailController.addTrailToArea)
+    .delete(trailController.deleteTrailFromArea);
+
 // Trail log routes
 router.route('/mountain/:mountainId/trail/:trailId/log')
     .get(trailController.getAllTrailLogs)
-    .post(trailController.addTrailLog);
+    .post(trailController.createTrailLog);
 
 router.route('/mountain/:mountainId/trail/:trailId/log/:logId')
     .get(trailController.getOneTrailLog)

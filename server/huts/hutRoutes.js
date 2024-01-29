@@ -4,7 +4,7 @@ const router = express.Router({ mergeParams: true });
 
 router.route('/mountain/:mountainId/hut')
     .get(hutController.getAllHuts)
-    .post(hutController.addHut);
+    .post(hutController.createHut);
 
 router.route('/mountain/:mountainId/hut/:hutId')
     .get(hutController.getHut)
@@ -13,7 +13,7 @@ router.route('/mountain/:mountainId/hut/:hutId')
 
 router.route('/mountain/:mountainId/hut/:hutId/log')
     .get(hutController.getHutLog)
-    .post(hutController.addHutLog);
+    .post(hutController.createHutLog);
 
 router.route('/mountain/:mountainId/hut/:hutId/log/:logId')
     .get(hutController.getHutLog)

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import MountainMap from '../../components/Mountain/MountainMap';
-import MountainMapBox from '../../components/Mountain/MountainMapBox';
-import MountainMapGoogle from '../../components/Mountain/MountainMap';
+import MountainMap from '../components/Mountain/MountainMap';
+import MountainMapBox from '../components/Mountain/MountainMapBox';
+import MountainMapGoogle from '../components/Mountain/MountainMap';
 
-function Dashboard() {
+function Map() {
 	return (
 		<Grid container rowSpacing={3} columnSpacing={3} sx={{ pt: 8 }}>
 			{/* <Grid item xs={12}>
@@ -20,4 +20,4 @@ function Dashboard() {
 	);
 }
 
-export default Dashboard;
+export default Map;

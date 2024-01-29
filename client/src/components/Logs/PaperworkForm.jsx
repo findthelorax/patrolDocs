@@ -12,7 +12,7 @@ const AddPaperworkForm = () => {
             await api.createPaperwork(paperwork);
             setTitle('');
         } catch (error) {
-            console.error('Error adding paperwork', error);
+            console.error('Error creating paperwork', error);
         }
     };
 

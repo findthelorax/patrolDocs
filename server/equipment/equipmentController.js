@@ -86,6 +86,18 @@ exports.uncheckEquipment = async (req, res) => {
     }
 };
 
+exports.getAllEquipmentLogs = async (req, res) => {
+    try {
+        const equipmentLogs = await EquipmentLog.find({ equipment: req.params.equipmentId });
+        if (!equipmentLogs) {
+            return res.status(404).json({ message: 'No logs found for this equipment' });
+        }
+        res.status(200).json(equipmentLogs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 exports.getEquipmentLog = async (req, res) => {
     try {
         const log = await EquipmentLog.findById(req.params.logId);
@@ -99,7 +111,7 @@ exports.getEquipmentLog = async (req, res) => {
     }
 };
 
-exports.addEquipmentLog = async (req, res) => {
+exports.createEquipmentLog = async (req, res) => {
     try {
         const equipment = await Equipment.findById(req.params.equipmentId);
         if (equipment) {

@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const mountainRoutes = require('./mountains/mountainRoutes');
 const hutRoutes = require('./huts/hutRoutes');
+const lodgeRoutes = require('./lodges/lodgeRoutes');
 const liftRoutes = require('./lifts/liftRoutes');
 const trailRoutes = require('./trails/trailRoutes');
 
@@ -37,6 +38,7 @@ app.use(express.json());
 
 app.use(mountainRoutes);
 app.use(hutRoutes);
+app.use(lodgeRoutes);
 app.use(liftRoutes);
 app.use(trailRoutes);
 

@@ -13,13 +13,13 @@ const AddPatrollerForm = () => {
 		event.preventDefault();
 		try {
 			const patroller = { firstName, lastName, position }; // Associate patroller with selected mountain
-			await patrollerApi.addPatroller(patroller);
+			await patrollerApi.createPatroller(patroller);
 			setFirstName('');
 			setLastName('');
 			setPosition('');
 			fetchPatrollers();
 		} catch (error) {
-			console.error('Error adding patroller', error);
+			console.error('Error creating patroller', error);
 		}
 	};
 

@@ -33,7 +33,7 @@ exports.createLift = async (req, res) => {
         mountain.lifts.push(lift._id);
         await mountain.save();
 
-        // If the lift is in an area, add it to the area's lifts array
+        // If the lift is in an area, create it to the area's lifts array
         if (req.body.area) {
             const area = await Mountain.areas.findById(req.body.area);
             if (!area) return res.status(404).json({ message: 'No area found with this ID' });
@@ -108,7 +108,7 @@ exports.addLiftToArea = async (req, res) => {
             return res.status(400).json({ message: 'Lift already exists in this area' });
         }
 
-        // Find the lift and add the area to it
+        // Find the lift and create the area to it
         const lift = await Lift.findById(req.params.liftId);
         if (!lift) {
             console.log(`Lift not found with ID: ${req.params.liftId}`);

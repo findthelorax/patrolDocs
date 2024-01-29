@@ -1,5 +1,5 @@
 const { Mountain } = require('../mountains/mountainModel');
-const Trail = require('./trailModel');
+const { Trail, TrailLog } = require('./trailModel');
 
 exports.getAllTrails = async (req, res) => {
 	try {
@@ -13,9 +13,9 @@ exports.getAllTrails = async (req, res) => {
 
 exports.getOneTrail = async (req, res) => {
 	try {
-		const mountain = await Mountain.findById(req.params.mountainId);
-		const area = mountain.areas.id(req.params.areaId);
-		const trail = area.trails.id(req.params.trailId);
+		const mountainId = req.params.mountainId;
+		const trailId = req.params.trailId;
+		const trail = await Trail.findOne({ _id: trailId, mountain: mountainId });
 		if (!trail) {
 			return res.status(404).json({ message: 'Trail not found' });
 		}
@@ -25,7 +25,7 @@ exports.getOneTrail = async (req, res) => {
 	}
 };
 
-exports.addTrail = async (req, res) => {
+exports.createTrail = async (req, res) => {
 	try {
 		const mountain = await Mountain.findById(req.params.mountainId);
 		const existingTrail = await Trail.findOne({
@@ -88,6 +88,41 @@ exports.deleteTrail = async (req, res) => {
 	}
 };
 
+exports.addTrailToArea = async (req, res) => {
+	try {
+		const mountain = await Mountain.findById(req.params.mountainId);
+		const area = mountain.areas.id(req.params.areaId);
+		const trail = await Trail.findById(req.params.trailId);
+
+		if (!area || !trail) {
+			return res.status(404).json({ message: 'Area or Trail not found' });
+		}
+
+		area.trails.push(trail._id);
+		await mountain.save();
+		res.status(200).json({ message: 'Trail added to Area' });
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+};
+
+exports.deleteTrailFromArea = async (req, res) => {
+	try {
+		const mountain = await Mountain.findById(req.params.mountainId);
+		const area = mountain.areas.id(req.params.areaId);
+
+		if (!area) {
+			return res.status(404).json({ message: 'Area not found' });
+		}
+
+		area.trails.pull(req.params.trailId);
+		await mountain.save();
+		res.status(200).json({ message: 'Trail removed from Area' });
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+};
+
 // Trail Logs
 exports.getAllTrailLogs = async (req, res) => {
     try {
@@ -110,7 +145,7 @@ exports.getOneTrailLog = async (req, res) => {
     }
 };
 
-exports.addTrailLog = async (req, res) => {
+exports.createTrailLog = async (req, res) => {
     try {
         const trailLog = new TrailLog(req.body);
         const newTrailLog = await trailLog.save();

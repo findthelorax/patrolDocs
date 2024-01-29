@@ -18,6 +18,7 @@ const EquipmentSchema = new Schema({
     outOfServiceDate: Date,
     checkLog: { type: Schema.Types.ObjectId, ref: 'EquipmentLog' },
     comments: String,
+    location: { type: String, enum: ['Hut', 'Lodge', 'AidRoom', 'Trail', 'OutOfService'], default: 'OutOfService' },
 });
 
 const Equipment = mongoose.model('Equipment', EquipmentSchema);

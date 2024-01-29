@@ -12,12 +12,12 @@ const AddTrailForm = () => {
         event.preventDefault();
         try {
             const trail = { name, areaId };
-            await trailApi.addTrail(selectedMountain.id, trail);
+            await trailApi.createTrail(selectedMountain._id, trail);
             setName('');
             setAreaId('');
             fetchMountains();
         } catch (error) {
-            console.error('Error adding trail', error);
+            console.error('Error creating trail', error);
         }
     };
 
@@ -37,7 +37,7 @@ const AddTrailForm = () => {
                             >
 								{areas &&
 									areas.map((area) => (
-										<MenuItem key={area.id} value={area}>
+										<MenuItem key={area._id} value={area}>
 											{area.name}
 										</MenuItem>
 									))}

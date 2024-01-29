@@ -1,156 +1,157 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import { api } from '../api/MountainAPI';
+import { api as equipmentApi } from '../api/EquipmentAPI';
+import { api as hutApi } from '../api/HutAPI';
+import { api as liftApi } from '../api/LiftAPI';
+import { api as lodgeApi } from '../api/LodgeAPI';
+// import { api as paperworkApi } from '../api/PaperworkAPI';
+import { api as patrollerApi } from '../api/PatrollerAPI';
+import { api as trailApi } from '../api/TrailAPI';
+import { DateContext } from './DateContext';
 
 export const MountainContext = createContext();
 
+const useFetch = (apiFunc, id) => {
+	const [data, setData] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+
+	const fetchData = useCallback(async () => {
+		setIsLoading(true);
+		const response = await apiFunc(id);
+		setData(response || []);
+		setIsLoading(false);
+	}, [apiFunc, id]);
+
+	return [data, isLoading, fetchData];
+};
+
 export const MountainProvider = ({ children }) => {
-	const [mountains, setMountains] = useState([]);
-	const [areas, setAreas] = useState(null);
-	const [huts, setHuts] = useState(null);
-	const [lodges, setLodges] = useState(null);
-	const [lifts, setLifts] = useState(null);
-	const [trails, setTrails] = useState(null);
-	const [patrollers, setPatrollers] = useState([]);
-
 	const [selectedMountain, setSelectedMountain] = useState(null);
-	const [selectedArea, setSelectedArea] = useState(null);
-	const [selectedHut, setSelectedHut] = useState(null);
-	const [selectedLodge, setSelectedLodge] = useState(null);
-	const [selectedLift, setSelectedLift] = useState(null);
-	const [selectedTrail, setSelectedTrail] = useState(null);
-	const [selectedPatroller, setSelectedPatroller] = useState(null);
 
-	const fetchMountains = async () => {
-		const data = await api.getAllMountains();
-		setMountains(data);
-	};
+	const [mountains, isMountainsLoading, fetchMountains] = useFetch(api.getAllMountains);
+	const [areas, isAreasLoading, fetchAreas] = useFetch(api.getAllAreas, selectedMountain?._id);
+	const [huts, isHutsLoading, fetchHuts] = useFetch(hutApi.getAllHuts, selectedMountain?._id);
+	const [lodges, isLodgesLoading, fetchLodges] = useFetch(lodgeApi.getAllLodges, selectedMountain?._id);
+	const [lifts, isLiftsLoading, fetchLifts] = useFetch(liftApi.getAllLifts, selectedMountain?._id);
+	const [trails, isTrailsLoading, fetchTrails] = useFetch(trailApi.getAllTrails, selectedMountain?._id);
+	const [equipment, isEquipmentLoading, fetchEquipment] = useFetch(
+		equipmentApi.getAllEquipment,
+		selectedMountain?._id
+	);
+	// const [paperwork, isPaperworkLoading, fetchPaperwork] = useFetch(paperworkApi.getAllPaperwork, selectedMountain?._id);
+	const [patrollers, isPatrollersLoading, fetchPatrollers] = useFetch(
+		patrollerApi.getAllPatrollers,
+		selectedMountain?._id
+	);
+	const [currentDayPatrolDispatcher, setCurrentDayPatrolDispatcher] = useState(null);
+	const [patrolDispatcher, setPatrolDispatcher] = useState(null);
+	const { selectedDate } = useContext(DateContext);
 
-	const fetchAreas = async () => {
-		if (selectedMountain) {
-			const data = await api.getAreas(selectedMountain.id);
-			setAreas(data || []); // set areas to an empty array when there are no areas
-		} else {
-			setAreas([]); // set areas to an empty array when there is no selected mountain
-		}
-	};
-
-	const fetchHuts = async () => {
-		if (selectedMountain) {
-			const data = await api.getHuts(selectedMountain.id);
-			setHuts(data || []);
-		} else {
-			setHuts([]);
-		}
-	};
-
-	const fetchLodges = async () => {
-		if (selectedMountain) {
-			const data = await api.getLodges(selectedMountain.id);
-			setLodges(data || []);
-		} else {
-			setLodges([]);
-		}
-	};
-
-	const fetchLifts = async () => {
-		if (selectedMountain) {
-			const data = await api.getLifts(selectedMountain.id);
-			setLifts(data || []);
-		} else {
-			setLifts([]);
-		}
-	};
-
-	const fetchTrails = async () => {
-		if (selectedMountain) {
-			const data = await api.getTrails(selectedMountain.id);
-			setTrails(data || []);
-		} else {
-			setTrails([]);
-		}
-	};
-
-	const fetchPatrollers = async () => {
-		// New function to fetch patrollers
-		if (selectedMountain) {
-			const data = await api.getPatrollers(selectedMountain.id);
-			setPatrollers(data);
-		} else {
-			setPatrollers([]);
-		}
-	};
+	const isLoading =
+		isMountainsLoading ||
+		isAreasLoading ||
+		isHutsLoading ||
+		isLodgesLoading ||
+		isLiftsLoading ||
+		isTrailsLoading ||
+		isPatrollersLoading ||
+		isEquipmentLoading;
 
 	const selectMountain = (mountain) => {
 		setSelectedMountain(mountain);
+		localStorage.setItem('selectedMountainId', mountain._id);
 	};
 
-	const selectArea = (area) => {
-		setSelectedArea(area);
-	};
+	async function handleServiceToggle(item) {
+		const updatedEquipment = { ...item, inService: !item.inService };
+		try {
+			await equipmentApi.updateEquipment(selectedMountain._id, item._id, updatedEquipment);
+			fetchEquipment(); // Refresh equipment data
+		} catch (error) {
+			console.error(`Error toggling service status for equipment with id ${item._id}`, error);
+		}
+	}
 
-	const selectHut = (hut) => {
-		setSelectedHut(hut);
-	};
+	async function fetchPatrolDispatcherForDate(date) {
+		const formattedDate = date.toISOString().split('T')[0];
 
-	const selectLodge = (lodge) => {
-		setSelectedLodge(lodge);
-	};
+		try {
+			const response = await patrollerApi.getPatrolDispatcherForDate(selectedMountain._id, formattedDate);
+			setCurrentDayPatrolDispatcher(response);
+		} catch (error) {
+			console.error(
+				`Error fetching patrol dispatcher for date ${formattedDate} for mountain with id ${selectedMountain._id}`,
+				error
+			);
+		}
+	}
 
-    
-	const selectLift = (lift) => {
-		setSelectedLift(lift);
-	};
-
-	const selectTrail = (trail) => {
-		setSelectedTrail(trail);
-	};
-
-    const selectPatroller = (patroller) => {
-        setSelectedPatroller(patroller);
-    };
+	useEffect(() => {
+		if (selectedDate && selectedMountain) {
+			fetchPatrolDispatcherForDate(selectedDate)
+				.then((data) => setPatrolDispatcher(data))
+				.catch((error) => console.error(error));
+		}
+	}, [selectedDate, selectedMountain]);
 
 	useEffect(() => {
 		fetchMountains();
-	}, []);
+	}, [fetchMountains]);
 
 	useEffect(() => {
-        fetchAreas();
-        fetchHuts();
-        fetchLodges();
-        fetchLifts();
-        fetchTrails();
-		fetchPatrollers();
-	}, [selectedMountain]);
+		if (selectedMountain) {
+			fetchAreas();
+			fetchHuts();
+			fetchLodges();
+			fetchLifts();
+			fetchTrails();
+			fetchPatrollers();
+			fetchEquipment();
+			fetchPatrolDispatcherForDate(new Date());
+			// fetchPaperwork();
+		}
+	}, [
+		selectedMountain,
+		fetchAreas,
+		fetchHuts,
+		fetchLodges,
+		fetchLifts,
+		fetchTrails,
+		fetchPatrollers,
+		fetchEquipment,
+	]);
 
 	return (
 		<MountainContext.Provider
 			value={{
+				isLoading,
 				mountains,
 				fetchMountains,
 				selectedMountain,
 				selectMountain,
-                areas,
-                fetchAreas,
-				selectedArea,
-				selectArea,
-                huts,
-                fetchHuts,
-				selectedHut,
-				selectHut,
-                lodges,
-                fetchLodges,
-				selectedLodge,
-				selectLodge,
-                lifts,
-                fetchLifts,
-				selectedLift,
-				selectLift,
-                trails,
-                fetchTrails,
-				selectedTrail,
-				selectTrail,
+				setSelectedMountain,
+				areas,
+				fetchAreas,
+				huts,
+				fetchHuts,
+				lodges,
+				fetchLodges,
+				lifts,
+				fetchLifts,
+				trails,
+				fetchTrails,
 				patrollers,
 				fetchPatrollers,
+				currentDayPatrolDispatcher,
+				fetchPatrolDispatcherForDate,
+				patrolDispatcher,
+				setPatrolDispatcher,
+				equipment,
+				fetchEquipment,
+				handleServiceToggle,
+				// paperwork,
+				// fetchPaperwork,
+				api,
 			}}
 		>
 			{children}

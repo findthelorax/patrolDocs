@@ -3,30 +3,32 @@ const patrollerController = require('./patrollerController');
 const router = express.Router();
 
 // Patroller routes
-router.route('/patroller')
+router.route('/mountain/:mountainId/patroller')
     .get(patrollerController.getAllPatrollers)
     .post(patrollerController.addPatroller);
 
-router.route('/patroller/:patrollerId')
+router.route('/mountain/:mountainId/patroller/:patrollerId')
     .get(patrollerController.getPatroller)
     .put(patrollerController.updatePatroller)
     .delete(patrollerController.deletePatroller);
 
 // Dispatcher routes
-router.route('/patroller/:patrollerId/dispatcher')
-    .get(patrollerController.getAllLogs)
-    .post(patrollerController.createLog);
+router.route('/mountain/:mountainId/patroller/:patrollerId/dispatcher')
+    .get(patrollerController.getAllPatrolDispatcherLogs)
+    .post(patrollerController.createPatrolDispatcherLog);
 
-router.route('/patroller/:patrollerId/dispatcher/:dispatcherId')
-    .get(patrollerController.getLog)
-    .patch(patrollerController.updateLog)
-    .delete(patrollerController.deleteLog);
+router.route('/mountain/:mountainId/patroller/:patrollerId/dispatcher/:dispatcherId')
+    .get(patrollerController.getPatrolDispatcherLog)
+    .patch(patrollerController.updatePatrolDispatcherLog)
+    .delete(patrollerController.deletePatrolDispatcherLog);
+
+router.get('/mountain/:mountainId/patroller/dispatcher/:date', patrollerController.getPatrolDispatcherForDate);
 
 // Mountain routes
-router.route('/patroller/:patrollerId/addMountain/:mountainId')
+router.route('/mountain/:mountainId/patroller/:patrollerId/addMountain/:mountainId')
     .put(patrollerController.addMountainToPatroller);
 
-router.route('/patroller/:patrollerId/removeMountain/:mountainId')
+router.route('/mountain/:mountainId/patroller/:patrollerId/removeMountain/:mountainId')
     .put(patrollerController.removeMountainFromPatroller);
 
 module.exports = router;

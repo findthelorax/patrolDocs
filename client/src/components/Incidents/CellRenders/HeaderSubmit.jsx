@@ -1,5 +1,5 @@
 import React from 'react';
-import { api } from '../../api/IncidentLog';
+import { api } from '../../../api/IncidentLog';
 
 const IncidentTableHeaderButton = (props) => {
     const handleSubmit = async () => {

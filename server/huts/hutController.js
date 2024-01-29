@@ -1,4 +1,4 @@
-const Hut = require('./hutModel');
+const { Hut } = require('./hutModel');
 const { Mountain } = require('../mountains/mountainModel');
 
 exports.getAllHuts = async (req, res) => {
@@ -24,17 +24,17 @@ exports.getHut = async (req, res) => {
     }
 };
 
-exports.addHut = async (req, res) => {
+exports.createHut = async (req, res) => {
     const hut = new Hut({
         name: req.body.name,
         mountain: req.params.mountainId,
-        area: req.body.area,
+        area: req.body.areaId,
         equipment: req.body.equipment,
     });
     try {
         const newHut = await hut.save();
 
-        // Find the mountain and add the new hut's ID to the huts array
+        // Find the mountain and create the new hut's ID to the huts array
         const mountain = await Mountain.findById(req.params.mountainId);
         if (!mountain) {
             return res.status(404).json({ message: 'Cannot find mountain' });
@@ -115,7 +115,7 @@ exports.getHutLog = async (req, res) => {
     }
 };
 
-exports.addHutLog = async (req, res) => {
+exports.createHutLog = async (req, res) => {
     try {
         const hut = await Hut.findById(req.params.hutId);
         if (hut) {

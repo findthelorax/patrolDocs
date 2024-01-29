@@ -1,8 +1,8 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import IncidentTable from '../../components/Incidents/IncidentTable';
+import IncidentTable from '../components/Incidents/IncidentTable';
 
-function Logs() {
+function IncidentLogs() {
 	return (
 		<Grid container rowSpacing={3} columnSpacing={3} sx={{ pt: 8 }}>
 			<Grid item xs={12}>
@@ -13,4 +13,4 @@ function Logs() {
 	);
 }
 
-export default Logs;
+export default IncidentLogs;

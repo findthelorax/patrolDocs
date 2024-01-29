@@ -5,7 +5,7 @@ import { MountainContext } from '../../contexts/MountainContext';
 const AddMountainForm = () => {
     const [name, setName] = useState('');
     const [city, setCity] = useState('');
-    const [state, setState] = useState('');
+    const [state, setState] = useState(null);
     const { fetchMountains, api } = useContext(MountainContext);
 
     const handleSubmit = async (event) => {
@@ -18,13 +18,13 @@ const AddMountainForm = () => {
                     state
                 }
             };
-            await api.addMountain(mountain);
+            await api.createMountain(mountain);
             setName('');
             setCity('');
-            setState('');
+            setState(null);
             fetchMountains();
         } catch (error) {
-            console.error('Error adding mountain', error);
+            console.error('Error creating mountain', error);
         }
     };
 

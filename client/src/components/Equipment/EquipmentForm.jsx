@@ -15,9 +15,9 @@ const AddEquipmentForm = () => {
             await equipmentApi.createEquipment(selectedMountain.id, equipment);
             setName('');
             setDescription('');
-            fetchMountains(); // fetch the updated list of mountains
+            fetchMountains();
         } catch (error) {
-            console.error('Error adding equipment', error);
+            console.error('Error creating equipment', error);
         }
     };
 
@@ -44,12 +44,12 @@ const AddEquipmentLogForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await equipmentApi.addEquipmentLog(selectedMountain.id, equipment.id, { log });
+            await equipmentApi.createEquipmentLog(selectedMountain.id, equipment.id, { log });
             setLog('');
             setEquipment(null);
             fetchMountains(); // fetch the updated list of mountains
         } catch (error) {
-            console.error('Error adding equipment log', error);
+            console.error('Error creating equipment log', error);
         }
     };
 

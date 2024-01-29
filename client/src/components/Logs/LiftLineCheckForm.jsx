@@ -15,7 +15,7 @@ const AddLineCheckForm = () => {
             setDescription('');
             fetchMountains();
         } catch (error) {
-            console.error('Error adding line check', error);
+            console.error('Error creating line check', error);
         }
     };
 

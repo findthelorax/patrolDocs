@@ -15,8 +15,8 @@ router
 
 router
     .route('/mountain/:mountainId/equipment/:equipmentId/log')
-    .get(equipmentController.getEquipmentLog)
-    .post(equipmentController.addEquipmentLog);
+    .get(equipmentController.getAllEquipmentLogs)
+    .post(equipmentController.createEquipmentLog);
 
 router
     .route('/mountain/:mountainId/equipment/:equipmentId/log/:logId')

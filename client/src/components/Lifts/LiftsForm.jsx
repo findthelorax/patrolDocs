@@ -15,7 +15,7 @@ const AddLiftForm = ({ coordinates }) => {
             setName('');
             fetchMountains();
         } catch (error) {
-            console.error('Error adding lift', error);
+            console.error('Error creating lift', error);
         }
     };
 

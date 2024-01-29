@@ -12,27 +12,20 @@ import {
 	Modal,
 	Snackbar,
 	Alert,
-	Autocomplete
+	Autocomplete,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { MountainContext } from '../../contexts/MountainContext';
 
 const AddAreaForm = () => {
 	const [name, setName] = useState('');
-	const [description, setDescription] = useState('');
 	const [selectedMountain, setSelectedMountain] = useState(null);
 	const { mountains, fetchMountains, api } = useContext(MountainContext);
 	const theme = useTheme();
 
 	const [openModal, setOpenModal] = useState(false);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
-
-	useEffect(() => {
-		if (mountains.length === 0) {
-			setOpenModal(true);
-			setOpenSnackbar(true);
-		}
-	}, [mountains]);
+	const [snackbarMessage, setSnackbarMessage] = useState('');
 
 	const handleCloseModal = () => setOpenModal(false);
 	const handleCloseSnackbar = () => setOpenSnackbar(false);
@@ -40,14 +33,17 @@ const AddAreaForm = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const area = { name, description };
-			await api.addArea(selectedMountain._id, area);
+			const area = { name };
+			await api.createArea(selectedMountain._id, area);
 			setName('');
-			setDescription('');
 			setSelectedMountain(null);
 			fetchMountains();
+			setSnackbarMessage(`Area ${name} created successfully!`);
+			setOpenSnackbar(true);
 		} catch (error) {
-			console.error('Error adding area', error);
+			console.error('Error creating area', error);
+			setSnackbarMessage(`Error creating ${name}`);
+			setOpenSnackbar(true);
 		}
 	};
 
@@ -74,13 +70,20 @@ const AddAreaForm = () => {
 						<Button
 							type="submit"
 							variant="contained"
-							style={{ backgroundColor: theme.palette.primary.main, color: theme.palette.common.white }}
 						>
 							Add Area
 						</Button>
 					</Stack>
 				</Box>
 			</CardContent>
+			<Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+				<Alert
+					onClose={handleCloseSnackbar}
+					severity={snackbarMessage.startsWith('Error') ? 'error' : 'success'}
+				>
+					{snackbarMessage}
+				</Alert>
+			</Snackbar>
 		</Card>
 	);
 };

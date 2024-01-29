@@ -7,6 +7,9 @@ const AreaSchema = new Schema({
     lifts: [{ type: Schema.Types.ObjectId, ref: 'Lift' }],
     trails: [{ type: Schema.Types.ObjectId, ref: 'Trail' }],
     huts: [{ type: Schema.Types.ObjectId, ref: 'Hut' }],
+    lodges: [{ type: Schema.Types.ObjectId, ref: 'Lodge' }],
+    aidRooms: [{ type: Schema.Types.ObjectId, ref: 'AidRoom' }],
+    equipment: [{ type: Schema.Types.ObjectId, ref: 'Equipment' }],
 });
 
 const MountainSchema = new Schema({
@@ -19,6 +22,9 @@ const MountainSchema = new Schema({
     lifts: [{ type: Schema.Types.ObjectId, ref: 'Lift' }],
     trails: [{ type: Schema.Types.ObjectId, ref: 'Trail' }],
     huts: [{ type: Schema.Types.ObjectId, ref: 'Hut' }],
+    lodges: [{ type: Schema.Types.ObjectId, ref: 'Lodge' }],
+    aidRooms: [{ type: Schema.Types.ObjectId, ref: 'AidRoom' }],
+    equipment: [{ type: Schema.Types.ObjectId, ref: 'Equipment' }],
     patrollers: [{ type: Schema.Types.ObjectId, ref: 'Patroller' }],
 });
 

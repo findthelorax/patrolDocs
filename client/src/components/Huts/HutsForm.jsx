@@ -23,13 +23,13 @@ const AddHutForm = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const hut = { name, area: selectedArea.id };
-			await hutApi.addHut(selectedMountain.id, hut);
+			const hut = { name, area: selectedArea._id };
+			await hutApi.createHut(selectedMountain._id, hut);
 			setName('');
 			setSelectedArea(null);
 			fetchMountains(); // fetch the updated list of mountains
 		} catch (error) {
-			console.error('Error adding hut', error);
+			console.error('Error creating hut', error);
 		}
 	};
 
@@ -44,13 +44,13 @@ const AddHutForm = () => {
 							<Select
 								labelId="area-select-label"
 								id="area-select"
-								value={selectedArea}
-								onChange={(e) => setSelectedArea(e.target.value)}
+								value={selectedArea ? selectedArea._id : ''}
+								onChange={(e) => setSelectedArea(areas.find((area) => area._id === e.target.value))}
 								label="Area"
 							>
 								{areas &&
 									areas.map((area) => (
-										<MenuItem key={area.id} value={area}>
+										<MenuItem key={area._id} value={area._id}>
 											{area.name}
 										</MenuItem>
 									))}
@@ -74,42 +74,51 @@ const AddHutLogForm = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			await hutApi.addHutLog(selectedMountain.id, hut.id, { log });
+			await hutApi.createHutLog(selectedMountain._id, hut._id, { log });
 			setLog('');
 			setHut('');
 			fetchMountains();
 		} catch (error) {
-			console.error('Error adding hut log', error);
+			console.error('Error creating hut log', error);
 		}
 	};
 
-    return (
-        <Card>
-            <CardContent>
-                <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
-                    <Stack spacing={2}>
-                        <FormControl variant="outlined" required>
-                            <InputLabel id="hut-label">Hut</InputLabel>
-                            <Select
-                                labelId="hut-label"
-                                value={hut}
-                                onChange={(e) => setHut(e.target.value)}
-                                label="Hut"
-                            >
-                                {huts && huts.map((hut) => (
-                                    <MenuItem key={hut.id} value={hut.id}>
-                                        {hut.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <TextField label="Log" value={log} onChange={(e) => setLog(e.target.value)} required multiline />
-                        <Button type="submit" variant="contained">Add Hut Log</Button>
-                    </Stack>
-                </Box>
-            </CardContent>
-        </Card>
-    );
+	return (
+		<Card>
+			<CardContent>
+				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
+					<Stack spacing={2}>
+						<FormControl variant="outlined" required>
+							<InputLabel id="hut-label">Hut</InputLabel>
+							<Select
+								labelId="hut-label"
+								value={hut ? hut._id : ''}
+								onChange={(e) => setHut(huts.find((hut) => hut._id === e.target.value))}
+								label="Hut"
+							>
+								{huts &&
+									huts.map((hut) => (
+										<MenuItem key={hut._id} value={hut._id}>
+											{hut.name}
+										</MenuItem>
+									))}
+							</Select>
+						</FormControl>
+						<TextField
+							label="Log"
+							value={log}
+							onChange={(e) => setLog(e.target.value)}
+							required
+							multiline
+						/>
+						<Button type="submit" variant="contained">
+							Add Hut Log
+						</Button>
+					</Stack>
+				</Box>
+			</CardContent>
+		</Card>
+	);
 };
 
 export { AddHutForm, AddHutLogForm };

@@ -20,6 +20,7 @@ const HutSchema = new mongoose.Schema({
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     equipment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Equipment' }],
+    paperwork: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Paperwork' }],
     comments: String,
 });
 

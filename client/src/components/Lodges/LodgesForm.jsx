@@ -1,23 +1,32 @@
 import React, { useState, useContext } from 'react';
-import { Autocomplete, TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
-import { api as liftApi } from '../../api/LiftAPI';
+import {
+	Autocomplete,
+	TextField,
+	Button,
+	Box,
+	Stack,
+	Card,
+	CardContent,
+	FormControl,
+} from '@mui/material';
+import { api as lodgeApi } from '../../api/LodgeAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 
-const AddLiftForm = ({ coordinates }) => {
+const AddLodgeForm = () => {
 	const [name, setName] = useState('');
-    const [selectedArea, setSelectedArea] = useState(null);
+	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const lift = { name, area: selectedArea._id, coordinates };
-			await liftApi.createLift(selectedMountain.id, lift);
+			const lodge = { name, area: selectedArea._id };
+			await lodgeApi.createLodge(selectedMountain._id, lodge);
 			setName('');
-            setSelectedArea(null);
-			fetchMountains();
+			setSelectedArea(null);
+			fetchMountains(); // fetch the updated list of mountains
 		} catch (error) {
-			console.error('Error creating lift', error);
+			console.error('Error creating lodge', error);
 		}
 	};
 
@@ -43,7 +52,7 @@ const AddLiftForm = ({ coordinates }) => {
 							/>
 						</FormControl>
 						<Button type="submit" variant="contained">
-							Add Lift
+							Add Lodge
 						</Button>
 					</Stack>
 				</Box>
@@ -52,43 +61,42 @@ const AddLiftForm = ({ coordinates }) => {
 	);
 };
 
-const AddLineCheckForm = () => {
-    const [description, setDescription] = useState('');
-	const [selectedLift, setSelectedLift] = useState(null);
+const AddLodgeLogForm = () => {
+	const [log, setLog] = useState('');
+	const [lodge, setLodge] = useState('');
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, lifts, patrollers } = useContext(MountainContext);
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const lineCheck = { description };
-            await liftApi.createLineCheck(selectedMountain.id, selectedLift.id, lineCheck);
-            setDescription('');
-			setSelectedLift(null);
+	const { selectedMountain, fetchMountains, lodges, patrollers } = useContext(MountainContext);
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		try {
+			await lodgeApi.createLodgeLog(selectedMountain._id, lodge._id, { log });
+			setLog('');
+			setLodge('');
 			setSelectedPatroller(null);
-            fetchMountains();
-        } catch (error) {
-            console.error('Error creating line check', error);
-        }
-    };
+			fetchMountains();
+		} catch (error) {
+			console.error('Error creating lodge log', error);
+		}
+	};
 
-    return (
+	return (
 		<Card>
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<Autocomplete
-							options={lifts || []}
-							getOptionLabel={(option) => option.name}
-							value={selectedLift}
-							onChange={(event, newValue) => {
-								setSelectedLift(newValue);
-							}}
-                            autoHighlight
-							autoSelect
-							noOptionsText="No lifts available"
-							renderInput={(params) => <TextField {...params} label="Lift" required />}
-						/>
+							<Autocomplete
+								id="lodge-autocomplete"
+								options={lodges || []}
+								getOptionLabel={(option) => option ? option.name : ""}
+								value={lodge}
+								onChange={(event, newValue) => {
+									setLodge(newValue);
+								}}
+								autoHighlight
+								autoSelect
+								noOptionsText="No lodges available"
+								renderInput={(params) => <TextField {...params} label="Lodge" required />}
+							/>
 						<Autocomplete
 							options={patrollers || []}
 							getOptionLabel={(option) => option.name}
@@ -100,22 +108,21 @@ const AddLineCheckForm = () => {
 							autoSelect
 							noOptionsText="No patrollers available"
 							renderInput={(params) => <TextField {...params} label="Patroller" required />}
-						/>
-						<TextField
-							label="Description"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
+						/>						<TextField
+							label="Log"
+							value={log}
+							onChange={(e) => setLog(e.target.value)}
 							required
 							multiline
 						/>
 						<Button type="submit" variant="contained">
-							Add Line Check
+							Add Lodge Log
 						</Button>
 					</Stack>
 				</Box>
 			</CardContent>
 		</Card>
-    );
+	);
 };
 
-export { AddLiftForm, AddLineCheckForm };
+export { AddLodgeForm, AddLodgeLogForm };

@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import AddLiftForm from '../Lifts/LiftsForm';
+import { AddLiftForm } from '../Lifts/LiftsForm';
 
 const okemoCoordinates = [-72.7170, 43.4018];
 
 function MountainMapBox() {
     const [map, setMap] = useState(null);
     const [draw, setDraw] = useState(null);
+    // eslint-disable-next-line
     const [selectedOption, setSelectedOption] = useState(null);
     const [clickedCoordinates, setClickedCoordinates] = useState(null);
 
@@ -54,6 +55,7 @@ function MountainMapBox() {
 
         // handle draw.create event
         map.on('draw.create', (e) => {
+            // eslint-disable-next-line
             const coordinates = e.features[0].geometry.coordinates;
             // create new lift or trail with these coordinates and send to your server...
         });

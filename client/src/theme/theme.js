@@ -4,13 +4,12 @@ export const colors = [
 	'#632B30',
 	'#D58936',
 	'#DEAE33',
-	'#384D48',
 	'#B39C4D',
+	'#007CBE',
 	'#94BFBE',
 	'#9E4770',
 	'#D65780',
-	'#007CBE',
-	'#B39C4D',
+	'#384D48',
 ];
 
 const lightTheme = createTheme({
@@ -23,6 +22,32 @@ const lightTheme = createTheme({
 		},
 	},
 	components: {
+		MuiFormControl: {
+			styleOverrides: {
+				root: {
+					minWidth: 200,
+				},
+			},
+		},
+		MuiInputLabel: {
+			styleOverrides: {
+				root: {
+					fontSize: '0.75rem',
+				},
+			},
+		},
+		MuiSelect: {
+			styleOverrides: {
+				root: {
+					'& .MuiOutlinedInput-input': {
+						padding: '10px 14px',
+					},
+					'&:focus': {
+						borderColor: 'black',
+					},
+				},
+			},
+		},
 		MuiTab: {
 			styleOverrides: {
 				root: {
@@ -36,13 +61,13 @@ const lightTheme = createTheme({
 		MuiOutlinedInput: {
 			styleOverrides: {
 				root: {
-					'& fieldset': {
+					'& $notchedOutline': {
 						borderColor: 'black',
 					},
-					'&:hover fieldset': {
+					'&:hover $notchedOutline': {
 						borderColor: 'black',
 					},
-					'&.Mui-focused fieldset': {
+					'&.Mui-focused $notchedOutline': {
 						borderColor: 'black',
 					},
 				},
@@ -69,6 +94,9 @@ const lightTheme = createTheme({
 		MuiTableRow: {
 			styleOverrides: {
 				root: {
+					'&:nth-of-type(odd)': {
+						backgroundColor: '#d3cdcd',
+					},
 					'&.open': {
 						backgroundColor: 'lightgreen',
 					},

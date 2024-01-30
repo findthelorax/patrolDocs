@@ -10,6 +10,11 @@ const EquipmentLogSchema = new Schema({
 
 const EquipmentLog = mongoose.model('EquipmentLog', EquipmentLogSchema);
 
+const LocationSchema = new Schema({
+    kind: { type: String, enum: ['Hut', 'Lodge', 'FirstAidRoom', 'Trail', 'Other', 'Available'], required: true },
+    item: { type: Schema.Types.ObjectId, required: true, refPath: 'location.kind' },
+});
+
 const EquipmentSchema = new Schema({
     name: String,
     type: String,
@@ -18,7 +23,7 @@ const EquipmentSchema = new Schema({
     outOfServiceDate: Date,
     checkLog: { type: Schema.Types.ObjectId, ref: 'EquipmentLog' },
     comments: String,
-    location: { type: String, enum: ['Hut', 'Lodge', 'AidRoom', 'Trail', 'OutOfService'], default: 'OutOfService' },
+    location: LocationSchema,
 });
 
 const Equipment = mongoose.model('Equipment', EquipmentSchema);

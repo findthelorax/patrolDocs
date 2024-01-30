@@ -6,7 +6,7 @@ import {
 	Button,
 	TextField,
 	Checkbox,
-    MenuItem,
+	MenuItem,
 	FormControl,
 	FormControlLabel,
 	InputLabel,
@@ -15,6 +15,8 @@ import {
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { format, parse } from 'date-fns';
+import InputMask from 'react-input-mask';
 import { api } from '../../api/IncidentLogAPI';
 import { MdAccessTime } from 'react-icons/md';
 import { MountainContext } from '../../contexts/MountainContext';
@@ -89,6 +91,7 @@ const IncidentTable = () => {
 
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
+
 		setNewRow((prevState) => ({
 			...prevState,
 			[name]: value,
@@ -107,6 +110,20 @@ const IncidentTable = () => {
 	};
 
 	const handleSubmit = () => {
+		// Define a regular expression for time in HH:MM:SS format
+		const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
+
+		// Validate the time fields
+		if (
+			!timeRegex.test(newRow.time) ||
+			!timeRegex.test(newRow.onScene) ||
+			!timeRegex.test(newRow.stable) ||
+			!timeRegex.test(newRow.transport)
+		) {
+			alert('Please enter a valid time in HH:MM:SS format.');
+			return;
+		}
+
 		setRowData((prevState) => [newRow, ...prevState]);
 		setNewRow({
 			time: '',
@@ -123,17 +140,29 @@ const IncidentTable = () => {
 	return (
 		<div className="ag-theme-quartz-dark" style={{ height: '80vh', width: '100%' }}>
 			<Card>
-            <CardContent style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+				<CardContent style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
 					<Button onClick={() => handleTimestamp('time')} variant="contained">
 						<MdAccessTime />
 					</Button>
 					<TextField
 						name="time"
-						value={newRow.time}
+						value={
+							/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(newRow.time)
+								? format(parse(newRow.time, 'HH:mm', new Date()), 'hh:mm a')
+								: newRow.time
+						}
 						onChange={handleInputChange}
+						placeholder="Time"
 						variant="outlined"
 						size="small"
-						style={{ width: '100px' }}
+						style={{ width: '75px' }}
+						InputProps={{
+							inputComponent: InputMask,
+							inputProps: {
+								mask: '99:99',
+								maskChar: null,
+							},
+						}}
 					/>
 					<TextField
 						name="incident"
@@ -154,7 +183,7 @@ const IncidentTable = () => {
 						}}
 						freeSolo
 						options={locationOptions}
-                        style={{ width: '250px' }}
+						style={{ width: '250px' }}
 						renderInput={(params) => (
 							<TextField {...params} variant="outlined" placeholder="Select a location" size="small" />
 						)}
@@ -183,7 +212,7 @@ const IncidentTable = () => {
 						placeholder="On Scene"
 						variant="outlined"
 						size="small"
-						style={{ width: '100px' }}
+						style={{ width: '60px' }}
 					/>{' '}
 					<Button onClick={() => handleTimestamp('stable')} variant="contained">
 						<MdAccessTime />
@@ -195,7 +224,7 @@ const IncidentTable = () => {
 						placeholder="Stable"
 						variant="outlined"
 						size="small"
-						style={{ width: '100px' }}
+						style={{ width: '50px' }}
 					/>{' '}
 					<Button onClick={() => handleTimestamp('transport')} variant="contained">
 						<MdAccessTime />
@@ -221,7 +250,11 @@ const IncidentTable = () => {
 					</Button>
 				</CardContent>
 			</Card>
-            <AgGridReact columnDefs={columnDefs} rowData={[newRow, ...rowData]} onGridReady={(params) => setGridApi(params.api)} />
+			<AgGridReact
+				columnDefs={columnDefs}
+				rowData={[newRow, ...rowData]}
+				onGridReady={(params) => setGridApi(params.api)}
+			/>
 		</div>
 	);
 };

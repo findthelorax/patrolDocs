@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, } from 'react';
 import {
 	TextField,
 	Button,
@@ -6,28 +6,20 @@ import {
 	Card,
 	CardContent,
 	Stack,
-	MenuItem,
-	InputLabel,
 	FormControl,
-	Modal,
 	Snackbar,
 	Alert,
 	Autocomplete,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import { MountainContext } from '../../contexts/MountainContext';
 
 const AddAreaForm = () => {
 	const [name, setName] = useState('');
 	const [selectedMountain, setSelectedMountain] = useState(null);
 	const { mountains, fetchMountains, api } = useContext(MountainContext);
-	const theme = useTheme();
-
-	const [openModal, setOpenModal] = useState(false);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState('');
 
-	const handleCloseModal = () => setOpenModal(false);
 	const handleCloseSnackbar = () => setOpenSnackbar(false);
 
 	const handleSubmit = async (event) => {
@@ -55,7 +47,7 @@ const AddAreaForm = () => {
 						<FormControl fullWidth required>
 							<Autocomplete
 								id="mountain-autocomplete"
-								options={mountains}
+								options={mountains || []}
 								getOptionLabel={(option) => option.name}
 								value={selectedMountain}
 								onChange={(event, newValue) => {
@@ -63,6 +55,7 @@ const AddAreaForm = () => {
 								}}
 								autoHighlight
 								autoSelect
+								noOptionsText="No mountains available"
 								renderInput={(params) => <TextField {...params} label="Mountain" required />}
 							/>
 						</FormControl>

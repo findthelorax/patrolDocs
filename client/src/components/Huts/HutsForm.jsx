@@ -1,17 +1,5 @@
 import React, { useState, useContext } from 'react';
-import {
-	Autocomplete,
-	TextField,
-	Button,
-	Box,
-	Stack,
-	Card,
-	CardContent,
-	Select,
-	MenuItem,
-	FormControl,
-	InputLabel,
-} from '@mui/material';
+import { Autocomplete, TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
 import { api as hutApi } from '../../api/HutAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 
@@ -40,21 +28,19 @@ const AddHutForm = () => {
 					<Stack spacing={2}>
 						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
 						<FormControl fullWidth required>
-							<InputLabel id="area-select-label">Area</InputLabel>
-							<Select
-								labelId="area-select-label"
-								id="area-select"
-								value={selectedArea ? selectedArea._id : ''}
-								onChange={(e) => setSelectedArea(areas.find((area) => area._id === e.target.value))}
-								label="Area"
-							>
-								{areas &&
-									areas.map((area) => (
-										<MenuItem key={area._id} value={area._id}>
-											{area.name}
-										</MenuItem>
-									))}
-							</Select>
+							<Autocomplete
+								id="area-autocomplete"
+								options={areas || []}
+								getOptionLabel={(option) => option.name}
+								value={selectedArea}
+								onChange={(event, newValue) => {
+									setSelectedArea(newValue);
+								}}
+								autoHighlight
+								autoSelect
+								noOptionsText="No areas available"
+								renderInput={(params) => <TextField {...params} label="Area" required />}
+							/>
 						</FormControl>
 						<Button type="submit" variant="contained">
 							Add Hut
@@ -69,7 +55,8 @@ const AddHutForm = () => {
 const AddHutLogForm = () => {
 	const [log, setLog] = useState('');
 	const [hut, setHut] = useState('');
-	const { selectedMountain, fetchMountains, huts } = useContext(MountainContext);
+	const [selectedPatroller, setSelectedPatroller] = useState(null);
+	const { selectedMountain, fetchMountains, huts, patrollers } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -77,6 +64,7 @@ const AddHutLogForm = () => {
 			await hutApi.createHutLog(selectedMountain._id, hut._id, { log });
 			setLog('');
 			setHut('');
+			setSelectedPatroller(null);
 			fetchMountains();
 		} catch (error) {
 			console.error('Error creating hut log', error);
@@ -88,22 +76,31 @@ const AddHutLogForm = () => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<FormControl variant="outlined" required>
-							<InputLabel id="hut-label">Hut</InputLabel>
-							<Select
-								labelId="hut-label"
-								value={hut ? hut._id : ''}
-								onChange={(e) => setHut(huts.find((hut) => hut._id === e.target.value))}
-								label="Hut"
-							>
-								{huts &&
-									huts.map((hut) => (
-										<MenuItem key={hut._id} value={hut._id}>
-											{hut.name}
-										</MenuItem>
-									))}
-							</Select>
-						</FormControl>
+						<Autocomplete
+							id="hut-autocomplete"
+							options={huts || []}
+							getOptionLabel={(option) => (option ? option.name : '')}
+							value={hut}
+							onChange={(event, newValue) => {
+								setHut(newValue);
+							}}
+							autoHighlight
+							autoSelect
+							noOptionsText="No huts available"
+							renderInput={(params) => <TextField {...params} label="Hut" required />}
+						/>
+						<Autocomplete
+							options={patrollers || []}
+							getOptionLabel={(option) => option.name}
+							value={selectedPatroller}
+							onChange={(event, newValue) => {
+								setSelectedPatroller(newValue);
+							}}
+							autoHighlight
+							autoSelect
+							noOptionsText="No patrollers available"
+							renderInput={(params) => <TextField {...params} label="Patroller" required />}
+						/>{' '}
 						<TextField
 							label="Log"
 							value={log}

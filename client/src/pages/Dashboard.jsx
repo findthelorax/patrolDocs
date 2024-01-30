@@ -2,11 +2,6 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import AddMountainForm from '../components/Mountain/MountainForm';
 import AddAreaForm from '../components/Areas/AreaForm';
-// import AddLodgeForm from '../components/Lodges/LodgesForm';
-import { AddHutForm, AddHutLogForm } from '../components/Huts/HutsForm';
-import AddLiftForm from '../components/Lifts/LiftsForm';
-import AddTrailForm from '../components/Trails/TrailsForm';
-import AddPatrollerForm from '../components/Patrollers/PatrollersForm';
 
 function Dashboard() {
 	return (
@@ -17,21 +12,7 @@ function Dashboard() {
 			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
 				<AddAreaForm />
 			</Grid>
-			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-				<AddHutForm />
-			</Grid>
-			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-				<AddHutLogForm />
-			</Grid>
-			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-				<AddLiftForm />
-			</Grid>
-			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-				<AddTrailForm />
-			</Grid>
-			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-				<AddPatrollerForm />
-			</Grid>
+
 		</Grid>
 	);
 }

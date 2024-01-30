@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TableCell, TableRow, TextField, Select, MenuItem, IconButton } from '@mui/material';
+import { Autocomplete, TableCell, TableRow, TextField, Box, IconButton } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Conditions } from '../../helpers/constants';
 import TimeUpdateDialog from './TimeUpdateDialog';
@@ -39,8 +39,8 @@ function TrailRow({ trail, patrollers }) {
 		setOpeningTime(event.target.value);
 	};
 
-	const handleConditionChange = (event) => {
-		setCondition(event.target.value);
+	const handleConditionChange = (event, newValue) => {
+		setCondition(newValue);
 	};
 
 	const handlePatrollerChange = (event) => {
@@ -54,51 +54,62 @@ function TrailRow({ trail, patrollers }) {
 	return (
 		<>
 			<TableRow key={trail._id}>
-				<TableCell style={{ borderRight: '1px solid #000' }}>{trail.name}</TableCell>
-				<TableCell>
-					<IconButton onClick={handleTimeClick}>
-						<AccessTimeIcon />
-					</IconButton>
-					<TextField type="time" value={openingTime} onChange={handleTimeChange} />
+				<TableCell >{trail.name}</TableCell>
+				<TableCell style={{ width: '100px' }} >
+					<Box display="flex" alignItems="center">
+						<IconButton onClick={handleTimeClick}>
+							<AccessTimeIcon />
+						</IconButton>
+						<TextField type="time" value={openingTime} onChange={handleTimeChange} />
+					</Box>
 				</TableCell>
 				<TableCell>
-					<Select
-						value={selectedPatroller}
-						onChange={handlePatrollerChange}
-						sx={{ minWidth: 200, height: '35px', overflow: 'hidden' }}
-					>
-						{patrollers.map((patroller) => (
-							<MenuItem key={patroller._id} value={patroller._id}>
-								{patroller.firstName} {patroller.lastName}
-							</MenuItem>
-						))}
-					</Select>
+				<Autocomplete
+                        value={patrollers.find((patroller) => patroller._id === selectedPatroller)}
+                        onChange={(event, newValue) => {
+                            handlePatrollerChange(newValue ? newValue._id : '');
+                        }}
+						autoHighlight
+						autoSelect
+						noOptionsText="No patrollers available"
+                        options={patrollers}
+                        getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
 				</TableCell>
 				<TableCell>
-					<Select
-						value={condition}
+				<Autocomplete
+                        value={condition}
 						onChange={handleConditionChange}
-						sx={{ minWidth: 125, height: '35px', overflow: 'hidden' }}
-					>
-						{Object.values(Conditions).map((condition) => (
-							<MenuItem key={condition} value={condition}>
-								{condition}
-							</MenuItem>
-						))}
-					</Select>
+                        options={Object.values(Conditions)}
+                        renderInput={(params) => <TextField {...params} />}
+						renderOption={(props, option, { selected }) => (
+							<Box component="li" {...props}>
+								{option === 'Powder' && '❆'}
+								{option === 'Soft' && '🏂'}
+								{option === 'Hard' && '🧊'}
+								{option === 'Variable' && '⛇'}
+								{option === 'Groomed' && '🚜'}
+								{option === 'Moguls' && '⛷'}
+								{option === 'Closed' && '❌'}
+								{option}
+							</Box>
+						)}
+                    />
 				</TableCell>
 				<TableCell>
-					<Select
-						value={closingPatroller}
-						onChange={handleClosingPatrollerChange}
-						sx={{ minWidth: 125, height: '35px', overflow: 'hidden' }}
-					>
-						{patrollers.map((patroller) => (
-							<MenuItem key={patroller._id} value={patroller._id}>
-								{patroller.firstName} {patroller.lastName}
-							</MenuItem>
-						))}
-					</Select>
+					<Autocomplete
+						value={patrollers.find((patroller) => patroller._id === closingPatroller)}
+						onChange={(event, newValue) => {
+							handleClosingPatrollerChange(newValue ? newValue._id : '');
+						}}
+						autoHighlight
+						autoSelect
+						noOptionsText="No patrollers available"
+						options={patrollers}
+						getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
+						renderInput={(params) => <TextField {...params} />}
+					/>
 				</TableCell>
 			</TableRow>
 			<TimeUpdateDialog open={openDialog} onClose={handleDialogClose} onConfirm={handleDialogConfirm} />

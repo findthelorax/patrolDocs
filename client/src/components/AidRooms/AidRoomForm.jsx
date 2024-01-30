@@ -1,23 +1,23 @@
 import React, { useState, useContext } from 'react';
 import { Autocomplete, TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
-import { api as liftApi } from '../../api/LiftAPI';
+import { api as aidRoomApi } from '../../api/AidRoomAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 
-const AddLiftForm = ({ coordinates }) => {
+const AddAidRoomForm = () => {
 	const [name, setName] = useState('');
-    const [selectedArea, setSelectedArea] = useState(null);
+	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const lift = { name, area: selectedArea._id, coordinates };
-			await liftApi.createLift(selectedMountain.id, lift);
+			const aidRoom = { name, area: selectedArea._id };
+			await aidRoomApi.createAidRoom(selectedMountain._id, aidRoom);
 			setName('');
-            setSelectedArea(null);
-			fetchMountains();
+			setSelectedArea(null);
+			fetchMountains(); // fetch the updated list of mountains
 		} catch (error) {
-			console.error('Error creating lift', error);
+			console.error('Error creating aidRoom', error);
 		}
 	};
 
@@ -43,7 +43,7 @@ const AddLiftForm = ({ coordinates }) => {
 							/>
 						</FormControl>
 						<Button type="submit" variant="contained">
-							Add Lift
+							Add First Aid Room
 						</Button>
 					</Stack>
 				</Box>
@@ -52,42 +52,42 @@ const AddLiftForm = ({ coordinates }) => {
 	);
 };
 
-const AddLineCheckForm = () => {
-    const [description, setDescription] = useState('');
-	const [selectedLift, setSelectedLift] = useState(null);
+const AddAidRoomLogForm = () => {
+	const [log, setLog] = useState('');
+	const [aidRoom, setAidRoom] = useState('');
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, lifts, patrollers } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, aidRooms, patrollers } = useContext(MountainContext);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const lineCheck = { description };
-            await liftApi.createLineCheck(selectedMountain.id, selectedLift.id, lineCheck);
-            setDescription('');
-			setSelectedLift(null);
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		try {
+			await aidRoomApi.createAidRoomLog(selectedMountain._id, aidRoom._id, { log });
+			setLog('');
+			setAidRoom('');
 			setSelectedPatroller(null);
-            fetchMountains();
-        } catch (error) {
-            console.error('Error creating line check', error);
-        }
-    };
+			fetchMountains();
+		} catch (error) {
+			console.error('Error creating aidRoom log', error);
+		}
+	};
 
-    return (
+	return (
 		<Card>
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
 						<Autocomplete
-							options={lifts || []}
-							getOptionLabel={(option) => option.name}
-							value={selectedLift}
+							id="aidRoom-autocomplete"
+							options={aidRooms || []}
+							getOptionLabel={(option) => (option ? option.name : '')}
+							value={aidRoom}
 							onChange={(event, newValue) => {
-								setSelectedLift(newValue);
+								setAidRoom(newValue);
 							}}
-                            autoHighlight
+							autoHighlight
 							autoSelect
-							noOptionsText="No lifts available"
-							renderInput={(params) => <TextField {...params} label="Lift" required />}
+							noOptionsText="No First Aid Rooms available"
+							renderInput={(params) => <TextField {...params} label="First Aid Room" required />}
 						/>
 						<Autocomplete
 							options={patrollers || []}
@@ -96,26 +96,26 @@ const AddLineCheckForm = () => {
 							onChange={(event, newValue) => {
 								setSelectedPatroller(newValue);
 							}}
-                            autoHighlight
+							autoHighlight
 							autoSelect
 							noOptionsText="No patrollers available"
 							renderInput={(params) => <TextField {...params} label="Patroller" required />}
 						/>
 						<TextField
-							label="Description"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
+							label="Log"
+							value={log}
+							onChange={(e) => setLog(e.target.value)}
 							required
 							multiline
 						/>
 						<Button type="submit" variant="contained">
-							Add Line Check
+							Add First Aid Room Log
 						</Button>
 					</Stack>
 				</Box>
 			</CardContent>
 		</Card>
-    );
+	);
 };
 
-export { AddLiftForm, AddLineCheckForm };
+export { AddAidRoomForm, AddAidRoomLogForm };

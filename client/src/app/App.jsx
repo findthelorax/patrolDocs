@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MountainProvider } from '../contexts/MountainContext';
-import { DateContext } from '../contexts/DateContext';
+import { DateProvider } from '../contexts/DateContext'; // Import DateProvider instead of DateContext
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { lightTheme, darkTheme } from '../theme/theme';
@@ -10,7 +10,6 @@ import { ThemeContext } from '../contexts/ThemeContext';
 import MainLayout from '../pages/MainLayout';
 
 function App() {
-	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [darkMode, setDarkMode] = useState(false);
 
 	const theme = darkMode ? darkTheme : lightTheme;
@@ -20,13 +19,13 @@ function App() {
 			<CssBaseline />
 			<ThemeContext.Provider value={{ darkMode, setDarkMode }}>
 				<MountainProvider>
-					<DateContext.Provider value={{ selectedDate, setSelectedDate }}>
+					<DateProvider>
 						<Router>
 							<Routes>
 								<Route path="*" element={<MainLayout />} />
 							</Routes>
 						</Router>
-					</DateContext.Provider>
+					</DateProvider>
 				</MountainProvider>
 			</ThemeContext.Provider>
 		</ThemeProvider>

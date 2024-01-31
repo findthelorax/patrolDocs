@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { TextField } from '@mui/material';
-import Autocomplete from '@mui/material/Autocomplete';
-import { MountainContext } from '../../../contexts/MountainContext';
+import { Autocomplete, TextField } from '@mui/material';
+import { MountainContext } from '../../contexts/MountainContext';
 
-function MountainDropdown({ selectedMountain, setSelectedMountain, setOpenSnackbar, setSnackbarMessage }) {
+const MountainAutocomplete = ({ selectedMountain, setSelectedMountain, setOpenSnackbar, setSnackbarMessage }) => {
     const { mountains, selectMountain } = useContext(MountainContext);
 
     const handleMountainChange = (event, newValue) => {
@@ -20,15 +19,21 @@ function MountainDropdown({ selectedMountain, setSelectedMountain, setOpenSnackb
         <Autocomplete
             id="mountain-autocomplete"
             options={mountains || []}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) => option && option.name ? option.name : ""}
             value={selectedMountain}
             onChange={handleMountainChange}
             autoHighlight
             autoSelect
             noOptionsText="No mountains available"
-            renderInput={(params) => <TextField {...params} label="Mountain" required />}
+            renderInput={(params) => 
+                <TextField 
+                    {...params} 
+                    label="Mountain" 
+                    required 
+                />
+            }
         />
     );
-}
+};
 
-export default MountainDropdown;
+export default MountainAutocomplete;

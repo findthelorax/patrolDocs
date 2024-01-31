@@ -1,12 +1,15 @@
 import React, { useState, useContext } from 'react';
-import { Autocomplete, TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
+import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
 import { api as aidRoomApi } from '../../api/AidRoomAPI';
 import { MountainContext } from '../../contexts/MountainContext';
+import AreaAutocomplete from '../AutoComplete/AreaAutocomplete';
+import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
+import FirstAidRoomAutocomplete from '../AutoComplete/FirstAidRoomAutocomplete';
 
 const AddAidRoomForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
-	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -15,7 +18,7 @@ const AddAidRoomForm = () => {
 			await aidRoomApi.createAidRoom(selectedMountain._id, aidRoom);
 			setName('');
 			setSelectedArea(null);
-			fetchMountains(); // fetch the updated list of mountains
+			fetchMountains();
 		} catch (error) {
 			console.error('Error creating aidRoom', error);
 		}
@@ -28,18 +31,9 @@ const AddAidRoomForm = () => {
 					<Stack spacing={2}>
 						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
 						<FormControl fullWidth required>
-							<Autocomplete
-								id="area-autocomplete"
-								options={areas || []}
-								getOptionLabel={(option) => option.name}
-								value={selectedArea}
-								onChange={(event, newValue) => {
-									setSelectedArea(newValue);
-								}}
-								autoHighlight
-								autoSelect
-								noOptionsText="No areas available"
-								renderInput={(params) => <TextField {...params} label="Area" required />}
+							<AreaAutocomplete
+								selectedArea={selectedArea}
+								setSelectedArea={setSelectedArea}
 							/>
 						</FormControl>
 						<Button type="submit" variant="contained">
@@ -54,16 +48,17 @@ const AddAidRoomForm = () => {
 
 const AddAidRoomLogForm = () => {
 	const [log, setLog] = useState('');
-	const [aidRoom, setAidRoom] = useState('');
+	const [selectedFirstAidRoom, setSelectedFirstAidRoom] = useState(null);
+	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, aidRooms, patrollers } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			await aidRoomApi.createAidRoomLog(selectedMountain._id, aidRoom._id, { log });
+			await aidRoomApi.createAidRoomLog(selectedMountain._id, selectedFirstAidRoom._id, { log });
 			setLog('');
-			setAidRoom('');
+			setSelectedFirstAidRoom(null);
 			setSelectedPatroller(null);
 			fetchMountains();
 		} catch (error) {
@@ -76,31 +71,11 @@ const AddAidRoomLogForm = () => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<Autocomplete
-							id="aidRoom-autocomplete"
-							options={aidRooms || []}
-							getOptionLabel={(option) => (option ? option.name : '')}
-							value={aidRoom}
-							onChange={(event, newValue) => {
-								setAidRoom(newValue);
-							}}
-							autoHighlight
-							autoSelect
-							noOptionsText="No First Aid Rooms available"
-							renderInput={(params) => <TextField {...params} label="First Aid Room" required />}
+						<FirstAidRoomAutocomplete
+							selectedFirstAidRoom={selectedFirstAidRoom}
+							setSelectedFirstAidRoom={setSelectedFirstAidRoom}
 						/>
-						<Autocomplete
-							options={patrollers || []}
-							getOptionLabel={(option) => option.name}
-							value={selectedPatroller}
-							onChange={(event, newValue) => {
-								setSelectedPatroller(newValue);
-							}}
-							autoHighlight
-							autoSelect
-							noOptionsText="No patrollers available"
-							renderInput={(params) => <TextField {...params} label="Patroller" required />}
-						/>
+						<PatrollerAutocomplete />
 						<TextField
 							label="Log"
 							value={log}

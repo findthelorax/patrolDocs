@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { Autocomplete, TextField, Button, Box, Card, CardContent, Stack, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { TextField, Button, Box, Card, CardContent, Stack } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
+import StateAutocomplete from '../AutoComplete/StatesAutocomplete'; // import the StateAutocomplete component
 
 const AddMountainForm = () => {
     const [name, setName] = useState('');
@@ -28,14 +29,6 @@ const AddMountainForm = () => {
         }
     };
 
-    const states = [
-        'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 
-        'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 
-        'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 
-        'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 
-        'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-    ];
-    
     return (
         <Card>
             <CardContent>
@@ -43,16 +36,7 @@ const AddMountainForm = () => {
                     <Stack spacing={2}>
                         <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
                         <TextField label="City" value={city} onChange={(e) => setCity(e.target.value)} required />
-                        <Autocomplete
-                            value={state}
-                            onChange={(event, newValue) => {
-                                setState(newValue);
-                            }}
-                            options={states}
-                            autoHighlight
-                            autoSelect
-                            renderInput={(params) => <TextField {...params} label="State" required />}
-                        />
+                        <StateAutocomplete state={state} setState={setState} />
                         <Button type="submit" variant="contained">Add Mountain</Button>
                     </Stack>
                 </Box>

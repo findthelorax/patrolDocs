@@ -8,4 +8,29 @@ export const Conditions = {
     Closed: 'Closed',
 };
 
-export const drawerWidth = 240;
+export const drawerWidth = 200;
+
+export const EquipmentTypes = {
+    Toboggan: 'Toboggan',
+    AED: 'AED',
+    TraumaPack: 'Trauma Pack',
+    TailRope: 'Tail Rope',
+    VacuumMattress: 'Vacuum Mattress',
+    VacuumSplintSmall: 'Vacuum Splint (Small)',
+    VacuumSplintMedium: 'Vacuum Splint (Medium)',
+    VacuumSplintLarge: 'Vacuum Splint (Large)',
+    Backboard: 'Backboard',
+    Scoop: 'Scoop',
+    Hare: 'Hare',
+    PelvicBinder: 'Pelvic Binder',
+    SledPack: 'Sled Pack',
+    Chair: 'Chair',
+    RollCabKit: 'Roll Cab Kit',
+    TSeat: 'T-Seat',
+    Helmet: 'Helmet',
+    Harness: 'Harness',
+    Rope: 'Rope',
+    ExtraGear: 'Extra Gear',
+    OxygenKit: 'Oxygen Kit',
+    Other: 'Other',
+};

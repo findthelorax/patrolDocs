@@ -15,8 +15,9 @@ const equipmentRoutes = require('./equipment/equipmentRoutes');
 const paperworkRoutes = require('./equipment/paperworkRoutes');
 
 const app = express();
-const IP = process.env.IP;
-const BPORT = process.env.BACKEND_PORT;
+const IP = process.env.RENDER_EXTERNAL_HOSTNAME || process.env.IP;
+
+const PORT = process.env.PORT;
 const FPORT = process.env.FRONTEND_PORT;
 const { MONGODB_URL, MONGODB_DB_NAME } = process.env;
 
@@ -30,7 +31,7 @@ db()
 
 app.use(
 	cors({
-		origin: `${IP}:${FPORT}`,
+		origin: `${IP}`,
 		credentials: true,
 	})
 );
@@ -48,6 +49,6 @@ app.use(paperworkRoutes);
 
 app.use(patrollerRoutes);
 
-app.listen(BPORT, () => {
-	console.log(`Server is running on ${IP}:${BPORT}`);
+app.listen(PORT, () => {
+	console.log(`Server is running on ${IP}:${PORT}`);
 });

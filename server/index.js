@@ -7,7 +7,7 @@ const hutRoutes = require('./huts/hutRoutes');
 const lodgeRoutes = require('./lodges/lodgeRoutes');
 const liftRoutes = require('./lifts/liftRoutes');
 const trailRoutes = require('./trails/trailRoutes');
-
+const aidRoomRoutes = require('./aidRooms/aidRoomRoutes');
 const patrollerRoutes = require('./patrollers/patrollerRoutes');
 
 const incidentRoutes = require('./incidents/incidentRoutes');
@@ -41,7 +41,7 @@ app.use(hutRoutes);
 app.use(lodgeRoutes);
 app.use(liftRoutes);
 app.use(trailRoutes);
-
+app.use(aidRoomRoutes);
 app.use(equipmentRoutes);
 app.use(incidentRoutes);
 app.use(paperworkRoutes);

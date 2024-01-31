@@ -24,7 +24,7 @@ const AidRoomSchema = new mongoose.Schema({
     comments: String,
 });
 
-const AidRoom = mongoose.model('Hut', AidRoomSchema);
-const AidRoomLog = mongoose.model('HutLog', AidRoomLogSchema);
+const AidRoom = mongoose.model('AidRoom', AidRoomSchema);
+const AidRoomLog = mongoose.model('AidRoomLog', AidRoomLogSchema);
 
 module.exports = { AidRoom, AidRoomLog };

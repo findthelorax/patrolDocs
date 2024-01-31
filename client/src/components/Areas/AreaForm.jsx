@@ -15,7 +15,7 @@ import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
 const AddAreaForm = () => {
 	const [name, setName] = useState('');
-	const [selectedMountain, setSelectedMountain] = useState(null);
+	const [selectedMountainInAreaForm, setSelectedMountainInAreaForm] = useState(null);
 	const { mountains, fetchMountains, api } = useContext(MountainContext);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -26,9 +26,9 @@ const AddAreaForm = () => {
 		event.preventDefault();
 		try {
 			const area = { name };
-			await api.createArea(selectedMountain._id, area);
+			await api.createArea(selectedMountainInAreaForm._id, area);
 			setName('');
-			setSelectedMountain(null);
+			setSelectedMountainInAreaForm(null);
 			fetchMountains();
 			setSnackbarMessage(`Area ${name} created successfully!`);
 			setOpenSnackbar(true);
@@ -45,7 +45,7 @@ const AddAreaForm = () => {
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
 						<FormControl fullWidth required>
-							<MountainAutocomplete mountains={mountains} selectedMountain={selectedMountain} setSelectedMountain={setSelectedMountain} />
+							<MountainAutocomplete mountains={mountains} selectedMountain={selectedMountainInAreaForm} setSelectedMountain={setSelectedMountainInAreaForm} setOpenSnackbar={setOpenSnackbar} setSnackbarMessage={setSnackbarMessage}/>
 						</FormControl>
 						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
 						<Button type="submit" variant="contained">

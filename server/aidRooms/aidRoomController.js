@@ -1,4 +1,4 @@
-const { AidRoom, AidRoomLog } = require('../models/aidRoomModel');
+const { AidRoom, AidRoomLog } = require('../aidRooms/aidRoomModel');
 
 exports.getAllAidRooms = async (req, res) => {
     try {

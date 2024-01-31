@@ -37,7 +37,6 @@ const IncidentForm = ({ newRow, setNewRow, handleInputChange, handleCheckboxChan
 					label="Call Time"
 					name="callTime"
 					handleTimeChange={handleTimeChange}
-					clear={newRow.dryRun}
 				/>
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 					<LocationTypeAutocomplete

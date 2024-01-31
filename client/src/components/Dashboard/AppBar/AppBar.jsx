@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Toolbar, IconButton, Badge, Avatar, Divider, Box, AppBar } from '@mui/material';
 import { Notifications as NotificationsIcon, Settings as SettingsIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
@@ -11,8 +11,22 @@ import PatrolDispatcherAutocomplete from '../../AutoComplete/PatrolDispatcherAut
 import PatrolDispatcherDisplay from '../../Patrollers/PatrolDispatcherDisplay';
 
 function SearchAppBar({ setOpenSnackbar, setSnackbarMessage }) {
-	const { selectedMountain, setSelectedMountain } = useContext(MountainContext);
+	const { selectedMountain, setSelectedMountain, api } = useContext(MountainContext);
 	const { openDatePicker, setOpenDatePicker } = useContext(DateContext);
+
+	// useEffect(() => {
+	// 	const storedMountainId = localStorage.getItem('selectedMountainId');
+	// 	if (storedMountainId) {
+	// 		api.getMountain(storedMountainId)
+	// 			.then((mountain) => {
+	// 				console.log("🚀 ~ file: AppBar.jsx:22 ~ .then ~ mountain:", mountain)
+	// 				// setSelectedMountain(mountain);
+	// 			})
+	// 			.catch((error) => {
+	// 				console.error('Error fetching mountain:', error);
+	// 			});
+	// 	}
+	// }, [api, setSelectedMountain]);
 
 	return (
 		<AppBar
@@ -22,7 +36,7 @@ function SearchAppBar({ setOpenSnackbar, setSnackbarMessage }) {
 		>
 			<Toolbar sx={{ display: 'flex' }}>
 				<Box sx={{ display: 'flex' }}>
-					<DarkModeButton />
+					<DarkModeButton />,
 					<Box sx={{ marginLeft: 2 }}>
 						<DatePickerMobile openDatePicker={openDatePicker} setOpenDatePicker={setOpenDatePicker} />
 					</Box>
@@ -37,7 +51,7 @@ function SearchAppBar({ setOpenSnackbar, setSnackbarMessage }) {
 					<PatrolDispatcherAutocomplete />
 				</Box>
 				<Box sx={{ ml: 2 }}>
-				<PatrolDispatcherDisplay />
+					<PatrolDispatcherDisplay />
 				</Box>
 				<Box sx={{ display: 'flex', ml: 'auto' }}>
 					<IconButton color="inherit" component={Link} to="/notifications">

@@ -15,22 +15,22 @@ const equipmentRoutes = require('./equipment/equipmentRoutes');
 const paperworkRoutes = require('./equipment/paperworkRoutes');
 
 const app = express();
-const IP = process.env.RENDER_EXTERNAL_HOSTNAME || process.env.IP;
-const URI = process.env.URI;
-const PORT = process.env.PORT;
+const IP = process.env.IP;
+const BPORT = process.env.BACKEND_PORT;
+const FPORT = process.env.FRONTEND_PORT;
 const { MONGODB_URL, MONGODB_DB_NAME } = process.env;
 
 const db = require('./helpers/db');
 
 db()
     .then(() => {
-        console.log(`Database connected to: ${URI}`);
+        console.log(`Database connected to: ${MONGODB_URL}/${MONGODB_DB_NAME}`);
     })
     .catch((err) => console.error(err));
 
 app.use(
 	cors({
-		origin: `${IP}`,
+		origin: `${IP}:${FPORT}`,
 		credentials: true,
 	})
 );
@@ -48,6 +48,6 @@ app.use(paperworkRoutes);
 
 app.use(patrollerRoutes);
 
-app.listen(PORT, () => {
-	console.log(`Server is running on ${IP}:${PORT}`);
+app.listen(BPORT, () => {
+	console.log(`Server is running on ${IP}:${BPORT}`);
 });

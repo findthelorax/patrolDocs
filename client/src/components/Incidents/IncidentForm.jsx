@@ -1,146 +1,107 @@
-import React from 'react';
-import {
-    Button,
-    TextField,
-    Checkbox,
-    MenuItem,
-    FormControl,
-    FormControlLabel,
-    InputLabel,
-    Select,
-    Card,
-    CardContent,
-} from '@mui/material';
-import { MdAccessTime } from 'react-icons/md';
-import Autocomplete from '@mui/material/Autocomplete';
-import InputMask from 'react-input-mask';
-import { format, parse } from 'date-fns';
+import * as React from 'react';
+import { useState } from 'react';
+import { Button, Box, TextField, Checkbox, FormControlLabel, Card, CardContent } from '@mui/material';
+import { format } from 'date-fns';
+import IncidentLogTimePicker from '../DatePickers/IncidentLogTimePicker';
+import PatrollerAutocomplete from '../AutoComplete/PatrollerMultiSelectAutocomplete';
+import LocationAutocomplete from '../AutoComplete/LocationAutocomplete';
+import LocationTypeAutocomplete from '../AutoComplete/LocationTypeAutocomplete';
+import { incidentFormStyles } from '../../theme/theme';
 
-const IncidentForm = ({
-    newRow,
-    setNewRow,
-    handleTimestamp,
-    handleInputChange,
-    handleCheckboxChange,
-    handleSubmit,
-    locationOptions,
-    patrollers,
-}) => {
+const IncidentForm = ({ newRow, setNewRow, handleInputChange, handleCheckboxChange, handleSubmit }) => {
+	// eslint-disable-next-line
+	const [gridApi, setGridApi] = useState(null);
+	const [locationType, setLocationType] = useState('Trails');
+	const [location, setLocation] = useState('Trails');
+	const [otherLocation, setOtherLocation] = useState('');
 
-    const [gridApi, setGridApi] = useState(null);
-    
+	const handleTimeChange = (name, time) => {
+		if (time !== null) {
+			const formattedTime = format(time, 'HH:mm');
+			setNewRow((prevState) => ({
+				...prevState,
+				[name]: formattedTime,
+			}));
+		} else {
+			setNewRow((prevState) => ({
+				...prevState,
+				[name]: null,
+			}));
+		}
+	};
+
 	return (
-			<Card>
-				<CardContent style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-					<Button onClick={() => handleTimestamp('time')} variant="contained">
-						<MdAccessTime />
-					</Button>
-					<TextField
-						name="time"
-						value={
-							/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(newRow.time)
-								? format(parse(newRow.time, 'HH:mm', new Date()), 'hh:mm a')
-								: newRow.time
-						}
-						onChange={handleInputChange}
-						placeholder="Time"
-						variant="outlined"
-						size="small"
-						style={{ width: '75px' }}
-						InputProps={{
-							inputComponent: InputMask,
-							inputProps: {
-								mask: '99:99',
-								maskChar: null,
-							},
-						}}
+		<Card>
+			<CardContent style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+				<IncidentLogTimePicker
+					label="Call Time"
+					name="callTime"
+					handleTimeChange={handleTimeChange}
+					clear={newRow.dryRun}
+				/>
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+					<LocationTypeAutocomplete
+						locationType={locationType}
+						setLocationType={setLocationType}
+						setLocation={setLocation}
+						defaultLocationType="Trails"
 					/>
+					{locationType !== 'Other' ? (
+						<LocationAutocomplete
+							locationType={locationType}
+							location={location}
+							setLocation={setLocation}
+						/>
+					) : (
+						<TextField
+							label="Other Location"
+							value={otherLocation}
+							onChange={(e) => setOtherLocation(e.target.value)}
+							required
+						/>
+					)}
+				</Box>
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 					<TextField
 						name="incident"
 						value={newRow.incident}
 						onChange={handleInputChange}
 						placeholder="Incident"
 						variant="outlined"
-						size="small"
-						style={{ width: '100px' }}
+						sx={incidentFormStyles}
 					/>
-					<Autocomplete
-						value={newRow.location}
-						onChange={(event, newValue) => {
-							setNewRow((prevState) => ({
-								...prevState,
-								location: newValue,
-							}));
-						}}
-						freeSolo
-						options={locationOptions}
-						style={{ width: '250px' }}
-						renderInput={(params) => (
-							<TextField {...params} variant="outlined" placeholder="Select a location" size="small" />
-						)}
-					/>
-					<FormControl variant="outlined" size="small" style={{ width: '100px' }}>
-						<InputLabel>Patroller</InputLabel>
-						<Select name="patroller" value={newRow.patroller} onChange={handleInputChange}>
-							<MenuItem value="">
-								<em>None</em>
-							</MenuItem>
-							{patrollers &&
-								patrollers.map((patroller) => (
-									<MenuItem key={patroller.id} value={patroller.name}>
-										{patroller.name}
-									</MenuItem>
-								))}
-						</Select>
-					</FormControl>
-					<Button onClick={() => handleTimestamp('onScene')} variant="contained">
-						<MdAccessTime />
-					</Button>
-					<TextField
-						name="onScene"
-						value={newRow.onScene}
-						onChange={handleInputChange}
-						placeholder="On Scene"
-						variant="outlined"
-						size="small"
-						style={{ width: '60px' }}
-					/>{' '}
-					<Button onClick={() => handleTimestamp('stable')} variant="contained">
-						<MdAccessTime />
-					</Button>
-					<TextField
-						name="stable"
-						value={newRow.stable}
-						onChange={handleInputChange}
-						placeholder="Stable"
-						variant="outlined"
-						size="small"
-						style={{ width: '50px' }}
-					/>{' '}
-					<Button onClick={() => handleTimestamp('transport')} variant="contained">
-						<MdAccessTime />
-					</Button>
-					<TextField
-						name="transport"
-						value={newRow.transport}
-						onChange={handleInputChange}
-						placeholder="Transport"
-						variant="outlined"
-						size="small"
-						style={{ width: '100px' }}
-					/>
-					<FormControlLabel
-						control={<Checkbox checked={newRow.dryRun} onChange={handleCheckboxChange} name="dryRun" />}
-						label="Dry Run"
-					/>
-					<Button onClick={handleSubmit} variant="contained">
-						Submit
-					</Button>
-					<Button onClick={() => gridApi && gridApi.exportDataAsCsv()} variant="contained">
-						Export
-					</Button>
-				</CardContent>
-			</Card>
+					<PatrollerAutocomplete />
+				</Box>
+				<IncidentLogTimePicker
+					label="On Scene"
+					name="onScene"
+					handleTimeChange={handleTimeChange}
+					clear={newRow.dryRun}
+				/>
+				<IncidentLogTimePicker
+					label="Stable"
+					name="stable"
+					handleTimeChange={handleTimeChange}
+					clear={newRow.dryRun}
+				/>
+				<IncidentLogTimePicker
+					label="Transport"
+					name="transport"
+					handleTimeChange={handleTimeChange}
+					clear={newRow.dryRun}
+				/>
+				<FormControlLabel
+					control={<Checkbox checked={newRow.dryRun} onChange={handleCheckboxChange} name="dryRun" />}
+					label="Dry Run"
+				/>
+				<Button onClick={handleSubmit} variant="contained">
+					Submit
+				</Button>
+				<Button onClick={() => gridApi && gridApi.exportDataAsCsv()} variant="contained">
+					Export
+				</Button>
+			</CardContent>
+		</Card>
 	);
 };
 

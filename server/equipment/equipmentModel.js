@@ -17,12 +17,22 @@ const LocationSchema = new Schema({
 
 const EquipmentSchema = new Schema({
     name: String,
-    type: String,
+    type: {
+        type: String,
+        enum: [
+            'Toboggan', 'AED', 'Trauma Pack', 'Tail Rope', 'Vacuum Mattress', 
+            'Vacuum Splint (Small)', 'Vacuum Splint (Medium)', 'Vacuum Splint (Large)', 
+            'Backboard', 'Scoop', 'Hare', 'Pelvic Binder', 'Sled Pack', 'Chair', 
+            'Roll Cab Kit', 'T-Seat', 'Helmet', 'Harness', 'Rope', 'Extra Gear', 
+            'Oxygen Kit', 'Other'
+        ],
+        required: true
+    },
     idNumber: { type: String, unique: true },
     inServiceDate: Date,
     outOfServiceDate: Date,
     checkLog: { type: Schema.Types.ObjectId, ref: 'EquipmentLog' },
-    comments: String,
+    description: String,
     location: LocationSchema,
 });
 

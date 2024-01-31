@@ -1,25 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {
-	Autocomplete,
-	Card,
-	CardContent,
-	Button,
-	TextField,
-	Checkbox,
-	MenuItem,
-	FormControl,
-	FormControlLabel,
-	InputLabel,
-	Select,
-} from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
-import { format, parse } from 'date-fns';
-import InputMask from 'react-input-mask';
 import { api } from '../../api/IncidentLogAPI';
-import { MdAccessTime } from 'react-icons/md';
 import { MountainContext } from '../../contexts/MountainContext';
+import IncidentForm from './IncidentForm';
+import DeleteButton from './CellRenders/DeleteButton';
 
 const IncidentTable = () => {
 	const { trails, huts, lodges, lifts, patrollers } = useContext(MountainContext);
@@ -36,7 +22,9 @@ const IncidentTable = () => {
 	});
 
 	const [gridApi, setGridApi] = useState(null);
-
+	const deleteRow = (deletedRowId) => {
+		setRowData(rowData.filter((row) => row.id !== deletedRowId));
+	};
 	const locationOptions = [
 		...(trails ? trails.map((option) => `Trails/${option.name}`) : []),
 		...(huts ? huts.map((option) => `Huts/${option.name}`) : []),
@@ -45,14 +33,23 @@ const IncidentTable = () => {
 	];
 
 	const columnDefs = [
-		{ headerName: 'Time', field: 'time', editable: true },
+		{ headerName: 'Time', field: 'time', editable: true, width: 100 },
 		{ headerName: 'Incident', field: 'incident', editable: true },
 		{ headerName: 'Location', field: 'location', editable: true },
-		{ headerName: 'Patroller', field: 'patroller', editable: true },
-		{ headerName: 'On Scene', field: 'onScene', editable: true },
-		{ headerName: 'Stable', field: 'stable', editable: true },
-		{ headerName: 'Transport', field: 'transport', editable: true },
-		{ headerName: 'Dry Run', field: 'dryRun', editable: true },
+		{ headerName: 'Patrollers', field: 'patrollers', editable: true },
+		{ headerName: 'On Scene', field: 'onScene', editable: true, width: 100 },
+		{ headerName: 'Stable', field: 'stable', editable: true, width: 100 },
+		{ headerName: 'Transport', field: 'transport', editable: true, width: 100 },
+		{ headerName: 'Dry Run', field: 'dryRun', editable: false, width: 100 },
+		{
+			headerName: 'Action',
+			field: 'action',
+			width: 100,
+			cellRenderer: 'DeleteButton',
+			cellRendererParams: {
+				clicked: deleteRow,
+			},
+		}
 	];
 
 	useEffect(() => {
@@ -129,7 +126,7 @@ const IncidentTable = () => {
 			time: '',
 			incident: '',
 			location: '',
-			patroller: '',
+			patrollers: '',
 			onScene: '',
 			stable: '',
 			transport: '',
@@ -137,123 +134,26 @@ const IncidentTable = () => {
 		});
 	};
 
+	const components = {
+		DeleteButton: DeleteButton
+	};
 	return (
 		<div className="ag-theme-quartz-dark" style={{ height: '80vh', width: '100%' }}>
-			<Card>
-				<CardContent style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-					<Button onClick={() => handleTimestamp('time')} variant="contained">
-						<MdAccessTime />
-					</Button>
-					<TextField
-						name="time"
-						value={
-							/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(newRow.time)
-								? format(parse(newRow.time, 'HH:mm', new Date()), 'hh:mm a')
-								: newRow.time
-						}
-						onChange={handleInputChange}
-						placeholder="Time"
-						variant="outlined"
-						size="small"
-						style={{ width: '75px' }}
-						InputProps={{
-							inputComponent: InputMask,
-							inputProps: {
-								mask: '99:99',
-								maskChar: null,
-							},
-						}}
-					/>
-					<TextField
-						name="incident"
-						value={newRow.incident}
-						onChange={handleInputChange}
-						placeholder="Incident"
-						variant="outlined"
-						size="small"
-						style={{ width: '100px' }}
-					/>
-					<Autocomplete
-						value={newRow.location}
-						onChange={(event, newValue) => {
-							setNewRow((prevState) => ({
-								...prevState,
-								location: newValue,
-							}));
-						}}
-						freeSolo
-						options={locationOptions}
-						style={{ width: '250px' }}
-						renderInput={(params) => (
-							<TextField {...params} variant="outlined" placeholder="Select a location" size="small" />
-						)}
-					/>
-					<FormControl variant="outlined" size="small" style={{ width: '100px' }}>
-						<InputLabel>Patroller</InputLabel>
-						<Select name="patroller" value={newRow.patroller} onChange={handleInputChange}>
-							<MenuItem value="">
-								<em>None</em>
-							</MenuItem>
-							{patrollers &&
-								patrollers.map((patroller) => (
-									<MenuItem key={patroller.id} value={patroller.name}>
-										{patroller.name}
-									</MenuItem>
-								))}
-						</Select>
-					</FormControl>
-					<Button onClick={() => handleTimestamp('onScene')} variant="contained">
-						<MdAccessTime />
-					</Button>
-					<TextField
-						name="onScene"
-						value={newRow.onScene}
-						onChange={handleInputChange}
-						placeholder="On Scene"
-						variant="outlined"
-						size="small"
-						style={{ width: '60px' }}
-					/>{' '}
-					<Button onClick={() => handleTimestamp('stable')} variant="contained">
-						<MdAccessTime />
-					</Button>
-					<TextField
-						name="stable"
-						value={newRow.stable}
-						onChange={handleInputChange}
-						placeholder="Stable"
-						variant="outlined"
-						size="small"
-						style={{ width: '50px' }}
-					/>{' '}
-					<Button onClick={() => handleTimestamp('transport')} variant="contained">
-						<MdAccessTime />
-					</Button>
-					<TextField
-						name="transport"
-						value={newRow.transport}
-						onChange={handleInputChange}
-						placeholder="Transport"
-						variant="outlined"
-						size="small"
-						style={{ width: '100px' }}
-					/>
-					<FormControlLabel
-						control={<Checkbox checked={newRow.dryRun} onChange={handleCheckboxChange} name="dryRun" />}
-						label="Dry Run"
-					/>
-					<Button onClick={handleSubmit} variant="contained">
-						Submit
-					</Button>
-					<Button onClick={() => gridApi && gridApi.exportDataAsCsv()} variant="contained">
-						Export
-					</Button>
-				</CardContent>
-			</Card>
+			<IncidentForm
+				newRow={newRow}
+				setNewRow={setNewRow}
+				handleTimestamp={handleTimestamp}
+				handleInputChange={handleInputChange}
+				handleCheckboxChange={handleCheckboxChange}
+				handleSubmit={handleSubmit}
+				locationOptions={locationOptions}
+				patrollers={patrollers}
+			/>
 			<AgGridReact
 				columnDefs={columnDefs}
 				rowData={[newRow, ...rowData]}
 				onGridReady={(params) => setGridApi(params.api)}
+				components={components}
 			/>
 		</div>
 	);

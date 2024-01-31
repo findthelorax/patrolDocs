@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Autocomplete, TableCell, TableRow, TextField, Box, IconButton } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Conditions } from '../../helpers/constants';
-import TimeUpdateDialog from './TimeUpdateDialog';
+import TimeUpdateDialog from '../DatePickers/TimeUpdateDialog';
 
 function TrailRow({ trail, patrollers }) {
 	const [openingTime, setOpeningTime] = useState('');

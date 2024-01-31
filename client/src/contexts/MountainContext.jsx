@@ -4,6 +4,7 @@ import { api as equipmentApi } from '../api/EquipmentAPI';
 import { api as hutApi } from '../api/HutAPI';
 import { api as liftApi } from '../api/LiftAPI';
 import { api as lodgeApi } from '../api/LodgeAPI';
+import { api as aidRoomApi } from '../api/AidRoomAPI';
 // import { api as paperworkApi } from '../api/PaperworkAPI';
 import { api as patrollerApi } from '../api/PatrollerAPI';
 import { api as trailApi } from '../api/TrailAPI';
@@ -32,6 +33,7 @@ export const MountainProvider = ({ children }) => {
 	const [areas, isAreasLoading, fetchAreas] = useFetch(api.getAllAreas, selectedMountain?._id);
 	const [huts, isHutsLoading, fetchHuts] = useFetch(hutApi.getAllHuts, selectedMountain?._id);
 	const [lodges, isLodgesLoading, fetchLodges] = useFetch(lodgeApi.getAllLodges, selectedMountain?._id);
+	const [aidRooms, isAidRoomsLoading, fetchAidRooms] = useFetch(aidRoomApi.getAllAidRooms, selectedMountain?._id);
 	const [lifts, isLiftsLoading, fetchLifts] = useFetch(liftApi.getAllLifts, selectedMountain?._id);
 	const [trails, isTrailsLoading, fetchTrails] = useFetch(trailApi.getAllTrails, selectedMountain?._id);
 	const [equipment, isEquipmentLoading, fetchEquipment] = useFetch(
@@ -44,13 +46,23 @@ export const MountainProvider = ({ children }) => {
 		selectedMountain?._id
 	);
 	const [currentDayPatrolDispatcher, setCurrentDayPatrolDispatcher] = useState(null);
-	const [patrolDispatcher, setPatrolDispatcher] = useState(null);
+	const [patrolDispatcher, setPatrolDispatcher] = useState([]);
 	const { selectedDate } = useContext(DateContext);
+
+	const locationTypes = ['Trails', 'Huts', 'First Aid Rooms', 'Other'];
+
+	const locations = {
+		Trails: trails,
+		Huts: huts,
+		'First Aid Rooms': aidRooms,
+		Other: [],
+	};
 
 	const isLoading =
 		isMountainsLoading ||
 		isAreasLoading ||
 		isHutsLoading ||
+		isAidRoomsLoading ||
 		isLodgesLoading ||
 		isLiftsLoading ||
 		isTrailsLoading ||
@@ -66,13 +78,13 @@ export const MountainProvider = ({ children }) => {
 		const updatedEquipment = { ...item, inService: !item.inService };
 		try {
 			await equipmentApi.updateEquipment(selectedMountain._id, item._id, updatedEquipment);
-			fetchEquipment(); // Refresh equipment data
+			fetchEquipment();
 		} catch (error) {
 			console.error(`Error toggling service status for equipment with id ${item._id}`, error);
 		}
 	}
 
-	async function fetchPatrolDispatcherForDate(date) {
+	const fetchPatrolDispatcherForDate = useCallback(async (date) => {
 		const formattedDate = date.toISOString().split('T')[0];
 
 		try {
@@ -84,7 +96,7 @@ export const MountainProvider = ({ children }) => {
 				error
 			);
 		}
-	}
+	}, [selectedMountain, setCurrentDayPatrolDispatcher]);
 
 	useEffect(() => {
 		if (selectedDate && selectedMountain) {
@@ -92,7 +104,7 @@ export const MountainProvider = ({ children }) => {
 				.then((data) => setPatrolDispatcher(data))
 				.catch((error) => console.error(error));
 		}
-	}, [selectedDate, selectedMountain]);
+	}, [selectedDate, selectedMountain, fetchPatrolDispatcherForDate]);
 
 	useEffect(() => {
 		fetchMountains();
@@ -102,6 +114,7 @@ export const MountainProvider = ({ children }) => {
 		if (selectedMountain) {
 			fetchAreas();
 			fetchHuts();
+			fetchAidRooms();
 			fetchLodges();
 			fetchLifts();
 			fetchTrails();
@@ -114,11 +127,13 @@ export const MountainProvider = ({ children }) => {
 		selectedMountain,
 		fetchAreas,
 		fetchHuts,
+		fetchAidRooms,
 		fetchLodges,
 		fetchLifts,
 		fetchTrails,
 		fetchPatrollers,
 		fetchEquipment,
+		fetchPatrolDispatcherForDate,
 	]);
 
 	return (
@@ -134,6 +149,8 @@ export const MountainProvider = ({ children }) => {
 				fetchAreas,
 				huts,
 				fetchHuts,
+				aidRooms,
+				fetchAidRooms,
 				lodges,
 				fetchLodges,
 				lifts,
@@ -149,6 +166,8 @@ export const MountainProvider = ({ children }) => {
 				equipment,
 				fetchEquipment,
 				handleServiceToggle,
+				locationTypes,
+				locations,
 				// paperwork,
 				// fetchPaperwork,
 				api,

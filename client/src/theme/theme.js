@@ -11,53 +11,15 @@ export const colors = [
 	'#D65780',
 	'#384D48',
 ];
-
-const lightTheme = createTheme({
-	palette: {
-		primary: {
-			main: '#dc7b67',
-		},
-		secondary: {
-			main: '#dcb667',
-		},
+export const incidentFormStyles = {
+	'& .MuiInputBase-root': {
+		height: '40px',
+		fontSize: '0.875rem',
 	},
+};
+
+const styleOverrides = {
 	components: {
-		MuiFormControl: {
-			styleOverrides: {
-				root: {
-					minWidth: 200,
-				},
-			},
-		},
-		MuiInputLabel: {
-			styleOverrides: {
-				root: {
-					fontSize: '0.75rem',
-				},
-			},
-		},
-		MuiSelect: {
-			styleOverrides: {
-				root: {
-					'& .MuiOutlinedInput-input': {
-						padding: '10px 14px',
-					},
-					'&:focus': {
-						borderColor: 'black',
-					},
-				},
-			},
-		},
-		MuiTab: {
-			styleOverrides: {
-				root: {
-					'&.Mui-selected': {
-						backgroundColor: colors[0],
-						textShadow: '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black',
-					},
-				},
-			},
-		},
 		MuiOutlinedInput: {
 			styleOverrides: {
 				root: {
@@ -91,6 +53,45 @@ const lightTheme = createTheme({
 				},
 			},
 		},
+		MuiInputLabel: {
+			styleOverrides: {
+				root: {
+					fontSize: '0.75rem',
+				},
+			},
+		},
+		MuiSelect: {
+			styleOverrides: {
+				root: {
+					'&:focus': {
+						borderColor: 'black',
+					},
+				},
+			},
+		},
+		MuiTab: {
+			styleOverrides: {
+				root: {
+					'&.Mui-selected': {
+						backgroundColor: colors[0],
+						textShadow: '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black',
+					},
+				},
+			},
+		},
+		MuiAutocomplete: {
+			defaultProps: {
+				size: 'small',
+				minwidth: 200,
+			},
+		},
+		MuiTextField: {
+			styleOverrides: {
+				root: {
+					minWidth: '200px',
+				},
+			},
+		},
 		MuiTableRow: {
 			styleOverrides: {
 				root: {
@@ -113,6 +114,18 @@ const lightTheme = createTheme({
 			},
 		},
 	},
+};
+
+const lightTheme = createTheme({
+	palette: {
+		primary: {
+			main: '#dc7b67',
+		},
+		secondary: {
+			main: '#dcb667',
+		},
+	},
+	...styleOverrides,
 });
 
 const darkTheme = createTheme({
@@ -128,39 +141,7 @@ const darkTheme = createTheme({
 			default: '#333333',
 		},
 	},
-	components: {
-		MuiOutlinedInput: {
-			styleOverrides: {
-				root: {
-					'& fieldset': {
-						borderColor: 'black',
-					},
-					'&:hover fieldset': {
-						borderColor: 'black',
-					},
-					'&.Mui-focused fieldset': {
-						borderColor: 'black',
-					},
-				},
-			},
-		},
-		MuiCard: {
-			styleOverrides: {
-				root: {
-					borderColor: 'black',
-					borderWidth: 1,
-					borderStyle: 'solid',
-				},
-			},
-		},
-		MuiTableContainer: {
-			styleOverrides: {
-				root: {
-					marginTop: '25px',
-				},
-			},
-		},
-	},
+	...styleOverrides,
 });
 
 export { lightTheme, darkTheme };

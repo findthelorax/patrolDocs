@@ -1,8 +1,8 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import MountainMap from '../components/Mountain/MountainMap';
-import MountainMapBox from '../components/Mountain/MountainMapBox';
-import MountainMapGoogle from '../components/Mountain/MountainMap';
+// import MountainMapBox from '../components/Mountain/MountainMapBox';
+// import MountainMapGoogle from '../components/Mountain/MountainMap';
 
 function Map() {
 	return (

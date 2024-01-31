@@ -16,16 +16,15 @@ const paperworkRoutes = require('./equipment/paperworkRoutes');
 
 const app = express();
 const IP = process.env.RENDER_EXTERNAL_HOSTNAME || process.env.IP;
-
+const URI = process.env.URI;
 const PORT = process.env.PORT;
-const FPORT = process.env.FRONTEND_PORT;
 const { MONGODB_URL, MONGODB_DB_NAME } = process.env;
 
 const db = require('./helpers/db');
 
 db()
     .then(() => {
-        console.log(`Database connected to: ${MONGODB_URL}/${MONGODB_DB_NAME}`);
+        console.log(`Database connected to: ${URI}`);
     })
     .catch((err) => console.error(err));
 

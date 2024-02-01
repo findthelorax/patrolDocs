@@ -1,21 +1,11 @@
 import React, { useState, useContext } from 'react';
-import {
-	TextField,
-	Button,
-	Box,
-	Card,
-	CardContent,
-	Stack,
-	FormControl,
-	Snackbar,
-	Alert,
-} from '@mui/material';
+import { TextField, Button, Box, Card, CardContent, Stack, FormControl, Snackbar, Alert } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
 const AddAreaForm = () => {
 	const [name, setName] = useState('');
-	const [selectedMountainInAreaForm, setSelectedMountainInAreaForm] = useState(null);
+	const [selectedMountain, setSelectedMountain] = useState(null);
 	const { mountains, fetchMountains, api } = useContext(MountainContext);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -26,9 +16,9 @@ const AddAreaForm = () => {
 		event.preventDefault();
 		try {
 			const area = { name };
-			await api.createArea(selectedMountainInAreaForm._id, area);
+			await api.createArea(selectedMountain._id, area);
 			setName('');
-			setSelectedMountainInAreaForm(null);
+			setSelectedMountain(null);
 			fetchMountains();
 			setSnackbarMessage(`Area ${name} created successfully!`);
 			setOpenSnackbar(true);
@@ -45,7 +35,12 @@ const AddAreaForm = () => {
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
 						<FormControl fullWidth required>
-							<MountainAutocomplete mountains={mountains} selectedMountain={selectedMountainInAreaForm} setSelectedMountain={setSelectedMountainInAreaForm} setOpenSnackbar={setOpenSnackbar} setSnackbarMessage={setSnackbarMessage}/>
+							<MountainAutocomplete
+								options={mountains}
+								selectedValue={selectedMountain}
+								setSelectedValue={setSelectedMountain}
+								label="Mountain"
+							/>
 						</FormControl>
 						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
 						<Button type="submit" variant="contained">
@@ -55,7 +50,10 @@ const AddAreaForm = () => {
 				</Box>
 			</CardContent>
 			<Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-				<Alert onClose={handleCloseSnackbar} severity={snackbarMessage.startsWith('Error') ? 'error' : 'success'}>
+				<Alert
+					onClose={handleCloseSnackbar}
+					severity={snackbarMessage.startsWith('Error') ? 'error' : 'success'}
+				>
 					{snackbarMessage}
 				</Alert>
 			</Snackbar>

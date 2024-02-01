@@ -8,7 +8,7 @@ import AddLiftForm from '../components/Lifts/LiftsForm';
 import AddTrailForm from '../components/Trails/TrailsForm';
 import AddPatrollerForm from '../components/Patrollers/PatrollersForm';
 
-function Settings() {
+function Settings({ setOpenSnackbar, setSnackbarMessage }) {
 	return (
 		<Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ pt: 8 }}>
 			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>

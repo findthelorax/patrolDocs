@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Snackbar } from '@mui/material';
-import MuiAlert from '@mui/material/Alert';
+import { Box, useTheme } from '@mui/material';
 import SearchAppBar from '../components/Dashboard/AppBar/AppBar';
 import { PermanentDrawerLeft } from '../components/Dashboard/Drawer/Drawer';
-import Dashboard from './Dashboard';
-import Map from './Map';
-import Patrollers from './Patrollers';
-import IncidentLogs from './IncidentLogs';
-import Areas from './Areas';
-import Lifts from './Lifts';
-import Trails from './Trails';
-import Equipment from './Equipment';
-import Lodges from './Lodges';
-import Huts from './Huts';
-import FirstAidRooms from './FirstAidRooms';
-import { Routes, Route } from 'react-router-dom';
 import Footer from '../components/Dashboard/Footer/Footer';
+import SnackbarAlert from '../components/SnackbarAlert/SnackbarAlert';
+import AppRoutes from './AppRoutes';
 
 function MainLayout() {
+	const theme = useTheme();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -35,20 +25,14 @@ function MainLayout() {
 
 	const drawerWidth = 240;
 
-	const AlertRef = React.forwardRef((props, ref) => (
-		<MuiAlert elevation={6} variant="standard" {...props} ref={ref} />
-	));
-
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-			<Box sx={{ display: 'flex', width: '100%' }}>
+		<Box sx={theme.layoutStyles.mainLayout}>
+			<Box sx={theme.layoutStyles.innerLayout}>
 				<PermanentDrawerLeft open={isDrawerOpen} handleDrawerClose={handleDrawerToggle} />
 				<Box
 					sx={{
-						display: 'flex',
-						flexDirection: 'column',
+						...theme.layoutStyles.content,
 						width: `calc(100% - ${isDrawerOpen ? drawerWidth : 0}px)`,
-						flexGrow: 1,
 					}}
 				>
 					<SearchAppBar
@@ -57,27 +41,10 @@ function MainLayout() {
 						setOpenSnackbar={setOpenSnackbar}
 						setSnackbarMessage={setSnackbarMessage}
 					/>
-					<Box component="main" sx={{ p: { xs: 2, sm: 3 }, flexGrow: 1 }}>
-						<Routes>
-							<Route path="/dashboard" element={<Dashboard />} />
-							<Route path="/map" element={<Map />} />
-							<Route path="/incidentLogs" element={<IncidentLogs />} />
-							<Route path="/areas" element={<Areas />} />
-							<Route path="/firstAidRooms" element={<FirstAidRooms />} />
-							<Route path="/patrollers" element={<Patrollers />} />
-							<Route path="/huts" element={<Huts />} />
-							<Route path="/lifts" element={<Lifts />} />
-							<Route path="/trails" element={<Trails />} />
-							<Route path="/lodges" element={<Lodges />} />
-							<Route path="/equipment" element={<Equipment />} />
-							<Route path="*" element={<Dashboard />} />
-						</Routes>
+					<Box component="main" sx={theme.layoutStyles.main}>
+					<AppRoutes setOpenSnackbar={setOpenSnackbar} setSnackbarMessage={setSnackbarMessage} />
 					</Box>
-					<Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-						<AlertRef onClose={handleCloseSnackbar} severity="success">
-							{snackbarMessage}
-						</AlertRef>
-					</Snackbar>
+					<SnackbarAlert open={openSnackbar} handleClose={handleCloseSnackbar} message={snackbarMessage} />
 				</Box>
 			</Box>
 			<Footer />

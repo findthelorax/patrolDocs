@@ -2,14 +2,13 @@ import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
 import { api as aidRoomApi } from '../../api/AidRoomAPI';
 import { MountainContext } from '../../contexts/MountainContext';
-import AreaAutocomplete from '../AutoComplete/AreaAutocomplete';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
-import FirstAidRoomAutocomplete from '../AutoComplete/FirstAidRoomAutocomplete';
+import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
 const AddAidRoomForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
-	const { selectedMountain, fetchMountains } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -31,9 +30,11 @@ const AddAidRoomForm = () => {
 					<Stack spacing={2}>
 						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
 						<FormControl fullWidth required>
-							<AreaAutocomplete
-								selectedArea={selectedArea}
-								setSelectedArea={setSelectedArea}
+							<MountainAutocomplete 
+								options={areas} 
+								selectedValue={selectedArea} 
+								setSelectedValue={setSelectedArea} 
+								label="Area" 
 							/>
 						</FormControl>
 						<Button type="submit" variant="contained">
@@ -51,7 +52,7 @@ const AddAidRoomLogForm = () => {
 	const [selectedFirstAidRoom, setSelectedFirstAidRoom] = useState(null);
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, aidRooms } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -71,9 +72,11 @@ const AddAidRoomLogForm = () => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<FirstAidRoomAutocomplete
-							selectedFirstAidRoom={selectedFirstAidRoom}
-							setSelectedFirstAidRoom={setSelectedFirstAidRoom}
+						<MountainAutocomplete 
+							options={aidRooms} 
+							selectedValue={selectedFirstAidRoom} 
+							setSelectedValue={setSelectedFirstAidRoom} 
+							label="First Aid Room" 
 						/>
 						<PatrollerAutocomplete />
 						<TextField

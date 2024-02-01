@@ -2,14 +2,13 @@ import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
 import { api as hutApi } from '../../api/HutAPI';
 import { MountainContext } from '../../contexts/MountainContext';
-import AreaAutocomplete from '../AutoComplete/AreaAutocomplete';
-import HutAutocomplete from '../AutoComplete/HutAutocomplete';
+import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 
 const AddHutForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
-	const { selectedMountain, fetchMountains } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -31,11 +30,13 @@ const AddHutForm = () => {
 					<Stack spacing={2}>
 						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
 						<FormControl fullWidth required>
-							<AreaAutocomplete
-								selectedArea={selectedArea}
-								setSelectedArea={setSelectedArea}
-							/>
-						</FormControl>
+							<MountainAutocomplete 
+								options={areas} 
+								selectedValue={selectedArea} 
+								setSelectedValue={setSelectedArea} 
+								label="Area" 
+							/>						
+							</FormControl>
 						<Button type="submit" variant="contained">
 							Add Hut
 						</Button>
@@ -48,16 +49,16 @@ const AddHutForm = () => {
 
 const AddHutLogForm = () => {
 	const [log, setLog] = useState('');
-	const [selectedHut, setSelectedHut] = useState('');
+	const [selectedHut, setSelectedHut] = useState(null);
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, huts } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
 			await hutApi.createHutLog(selectedMountain._id, selectedHut._id, { log });
-			setLog('');
+			setLog(null);
 			setSelectedHut(null);
 			setSelectedPatroller(null);
 			fetchMountains();
@@ -71,8 +72,16 @@ const AddHutLogForm = () => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<HutAutocomplete selectedHut={selectedHut} setSelectedHut={setSelectedHut} />
-						<PatrollerAutocomplete />
+						<MountainAutocomplete
+							options={huts}
+							selectedValue={selectedHut}
+							setSelectedValue={setSelectedHut}
+							label="Hut"
+						/>
+						<PatrollerAutocomplete
+							selectedPatroller={selectedPatroller}
+							setSelectedPatroller={setSelectedPatroller}
+						/>
 						<TextField
 							label="Log"
 							value={log}

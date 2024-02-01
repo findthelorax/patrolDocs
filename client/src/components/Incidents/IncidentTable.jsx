@@ -8,10 +8,11 @@ import IncidentForm from './IncidentForm';
 import DeleteButton from './CellRenders/DeleteButton';
 
 const IncidentTable = () => {
-	const { trails, huts, lodges, lifts, patrollers } = useContext(MountainContext);
+	const { trails, huts, lodges, lifts, patrollers, selectedMountain } = useContext(MountainContext);
+	console.log('🚀 ~ file: IncidentTable.jsx:12 ~ IncidentTable ~ selectedMountain:', selectedMountain);
 	const [rowData, setRowData] = useState([]);
 	const [newRow, setNewRow] = useState({
-		time: '',
+		callTime: '',
 		incident: '',
 		location: '',
 		patroller: '',
@@ -33,7 +34,7 @@ const IncidentTable = () => {
 	];
 
 	const columnDefs = [
-		{ headerName: 'Time', field: 'time', editable: true, width: 100 },
+		{ headerName: 'Call Time', field: 'callTime', editable: true, width: 100 },
 		{ headerName: 'Incident', field: 'incident', editable: true },
 		{ headerName: 'Location', field: 'location', editable: true },
 		{ headerName: 'Patrollers', field: 'patrollers', editable: true },
@@ -49,21 +50,25 @@ const IncidentTable = () => {
 			cellRendererParams: {
 				clicked: deleteRow,
 			},
-		}
+		},
 	];
 
 	useEffect(() => {
 		const fetchLogs = async () => {
 			try {
-				const logs = await api.getAllLogs();
-				setRowData(logs);
+				if (selectedMountain) {
+					const logs = await api.getAllLogs(selectedMountain._id);
+					console.log('🚀 ~ file: IncidentTable.jsx:59 ~ fetchLogs ~ logs:', logs);
+					setRowData(Array.isArray(logs) ? logs : []);
+				}
 			} catch (error) {
 				console.error('Error fetching logs', error);
+				setRowData([]);
 			}
 		};
 
 		fetchLogs();
-	}, []);
+	}, [selectedMountain]);
 
 	const handleTimestamp = (field) => {
 		const timestamp = new Date();
@@ -123,7 +128,7 @@ const IncidentTable = () => {
 
 		setRowData((prevState) => [newRow, ...prevState]);
 		setNewRow({
-			time: '',
+			callTime: '',
 			incident: '',
 			location: '',
 			patrollers: '',
@@ -135,7 +140,7 @@ const IncidentTable = () => {
 	};
 
 	const components = {
-		DeleteButton: DeleteButton
+		DeleteButton: DeleteButton,
 	};
 	return (
 		<div className="ag-theme-quartz-dark" style={{ height: '80vh', width: '100%' }}>

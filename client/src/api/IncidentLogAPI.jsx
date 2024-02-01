@@ -3,9 +3,9 @@ const IP = process.env.REACT_APP_IP;
 const PORT = process.env.REACT_APP_BACKEND_PORT;
 
 export const api = {
-	async createLog(log) {
+	async createLog(mountainId, log) {
 		try {
-			const response = await axios.post(`${IP}:${PORT}/mountain`, log);
+			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}`, log);
 			return response.data;
 		} catch (error) {
 			console.error(`Error creating log`, error);
@@ -13,9 +13,9 @@ export const api = {
 		}
 	},
 
-	async getAllLogs() {
+	async getAllLogs(mountainId) {
 		try {
-			const response = await axios.get(`${IP}:${PORT}/mountain`);
+			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}`);
 			return response.data;
 		} catch (error) {
 			console.error(`Error fetching all logs`, error);
@@ -23,9 +23,9 @@ export const api = {
 		}
 	},
 
-	async getLog(incidentLogId) {
+	async getLog(mountainId, incidentLogId) {
 		try {
-			const response = await axios.get(`${IP}:${PORT}/mountain/${incidentLogId}`);
+			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/${incidentLogId}`);
 			return response.data;
 		} catch (error) {
 			console.error(`Error fetching log with id ${incidentLogId}`, error);
@@ -33,9 +33,9 @@ export const api = {
 		}
 	},
 
-	async updateLog(incidentLogId, updatedLog) {
+	async updateLog(mountainId, incidentLogId, updatedLog) {
 		try {
-			const response = await axios.patch(`${IP}:${PORT}/mountain/${incidentLogId}`, updatedLog);
+			const response = await axios.patch(`${IP}:${PORT}/mountain/${mountainId}/${incidentLogId}`, updatedLog);
 			return response.data;
 		} catch (error) {
 			console.error(`Error updating log with id ${incidentLogId}`, error);
@@ -43,9 +43,9 @@ export const api = {
 		}
 	},
 
-	async deleteLog(incidentLogId) {
+	async deleteLog(mountainId, incidentLogId) {
 		try {
-			const response = await axios.delete(`${IP}:${PORT}/mountain/${incidentLogId}`);
+			const response = await axios.delete(`${IP}:${PORT}/mountain/${mountainId}/${incidentLogId}`);
 			return response.data;
 		} catch (error) {
 			console.error(`Error deleting log with id ${incidentLogId}`, error);

@@ -2,9 +2,8 @@ import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, Select, MenuItem, Typography } from '@mui/material';
 import { api as equipmentApi } from '../../api/EquipmentAPI';
 import { MountainContext } from '../../contexts/MountainContext';
-import EquipmentAutocomplete from '../AutoComplete/EquipmentAutocomplete';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
-import LocationAutocomplete from '../AutoComplete/LocationAutocomplete';
+import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 import LocationTypeAutocomplete from '../AutoComplete/LocationTypeAutocomplete';
 import { EquipmentTypes } from '../../helpers/constants';
 
@@ -15,7 +14,8 @@ const AddEquipmentForm = () => {
 	const [locationType, setLocationType] = useState(null);
 	const [location, setLocation] = useState(null);
 	const [otherLocation, setOtherLocation] = useState('');
-	const { selectedMountain, fetchMountains } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, locations } = useContext(MountainContext);
+	const [selectedLocation, setSelectedLocation] = useState(null);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -74,10 +74,11 @@ const AddEquipmentForm = () => {
 							setLocation={setLocation}
 						/>
 						{locationType !== 'Other' ? (
-							<LocationAutocomplete
-								locationType={locationType}
-								location={location}
-								setLocation={setLocation}
+							<MountainAutocomplete 
+								options={locations} 
+								selectedValue={selectedLocation} 
+								setSelectedValue={setSelectedLocation} 
+								label="Location" 
 							/>
 						) : (
 							<TextField
@@ -99,14 +100,16 @@ const AddEquipmentForm = () => {
 
 const AddEquipmentLogForm = () => {
 	const [log, setLog] = useState('');
-	const [equipment, setEquipment] = useState(null);
-	const { selectedMountain, fetchMountains } = useContext(MountainContext);
+	const [ equipmentS, setEquipmentS ] = useState(null);
+	const { selectedMountain, fetchMountains, equipment } = useContext(MountainContext);
+	const [selectedEquipment, setSelectedEquipment] = useState(null);
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			await equipmentApi.createEquipmentLog(selectedMountain.id, equipment.id, { log });
+			await equipmentApi.createEquipmentLog(selectedMountain.id, equipmentS.id, { log });
 			setLog('');
-			setEquipment(null);
+			setEquipmentS(null);
 			fetchMountains();
 		} catch (error) {
 			console.error('Error creating equipment log', error);
@@ -118,7 +121,12 @@ const AddEquipmentLogForm = () => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<EquipmentAutocomplete equipment={equipment} setEquipment={setEquipment} />
+						<MountainAutocomplete 
+							options={equipment} 
+							selectedValue={selectedEquipment} 
+							setSelectedValue={setSelectedEquipment} 
+							label="Equipment" 
+						/>						
 						<PatrollerAutocomplete />
 						<TextField
 							label="Log"

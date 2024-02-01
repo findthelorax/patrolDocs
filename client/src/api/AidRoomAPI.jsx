@@ -1,12 +1,11 @@
 import axios from 'axios';
 const IP = process.env.REACT_APP_IP;
 const PORT = process.env.REACT_APP_BACKEND_PORT;
-const BASE_URL = `http://${IP}:${PORT}`;
 
 export const api = {
     getAllAidRooms: async (mountainId) => {
         try {
-            const response = await axios.get(`${BASE_URL}/mountain/${mountainId}/aidRoom`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/aidRoom`);
             return response.data;
         } catch (error) {
             throw error;
@@ -14,7 +13,7 @@ export const api = {
     },
     createAidRoom: async (mountainId, aidRoomData) => {
         try {
-            const response = await axios.post(`${BASE_URL}/mountain/${mountainId}/aidRoom`, aidRoomData);
+            const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/aidRoom`, aidRoomData);
             return response.data;
         } catch (error) {
             throw error;
@@ -22,7 +21,7 @@ export const api = {
     },
     getAidRoom: async (mountainId, aidRoomId) => {
         try {
-            const response = await axios.get(`${BASE_URL}/mountain/${mountainId}/aidRoom/${aidRoomId}`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/${aidRoomId}`);
             return response.data;
         } catch (error) {
             throw error;
@@ -30,7 +29,7 @@ export const api = {
     },
     updateAidRoom: async (mountainId, aidRoomId, updatedData) => {
         try {
-            const response = await axios.patch(`${BASE_URL}/mountain/${mountainId}/aidRoom/${aidRoomId}`, updatedData);
+            const response = await axios.patch(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/${aidRoomId}`, updatedData);
             return response.data;
         } catch (error) {
             throw error;
@@ -38,7 +37,7 @@ export const api = {
     },
     deleteAidRoom: async (mountainId, aidRoomId) => {
         try {
-            const response = await axios.delete(`${BASE_URL}/mountain/${mountainId}/aidRoom/${aidRoomId}`);
+            const response = await axios.delete(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/${aidRoomId}`);
             return response.data;
         } catch (error) {
             throw error;
@@ -46,7 +45,7 @@ export const api = {
     },
     getAllAidRoomLogs: async (mountainId, aidRoomId) => {
         try {
-            const response = await axios.get(`${BASE_URL}/mountain/${mountainId}/aidRoom/${aidRoomId}/log`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/${aidRoomId}/log`);
             return response.data;
         } catch (error) {
             throw error;
@@ -54,7 +53,7 @@ export const api = {
     },
     getAidRoomLog: async (mountainId, aidRoomId, logId) => {
         try {
-            const response = await axios.get(`${BASE_URL}/mountain/${mountainId}/aidRoom/${aidRoomId}/log/${logId}`);
+            const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/${aidRoomId}/log/${logId}`);
             return response.data;
         } catch (error) {
             throw error;
@@ -62,7 +61,7 @@ export const api = {
     },
     createAidRoomLog: async (mountainId, aidRoomId, logData) => {
         try {
-            const response = await axios.post(`${BASE_URL}/mountain/${mountainId}/aidRoom/${aidRoomId}/log`, logData);
+            const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/${aidRoomId}/log`, logData);
             return response.data;
         } catch (error) {
             throw error;
@@ -70,7 +69,7 @@ export const api = {
     },
     updateAidRoomLog: async (mountainId, aidRoomId, logId, updatedData) => {
         try {
-            const response = await axios.patch(`${BASE_URL}/mountain/${mountainId}/aidRoom/${aidRoomId}/log/${logId}`, updatedData);
+            const response = await axios.patch(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/${aidRoomId}/log/${logId}`, updatedData);
             return response.data;
         } catch (error) {
             throw error;
@@ -78,7 +77,7 @@ export const api = {
     },
     deleteAidRoomLog: async (mountainId, aidRoomId, logId) => {
         try {
-            const response = await axios.delete(`${BASE_URL}/mountain/${mountainId}/aidRoom/${aidRoomId}/log/${logId}`);
+            const response = await axios.delete(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/${aidRoomId}/log/${logId}`);
             return response.data;
         } catch (error) {
             throw error;

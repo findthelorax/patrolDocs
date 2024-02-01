@@ -18,6 +18,27 @@ export const incidentFormStyles = {
 	},
 };
 
+const layoutStyles = {
+	mainLayout: {
+		display: 'flex',
+		flexDirection: 'column',
+		minHeight: '100vh',
+	},
+	innerLayout: {
+		display: 'flex',
+		width: '100%',
+	},
+	content: {
+		display: 'flex',
+		flexDirection: 'column',
+		flexGrow: 1,
+	},
+	main: {
+		p: { xs: 2, sm: 3 },
+		flexGrow: 1,
+	},
+};
+
 const styleOverrides = {
 	components: {
 		MuiOutlinedInput: {
@@ -126,6 +147,7 @@ const lightTheme = createTheme({
 		},
 	},
 	...styleOverrides,
+	layoutStyles,
 });
 
 const darkTheme = createTheme({
@@ -142,6 +164,7 @@ const darkTheme = createTheme({
 		},
 	},
 	...styleOverrides,
+	layoutStyles,
 });
 
 export { lightTheme, darkTheme };

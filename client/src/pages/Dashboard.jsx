@@ -10,7 +10,7 @@ import { AddLiftForm } from '../components/Lifts/LiftsForm';
 import { AddLodgeForm } from '../components/Lodges/LodgesForm';
 import AddPatrollerForm from '../components/Patrollers/PatrollersForm';
 
-function Dashboard() {
+function Dashboard({ setOpenSnackbar, setSnackbarMessage }) {
 	return (
 		<Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ pt: 8 }}>
 			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>

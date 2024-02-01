@@ -8,13 +8,13 @@ const AddPatrollerForm = () => {
 	const [lastName, setLastName] = useState('');
 	const [position, setPosition] = useState('');
     // eslint-disable-next-line
-	const { mountains, fetchPatrollers } = useContext(MountainContext); // Use MountainContext
+    const { selectedMountain, fetchPatrollers } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const patroller = { firstName, lastName, position }; // Associate patroller with selected mountain
-			await patrollerApi.createPatroller(patroller);
+			const patroller = { firstName, lastName, position };
+            await patrollerApi.createPatroller(selectedMountain._id, patroller);
 			setFirstName('');
 			setLastName('');
 			setPosition('');

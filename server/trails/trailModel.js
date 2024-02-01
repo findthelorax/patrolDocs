@@ -14,7 +14,8 @@ const TrailLogSchema = new mongoose.Schema({
 const TrailSchema = new mongoose.Schema({
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
     name: { type: String, required: true, unique: true },
-    difficulty: String,
+    difficulty: { type: String, enum: ['green', 'blue', 'black', 'double black'] },
+    type: { type: String, enum: ['glades', 'moguls', 'natural', 'race', 'park', 'groomed'] },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     status: { type: String, default: 'closed' },
     trailLogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TrailLog' }],

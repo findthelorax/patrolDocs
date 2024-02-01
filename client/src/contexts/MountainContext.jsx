@@ -69,11 +69,6 @@ export const MountainProvider = ({ children }) => {
 		isPatrollersLoading ||
 		isEquipmentLoading;
 
-	const selectMountain = (mountain) => {
-		setSelectedMountain(mountain);
-		localStorage.setItem('selectedMountainId', mountain._id);
-	};
-
 	async function handleServiceToggle(item) {
 		const updatedEquipment = { ...item, inService: !item.inService };
 		try {
@@ -84,19 +79,30 @@ export const MountainProvider = ({ children }) => {
 		}
 	}
 
-	const fetchPatrolDispatcherForDate = useCallback(async (date) => {
-		const formattedDate = date.toISOString().split('T')[0];
+	const fetchPatrolDispatcherForDate = useCallback(
+		async (date) => {
+			const formattedDate = date.toISOString().split('T')[0];
 
-		try {
-			const response = await patrollerApi.getPatrolDispatcherForDate(selectedMountain._id, formattedDate);
-			setCurrentDayPatrolDispatcher(response);
-		} catch (error) {
-			console.error(
-				`Error fetching patrol dispatcher for date ${formattedDate} for mountain with id ${selectedMountain._id}`,
-				error
-			);
+			try {
+				const response = await patrollerApi.getPatrolDispatcherForDate(selectedMountain._id, formattedDate);
+				setCurrentDayPatrolDispatcher(response);
+			} catch (error) {
+				console.error(
+					`Error fetching patrol dispatcher for date ${formattedDate} for mountain with id ${selectedMountain._id}`,
+					error
+				);
+			}
+		},
+		[selectedMountain, setCurrentDayPatrolDispatcher]
+	);
+
+	useEffect(() => {
+		const storedMountainId = localStorage.getItem('selectedMountainId');
+		if (storedMountainId) {
+			const storedMountain = mountains.find((mountain) => mountain._id === storedMountainId);
+			setSelectedMountain(storedMountain);
 		}
-	}, [selectedMountain, setCurrentDayPatrolDispatcher]);
+	}, [mountains]);
 
 	useEffect(() => {
 		if (selectedDate && selectedMountain) {
@@ -143,7 +149,6 @@ export const MountainProvider = ({ children }) => {
 				mountains,
 				fetchMountains,
 				selectedMountain,
-				selectMountain,
 				setSelectedMountain,
 				areas,
 				fetchAreas,

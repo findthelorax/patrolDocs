@@ -5,28 +5,14 @@ import { Link } from 'react-router-dom';
 import { MountainContext } from '../../../contexts/MountainContext';
 import { DateContext } from '../../../contexts/DateContext';
 import DarkModeButton from '../../LightDarkButton/LightDarkButton';
-import MountainAutocomplete from '../../AutoComplete/MountainAutocomplete';
+import AppBarMountainAutocomplete from '../../AutoComplete/AppBarMountainAutocomplete';
 import DatePickerMobile from '../../DatePickers/DatePickerMobile';
 import PatrolDispatcherAutocomplete from '../../AutoComplete/PatrolDispatcherAutocomplete';
 import PatrolDispatcherDisplay from '../../Patrollers/PatrolDispatcherDisplay';
 
 function SearchAppBar({ setOpenSnackbar, setSnackbarMessage }) {
-	const { selectedMountain, setSelectedMountain, api } = useContext(MountainContext);
+	const { selectedMountain, setSelectedMountain } = useContext(MountainContext);
 	const { openDatePicker, setOpenDatePicker } = useContext(DateContext);
-
-	// useEffect(() => {
-	// 	const storedMountainId = localStorage.getItem('selectedMountainId');
-	// 	if (storedMountainId) {
-	// 		api.getMountain(storedMountainId)
-	// 			.then((mountain) => {
-	// 				console.log("🚀 ~ file: AppBar.jsx:22 ~ .then ~ mountain:", mountain)
-	// 				// setSelectedMountain(mountain);
-	// 			})
-	// 			.catch((error) => {
-	// 				console.error('Error fetching mountain:', error);
-	// 			});
-	// 	}
-	// }, [api, setSelectedMountain]);
 
 	return (
 		<AppBar
@@ -41,7 +27,7 @@ function SearchAppBar({ setOpenSnackbar, setSnackbarMessage }) {
 						<DatePickerMobile openDatePicker={openDatePicker} setOpenDatePicker={setOpenDatePicker} />
 					</Box>
 				</Box>
-				<MountainAutocomplete
+				<AppBarMountainAutocomplete
 					selectedMountain={selectedMountain}
 					setSelectedMountain={setSelectedMountain}
 					setOpenSnackbar={setOpenSnackbar}

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Autocomplete, TextField, createFilterOptions } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 
-const PatrollerAutocomplete = ({ selectedPatrollers, setSelectedPatrollers }) => {
+const PatrollerAutocomplete = ({ selectedPatrollers, setSelectedPatrollers, handlePatrollerChange }) => {
 	const { patrollers } = useContext(MountainContext);
 
 	const filterOptions = createFilterOptions({
@@ -16,9 +16,7 @@ const PatrollerAutocomplete = ({ selectedPatrollers, setSelectedPatrollers }) =>
 			id="patroller-autocomplete"
 			value={selectedPatrollers}
 			options={patrollers}
-			onChange={(event, newValues) => {
-				setSelectedPatrollers(newValues);
-			}}
+			onChange={handlePatrollerChange}
 			autoHighlight
 			autoSelect
 			noOptionsText="No Patrollers Found"

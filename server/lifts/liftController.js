@@ -33,12 +33,11 @@ exports.createLift = async (req, res) => {
         mountain.lifts.push(lift._id);
         await mountain.save();
 
-        // If the lift is in an area, create it to the area's lifts array
         if (req.body.area) {
-            const area = await Mountain.areas.findById(req.body.area);
+            const area = mountain.areas.id(req.body.area);
             if (!area) return res.status(404).json({ message: 'No area found with this ID' });
             area.lifts.push(lift._id);
-            await area.save();
+            await mountain.save();
         }
 
         res.status(201).json(lift);

@@ -15,15 +15,21 @@ export const MountainContext = createContext();
 const useFetch = (apiFunc, id) => {
 	const [data, setData] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState(null);
 
 	const fetchData = useCallback(async () => {
 		setIsLoading(true);
-		const response = await apiFunc(id);
-		setData(response || []);
-		setIsLoading(false);
+		try {
+			const response = await apiFunc(id);
+			setData(response || []);
+		} catch (error) {
+			setError(error);
+		} finally {
+			setIsLoading(false);
+		}
 	}, [apiFunc, id]);
 
-	return [data, isLoading, fetchData];
+	return [data, isLoading, fetchData, error];
 };
 
 export const MountainProvider = ({ children }) => {
@@ -40,6 +46,14 @@ export const MountainProvider = ({ children }) => {
 		equipmentApi.getAllEquipment,
 		selectedMountain?._id
 	);
+
+	const [trailLogs, isTrailLogsLoading, fetchTrailLogs] = useFetch(trailApi.getAllTrailLogs, selectedMountain?._id);
+	const [equipmentLogs, isEquipmentLogsLoading, fetchEquipmentLogs] = useFetch(equipmentApi.getAllEquipmentLogs, selectedMountain?._id);
+	const [hutLogs, isHutLogsLoading, fetchHutLogs] = useFetch(hutApi.getAllHutLogs, selectedMountain?._id);
+	const [liftLineChecks, isLiftLineChecksLoading, fetchLiftLineChecks] = useFetch(liftApi.getAllLiftLineChecks, selectedMountain?._id);
+	const [aidRoomLogs, isAidRoomLogsLoading, fetchAidRoomLogs] = useFetch(aidRoomApi.getAllAidRoomLogs, selectedMountain?._id);
+
+
 	// const [paperwork, isPaperworkLoading, fetchPaperwork] = useFetch(paperworkApi.getAllPaperwork, selectedMountain?._id);
 	const [patrollers, isPatrollersLoading, fetchPatrollers] = useFetch(
 		patrollerApi.getAllPatrollers,
@@ -62,10 +76,14 @@ export const MountainProvider = ({ children }) => {
 		isMountainsLoading ||
 		isAreasLoading ||
 		isHutsLoading ||
+		isHutLogsLoading ||
 		isAidRoomsLoading ||
+		isAidRoomLogsLoading ||
 		isLodgesLoading ||
 		isLiftsLoading ||
+		isLiftLineChecksLoading ||
 		isTrailsLoading ||
+		isTrailLogsLoading ||
 		isPatrollersLoading ||
 		isEquipmentLoading;
 
@@ -120,10 +138,14 @@ export const MountainProvider = ({ children }) => {
 		if (selectedMountain) {
 			fetchAreas();
 			fetchHuts();
+			fetchHutLogs();
 			fetchAidRooms();
+			fetchAidRoomLogs();
 			fetchLodges();
 			fetchLifts();
+			fetchLiftLineChecks();
 			fetchTrails();
+			fetchTrailLogs();
 			fetchPatrollers();
 			fetchEquipment();
 			fetchPatrolDispatcherForDate(new Date());
@@ -133,10 +155,14 @@ export const MountainProvider = ({ children }) => {
 		selectedMountain,
 		fetchAreas,
 		fetchHuts,
+		fetchHutLogs,
 		fetchAidRooms,
+		fetchAidRoomLogs,
 		fetchLodges,
 		fetchLifts,
+		fetchLiftLineChecks,
 		fetchTrails,
+		fetchTrailLogs,
 		fetchPatrollers,
 		fetchEquipment,
 		fetchPatrolDispatcherForDate,
@@ -154,14 +180,22 @@ export const MountainProvider = ({ children }) => {
 				fetchAreas,
 				huts,
 				fetchHuts,
+				hutLogs,
+				fetchHutLogs,
 				aidRooms,
 				fetchAidRooms,
+				aidRoomLogs,
+				fetchAidRoomLogs,
 				lodges,
 				fetchLodges,
 				lifts,
 				fetchLifts,
+				liftLineChecks,
+				fetchLiftLineChecks,
 				trails,
 				fetchTrails,
+				trailLogs,
+				fetchTrailLogs,
 				patrollers,
 				fetchPatrollers,
 				currentDayPatrolDispatcher,

@@ -9,7 +9,7 @@ import DeleteButton from './CellRenders/DeleteButton';
 
 const IncidentTable = () => {
 	const { trails, huts, lodges, lifts, patrollers, selectedMountain } = useContext(MountainContext);
-	console.log('🚀 ~ file: IncidentTable.jsx:12 ~ IncidentTable ~ selectedMountain:', selectedMountain);
+	const [selectedPatrollers, setSelectedPatrollers] = useState([]);
 	const [rowData, setRowData] = useState([]);
 	const [newRow, setNewRow] = useState({
 		callTime: '',
@@ -22,6 +22,7 @@ const IncidentTable = () => {
 		dryRun: false,
 	});
 
+	// eslint-disable-next-line
 	const [gridApi, setGridApi] = useState(null);
 	const deleteRow = (deletedRowId) => {
 		setRowData(rowData.filter((row) => row.id !== deletedRowId));
@@ -49,6 +50,7 @@ const IncidentTable = () => {
 			cellRenderer: 'DeleteButton',
 			cellRendererParams: {
 				clicked: deleteRow,
+				mountainId: selectedMountain ? selectedMountain._id : null,
 			},
 		},
 	];
@@ -56,10 +58,11 @@ const IncidentTable = () => {
 	useEffect(() => {
 		const fetchLogs = async () => {
 			try {
-				if (selectedMountain) {
+				// Add a null check for selectedMountain
+				if (selectedMountain && selectedMountain._id) {
 					const logs = await api.getAllLogs(selectedMountain._id);
-					console.log('🚀 ~ file: IncidentTable.jsx:59 ~ fetchLogs ~ logs:', logs);
-					setRowData(Array.isArray(logs) ? logs : []);
+					const rowData = logs.map((log) => ({ id: log._id, ...log }));
+					setRowData(Array.isArray(rowData) ? rowData : []);
 				}
 			} catch (error) {
 				console.error('Error fetching logs', error);
@@ -100,6 +103,15 @@ const IncidentTable = () => {
 		}));
 	};
 
+	const handlePatrollerChange = (event, newValue) => {
+		setSelectedPatrollers(newValue);
+		const patrollersString = newValue.map((patroller) => `${patroller.firstName} ${patroller.lastName}`).join(', ');
+		setNewRow((prevState) => ({
+			...prevState,
+			patrollers: patrollersString,
+		}));
+	};
+
 	const handleCheckboxChange = (event) => {
 		const { name, checked } = event.target;
 		setNewRow((prevState) => ({
@@ -111,22 +123,41 @@ const IncidentTable = () => {
 		}));
 	};
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		// Define a regular expression for time in HH:MM:SS format
 		const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
 
 		// Validate the time fields
 		if (
-			!timeRegex.test(newRow.time) ||
-			!timeRegex.test(newRow.onScene) ||
-			!timeRegex.test(newRow.stable) ||
-			!timeRegex.test(newRow.transport)
+			!timeRegex.test(newRow.callTime) ||
+			(!newRow.dryRun &&
+				(!timeRegex.test(newRow.onScene) ||
+					!timeRegex.test(newRow.stable) ||
+					!timeRegex.test(newRow.transport)))
 		) {
 			alert('Please enter a valid time in HH:MM:SS format.');
 			return;
 		}
 
+		const patrollersString = selectedPatrollers
+			.map((patroller) => `${patroller.firstName} ${patroller.lastName}`)
+			.join(', ');
+
+		setNewRow((prevState) => ({
+			...prevState,
+			patrollers: patrollersString,
+		}));
+
+		try {
+			if (selectedMountain && selectedMountain._id) {
+				await api.createLog(selectedMountain._id, newRow);
+			}
+		} catch (error) {
+			console.error('Error creating log', error);
+		}
+
 		setRowData((prevState) => [newRow, ...prevState]);
+		setSelectedPatrollers([]);
 		setNewRow({
 			callTime: '',
 			incident: '',
@@ -153,6 +184,9 @@ const IncidentTable = () => {
 				handleSubmit={handleSubmit}
 				locationOptions={locationOptions}
 				patrollers={patrollers}
+				selectedPatrollers={selectedPatrollers}
+				setSelectedPatrollers={setSelectedPatrollers}
+				handlePatrollerChange={handlePatrollerChange}
 			/>
 			<AgGridReact
 				columnDefs={columnDefs}

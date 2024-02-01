@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import { AddHutForm, AddHutLogForm } from '../components/Huts/HutsForm';
+import HutsTable from '../components/Huts/HutsTable';
 
 function Huts({ setOpenSnackbar, setSnackbarMessage }) {
 	return (
@@ -10,6 +11,9 @@ function Huts({ setOpenSnackbar, setSnackbarMessage }) {
 			</Grid>
 			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
 				<AddHutLogForm />
+			</Grid>
+			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
+				<HutsTable />
 			</Grid>
 		</Grid>
 	);

@@ -78,7 +78,10 @@ const AddLodgeLogForm = () => {
 							setSelectedValue={setSelectedLodge}
 							label="Lodge"
 						/>
-						<PatrollerAutocomplete />
+						<PatrollerAutocomplete
+							selectedPatroller={selectedPatroller}
+							setSelectedPatroller={setSelectedPatroller}
+						/>
 						<Button type="submit" variant="contained">
 							Add Lodge Log
 						</Button>

@@ -26,6 +26,7 @@ export default function IncidentLogTimePicker({ label, name, handleTimeChange, c
             <TimePicker
                 label={label}
                 value={selectedTime}
+                views={['hours', 'minutes', 'seconds']}
                 sx={{ 
                     marginLeft: -1.5,
                     maxWidth: 120,
@@ -38,6 +39,7 @@ export default function IncidentLogTimePicker({ label, name, handleTimeChange, c
                     },
                 }}
                 onChange={(time) => {
+                    console.log("🚀 ~ file: IncidentLogTimePicker.jsx:42 ~ IncidentLogTimePicker ~ time:", time)
                     setSelectedTime(time);
                     handleTimeChange(name, time);
                 }}

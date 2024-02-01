@@ -10,9 +10,6 @@ const AppBarMountainAutocomplete = ({ selectedMountain, setSelectedMountain, set
 			setSelectedMountain(newValue);
 			setOpenSnackbar(true);
 			setSnackbarMessage(`Mountain changed to ${newValue.name}`);
-			console.log(
-				newValue._id
-			);
 			localStorage.setItem('selectedMountainId', newValue._id);
 		}
 	};

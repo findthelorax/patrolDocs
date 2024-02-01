@@ -4,8 +4,8 @@ import { MountainContext } from '../../contexts/MountainContext';
 
 const LocationTypeAutocomplete = ({ locationType, setLocationType, setLocation, defaultLocationType }) => {
 	const { locationTypes = [] } = useContext(MountainContext);
-	const [localLocationType, setLocalLocationType] = useState(defaultLocationType);
-
+	const [localLocationType, setLocalLocationType] = useState(defaultLocationType || null);
+	
 	useEffect(() => {
 		if (locationType !== undefined && locationType !== null) {
 			setLocalLocationType(locationType);

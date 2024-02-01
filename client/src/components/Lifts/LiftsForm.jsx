@@ -14,7 +14,8 @@ const AddLiftForm = ({ coordinates }) => {
 		event.preventDefault();
 		try {
 			const lift = { name, area: selectedArea._id, coordinates };
-			await liftApi.createLift(selectedMountain.id, lift);
+			console.log("🚀 ~ file: LiftsForm.jsx:18 ~ handleSubmit ~ lift:", lift)
+			await liftApi.createLift(selectedMountain._id, lift);
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
@@ -57,7 +58,7 @@ const AddLineCheckForm = () => {
 		event.preventDefault();
 		try {
 			const lineCheck = { description };
-			await liftApi.createLineCheck(selectedMountain.id, selectedLift.id, lineCheck);
+			await liftApi.createLineCheck(selectedMountain._id, selectedLift.id, lineCheck);
 			setDescription('');
 			setSelectedLift(null);
 			setSelectedPatroller(null);
@@ -78,7 +79,10 @@ const AddLineCheckForm = () => {
 							setSelectedValue={setSelectedLift}
 							label="Lift"
 						/>
-						<PatrollerAutocomplete />
+						<PatrollerAutocomplete
+							selectedPatroller={selectedPatroller}
+							setSelectedPatroller={setSelectedPatroller}
+						/>						
 						<TextField
 							label="Description"
 							value={description}

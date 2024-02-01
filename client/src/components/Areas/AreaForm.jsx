@@ -5,8 +5,8 @@ import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
 const AddAreaForm = () => {
 	const [name, setName] = useState('');
-	const [selectedMountain, setSelectedMountain] = useState(null);
-	const { mountains, fetchMountains, api } = useContext(MountainContext);
+	const [localSelectedMountain, setLocalSelectedMountain] = useState(null);
+	const { mountains, fetchMountains, api, selectedMountain } = useContext(MountainContext);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState('');
 
@@ -14,11 +14,19 @@ const AddAreaForm = () => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		// Check if a mountain is selected locally or in the context
+		const mountainToUse = localSelectedMountain || selectedMountain;
+		if (!mountainToUse) {
+			setSnackbarMessage(`Please select a mountain.`);
+			setOpenSnackbar(true);
+			return;
+		}
 		try {
 			const area = { name };
-			await api.createArea(selectedMountain._id, area);
+			const mountainId = mountainToUse._id;
+			await api.createArea(mountainId, area);
 			setName('');
-			setSelectedMountain(null);
+			setLocalSelectedMountain(null);
 			fetchMountains();
 			setSnackbarMessage(`Area ${name} created successfully!`);
 			setOpenSnackbar(true);
@@ -37,8 +45,8 @@ const AddAreaForm = () => {
 						<FormControl fullWidth required>
 							<MountainAutocomplete
 								options={mountains}
-								selectedValue={selectedMountain}
-								setSelectedValue={setSelectedMountain}
+								selectedValue={localSelectedMountain}
+								setSelectedValue={setLocalSelectedMountain}
 								label="Mountain"
 							/>
 						</FormControl>

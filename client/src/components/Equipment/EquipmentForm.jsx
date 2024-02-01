@@ -42,7 +42,9 @@ const AddEquipmentForm = () => {
 					<Stack spacing={2}>
 						<Select value={type} onChange={(e) => setType(e.target.value)} required displayEmpty>
 							<MenuItem value="" disabled>
-								<Typography color="text.secondary" variant='body2'>Type</Typography>
+								<Typography color="text.secondary" variant="body2">
+									Type
+								</Typography>
 							</MenuItem>
 							{Object.values(EquipmentTypes).map((type) => (
 								<MenuItem key={type} value={type}>
@@ -74,11 +76,11 @@ const AddEquipmentForm = () => {
 							setLocation={setLocation}
 						/>
 						{locationType !== 'Other' ? (
-							<MountainAutocomplete 
-								options={locations} 
-								selectedValue={selectedLocation} 
-								setSelectedValue={setSelectedLocation} 
-								label="Location" 
+							<MountainAutocomplete
+								options={Array.isArray(locations) ? locations : []}
+								selectedValue={selectedLocation}
+								setSelectedValue={setSelectedLocation}
+								label="Location"
 							/>
 						) : (
 							<TextField
@@ -100,7 +102,7 @@ const AddEquipmentForm = () => {
 
 const AddEquipmentLogForm = () => {
 	const [log, setLog] = useState('');
-	const [ equipmentS, setEquipmentS ] = useState(null);
+	const [equipmentS, setEquipmentS] = useState(null);
 	const { selectedMountain, fetchMountains, equipment } = useContext(MountainContext);
 	const [selectedEquipment, setSelectedEquipment] = useState(null);
 
@@ -121,12 +123,12 @@ const AddEquipmentLogForm = () => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<MountainAutocomplete 
-							options={equipment} 
-							selectedValue={selectedEquipment} 
-							setSelectedValue={setSelectedEquipment} 
-							label="Equipment" 
-						/>						
+						<MountainAutocomplete
+							options={equipment}
+							selectedValue={selectedEquipment}
+							setSelectedValue={setSelectedEquipment}
+							label="Equipment"
+						/>
 						<PatrollerAutocomplete />
 						<TextField
 							label="Log"

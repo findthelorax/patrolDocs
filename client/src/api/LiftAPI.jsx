@@ -53,7 +53,7 @@ export const api = {
 		}
 	},
 
-	async getAllLineChecks(mountainId, liftId) {
+	async getAllLiftLineChecks(mountainId, liftId) {
 		try {
 			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/lift/${liftId}/linecheck`);
 			return response.data;
@@ -66,7 +66,7 @@ export const api = {
 		}
 	},
 
-	async createLineCheck(mountainId, liftId, lineCheck) {
+	async createLiftLineCheck(mountainId, liftId, lineCheck) {
 		try {
 			const response = await axios.post(
 				`${IP}:${PORT}/mountain/${mountainId}/lift/${liftId}/linecheck`,
@@ -82,7 +82,7 @@ export const api = {
 		}
 	},
 
-	async getLineCheck(mountainId, liftId, lineCheckId) {
+	async getLiftLineCheck(mountainId, liftId, lineCheckId) {
 		try {
 			const response = await axios.get(
 				`${IP}:${PORT}/mountain/${mountainId}/lift/${liftId}/linecheck/${lineCheckId}`
@@ -97,7 +97,7 @@ export const api = {
 		}
 	},
 
-	async updateLineCheck(mountainId, liftId, lineCheckId, updatedLineCheck) {
+	async updateLiftLineCheck(mountainId, liftId, lineCheckId, updatedLineCheck) {
 		try {
 			const response = await axios.patch(
 				`${IP}:${PORT}/mountain/${mountainId}/lift/${liftId}/linecheck/${lineCheckId}`,
@@ -113,7 +113,7 @@ export const api = {
 		}
 	},
 
-	async deleteLineCheck(mountainId, liftId, lineCheckId) {
+	async deleteLiftLineCheck(mountainId, liftId, lineCheckId) {
 		try {
 			const response = await axios.delete(
 				`${IP}:${PORT}/mountain/${mountainId}/lift/${liftId}/linecheck/${lineCheckId}`
@@ -128,13 +128,13 @@ export const api = {
 		}
 	},
 
-	async createLiftToArea(mountainId, liftId, areaId) {
+	async addLiftToArea(mountainId, liftId, areaId) {
 		try {
 			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/lift/${liftId}/${areaId}`);
 			return response.data;
 		} catch (error) {
 			console.error(
-				`Error creating lift with id ${liftId} to area with id ${areaId} for mountain with id ${mountainId}`,
+				`Error adding lift with id ${liftId} to area with id ${areaId} for mountain with id ${mountainId}`,
 				error
 			);
 			throw error;

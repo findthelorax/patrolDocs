@@ -69,7 +69,7 @@ export const api = {
 		}
 	},
 
-	async getAllEquipmentLog(mountainId, equipmentId) {
+	async getAllEquipmentLogs(mountainId, equipmentId) {
 		try {
 			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/equipment/${equipmentId}/log`);
 			return response.data;

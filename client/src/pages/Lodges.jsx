@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import { AddLodgeForm, AddLodgeLogForm } from '../components/Lodges/LodgesForm';
+import LodgesTable from '../components/Lodges/LodgesTable';
 
 function Lodges({ setOpenSnackbar, setSnackbarMessage }) {
 	return (
@@ -10,6 +11,9 @@ function Lodges({ setOpenSnackbar, setSnackbarMessage }) {
 			</Grid>
 			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
 				<AddLodgeLogForm />
+			</Grid>
+			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
+				<LodgesTable />
 			</Grid>
 		</Grid>
 	);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import { AddAidRoomForm, AddAidRoomLogForm } from '../components/AidRooms/AidRoomForm';
+import AidRoomsTable from '../components/AidRooms/AidRoomsTable';
 
 function FirstAidRooms({ setOpenSnackbar, setSnackbarMessage }) {
 	return (
@@ -10,6 +11,9 @@ function FirstAidRooms({ setOpenSnackbar, setSnackbarMessage }) {
 			</Grid>
 			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
 				<AddAidRoomLogForm />
+			</Grid>
+			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
+				<AidRoomsTable />
 			</Grid>
 		</Grid>
 	);

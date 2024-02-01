@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { ListItemText, ListSubheader, ListItemIcon, ListItemButton, Divider } from '@mui/material';
+import { ListItemText, ListItemIcon, ListItemButton, Divider } from '@mui/material';
 import { GiMushroomHouse, GiTrail } from 'react-icons/gi';
 import { MdSpaceDashboard, MdFoodBank, MdOutlineSledding, MdSnowmobile } from 'react-icons/md';
 import { FaMap, FaSkiing } from 'react-icons/fa';
-import { PiFirstAidDuotone } from 'react-icons/pi';
+import { PiFirstAidDuotone, PiReadCvLogoDuotone } from 'react-icons/pi';
 import { TbBuildingHospital, TbAerialLift } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
 
@@ -86,6 +86,12 @@ export const SettingsListItems = () => (
 				<MdSnowmobile />
 			</ListItemIcon>
 			<ListItemText primary="Equipment" />
+		</ListItemButton>
+		<ListItemButton component={Link} to="/logs">
+			<ListItemIcon>
+				<PiReadCvLogoDuotone />
+			</ListItemIcon>
+			<ListItemText primary="Logs" />
 		</ListItemButton>
 	</>
 );

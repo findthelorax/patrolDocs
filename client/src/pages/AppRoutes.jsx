@@ -11,6 +11,7 @@ import Equipment from './Equipment';
 import Lodges from './Lodges';
 import Huts from './Huts';
 import FirstAidRooms from './FirstAidRooms';
+import Logs from './Logs';
 
 const routes = [
 	{ path: '/dashboard', component: Dashboard },
@@ -24,6 +25,7 @@ const routes = [
 	{ path: '/trails', component: Trails },
 	{ path: '/lodges', component: Lodges },
 	{ path: '/equipment', component: Equipment },
+	{ path: '/logs', component: Logs },
 	{ path: '*', component: Dashboard },
 ];
 

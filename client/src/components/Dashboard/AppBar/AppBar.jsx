@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Toolbar, IconButton, Badge, Avatar, Divider, Box, AppBar } from '@mui/material';
 import { Notifications as NotificationsIcon, Settings as SettingsIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';

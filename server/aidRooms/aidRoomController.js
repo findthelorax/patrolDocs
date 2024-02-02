@@ -64,10 +64,19 @@ exports.deleteAidRoom = async (req, res) => {
 
 exports.getAllAidRoomLogs = async (req, res) => {
     try {
-        const aidRoomLogs = await AidRoomLog.find({ aidRoom: req.params.id });
+        const aidRoomLogs = await AidRoomLog.find();
         if (!aidRoomLogs) {
-            return res.status(404).json({ message: 'No logs found for this aid room' });
+            return res.status(404).json({ message: 'No logs found' });
         }
+        res.status(200).json(aidRoomLogs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.getAidRoomLogs = async (req, res) => {
+    try {
+        const aidRoomLogs = await AidRoomLog.find({ aidRoom: req.params.aidRoomId });
         res.status(200).json(aidRoomLogs);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -76,11 +85,16 @@ exports.getAllAidRoomLogs = async (req, res) => {
 
 exports.getAidRoomLog = async (req, res) => {
     try {
-        const aidRoomLog = await AidRoomLog.findById(req.params.logId);
-        if (!aidRoomLog) {
-            return res.status(404).json({ message: 'No log found with this ID' });
+        const aidRoomLog = await AidRoomLog.findOne({ 
+            _id: req.params.logId, 
+            aidRoom: req.params.aidRoomId 
+        }).populate('aidRoom', 'mountain').exec();
+
+        if (aidRoomLog && aidRoomLog.aidRoom.mountain.toString() === req.params.mountainId) {
+            res.status(200).json(aidRoomLog);
+        } else {
+            res.status(404).json({ message: 'Log not found' });
         }
-        res.status(200).json(aidRoomLog);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

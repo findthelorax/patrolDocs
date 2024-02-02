@@ -54,6 +54,20 @@ export const api = {
 	},
 
     // Hut Logs
+
+	async getAllHutLogs(mountainId) {
+		try {
+			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/hut/logs`);
+			return response.data;
+		} catch (error) {
+			console.error(
+				`Error fetching hut logs mountain with id ${mountainId}`,
+				error
+			);
+			throw error;
+		}
+	},
+
     async createHutLog(mountainId, hutId, log) {
 		try {
 			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/hut/${hutId}/log`, log);
@@ -64,7 +78,7 @@ export const api = {
 		}
 	},
 
-	async getAllHutLogs(mountainId, hutId) {
+	async getHutLogs(mountainId, hutId) {
 		try {
 			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/hut/${hutId}/log`);
 			return response.data;

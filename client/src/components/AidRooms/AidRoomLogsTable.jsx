@@ -13,7 +13,7 @@ const AidRoomLogsTable = () => {
 
     const columnDefs = [
         { 
-            headerName: "Aid Room", 
+            headerName: "First Aid Room", 
             field: "aidRoom",
             valueGetter: params => aidRoomMap[params.data.aidRoom]
         },
@@ -30,7 +30,7 @@ const AidRoomLogsTable = () => {
     ];
 
     return (
-        <div className="ag-theme-quartz-dark" style={{ height: 400, width: 600 }}>
+        <div className="ag-theme-quartz-dark" style={{ height: '40vh', width: '95%' }}>
             <AgGridReact
                 columnDefs={columnDefs}
                 rowData={aidRoomLogs}

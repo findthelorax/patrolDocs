@@ -48,7 +48,7 @@ const TrailLogsTable = () => {
     ];
 
     return (
-        <div className="ag-theme-quartz-dark" style={{ height: 400, width: 600 }}>
+        <div className="ag-theme-quartz-dark" style={{ height: '40vh', width: '60.65%' }}>
             <AgGridReact
                 columnDefs={columnDefs}
                 rowData={trailLogs}

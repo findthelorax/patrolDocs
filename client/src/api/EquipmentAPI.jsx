@@ -69,7 +69,20 @@ export const api = {
 		}
 	},
 
-	async getAllEquipmentLogs(mountainId, equipmentId) {
+	async getAllEquipmentLogs(mountainId) {
+		try {
+			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/equipment/logs`);
+			return response.data;
+		} catch (error) {
+			console.error(
+				`Error fetching equipment logs mountain with id ${mountainId}`,
+				error
+			);
+			throw error;
+		}
+	},
+
+	async getEquipmentLogs(mountainId, equipmentId) {
 		try {
 			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/equipment/${equipmentId}/log`);
 			return response.data;

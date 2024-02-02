@@ -1,4 +1,4 @@
-const { Hut } = require('./hutModel');
+const { Hut, HutLog } = require('./hutModel');
 const { Mountain } = require('../mountains/mountainModel');
 
 exports.getAllHuts = async (req, res) => {
@@ -102,11 +102,24 @@ exports.getAllHutLogs = async (req, res) => {
     }
 };
 
+exports.getHutLogs = async (req, res) => {
+    try {
+        const hutLogs = await HutLog.find({ hut: req.params.hutId });
+        res.status(200).json(hutLogs);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
 exports.getHutLog = async (req, res) => {
     try {
-        const hut = await Hut.findById(req.params.hutId);
-        if (hut && hut.log.id(req.params.logId)) {
-            res.status(200).json(hut.log.id(req.params.logId));
+        const hutLog = await HutLog.findOne({ 
+            _id: req.params.logId, 
+            hut: req.params.hutId 
+        }).populate('hut', 'mountain').exec();
+
+        if (hutLog && hutLog.hut.mountain.toString() === req.params.mountainId) {
+            res.status(200).json(hutLog);
         } else {
             res.status(404).json({ message: 'Log not found' });
         }

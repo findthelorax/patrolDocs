@@ -122,6 +122,15 @@ exports.removeMountainFromPatroller = async (req, res) => {
 
 exports.getAllPatrolDispatcherLogs = async (req, res) => {
     try {
+        const logs = await PatrolDispatcherLog.find();
+        res.status(200).json(logs);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+exports.getPatrolDispatcherLogs = async (req, res) => {
+    try {
         const logs = await PatrolDispatcherLog.find({ patroller: req.params.patrollerId });
         res.status(200).json(logs);
     } catch (err) {
@@ -157,8 +166,9 @@ exports.getPatrolDispatcherForDate = async (req, res) => {
 };
 
 exports.createPatrolDispatcherLog = async (req, res) => {
+
     try {
-        const log = new PatrolDispatcherLog({ ...req.body, patroller: req.params.patrollerId });
+        const log = new PatrolDispatcherLog({ mountain: req.params.mountainId, patroller: req.params.patrollerId, ...req.body.date});
         const savedLog = await log.save();
         res.status(201).json(savedLog);
     } catch (err) {

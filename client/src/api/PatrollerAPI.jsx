@@ -79,9 +79,9 @@ export const api = {
 		}
 	},
 
-	async createPatrolDispatcherLog(mountainId, patrollerId, log) {
+	async createPatrolDispatcherLog(mountainId, patrollerId, date) {
 		try {
-			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/patroller/${patrollerId}/dispatcher`, log);
+			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/patroller/${patrollerId}/dispatcher`, date.date);
 			return response.data;
 		} catch (error) {
 			console.error(`Error creating log for patroller with id ${patrollerId}`, error);
@@ -99,11 +99,11 @@ export const api = {
 		}
 	},
 
-	async updatePatrolDispatcherLog(mountainId, patrollerId, dispatcherId, updatedLog) {
+	async updatePatrolDispatcherLog(mountainId, patrollerId, dispatcherId, updatedDate) {
 		try {
 			const response = await axios.patch(
 				`${IP}:${PORT}/mountain/${mountainId}/patroller/${patrollerId}/dispatcher/${dispatcherId}`,
-				updatedLog
+				updatedDate
 			);
 			return response.data;
 		} catch (error) {

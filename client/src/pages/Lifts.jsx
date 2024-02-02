@@ -12,7 +12,7 @@ function Lifts({ setOpenSnackbar, setSnackbarMessage }) {
 			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
 				<AddLineCheckForm />
 			</Grid>
-			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
+			<Grid item xs={12}>
 				<LiftsTable />
 			</Grid>
 		</Grid>

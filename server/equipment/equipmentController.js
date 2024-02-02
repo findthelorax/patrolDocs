@@ -1,6 +1,6 @@
 const { Equipment, EquipmentLog } = require('./equipmentModel');
 
-exports.getAllEquipments = async (req, res) => {
+exports.getAllEquipment = async (req, res) => {
     try {
         const equipments = await Equipment.find().populate('checkLog.checkedBy');
         res.status(200).json(equipments);
@@ -53,40 +53,19 @@ exports.deleteEquipment = async (req, res) => {
     }
 };
 
-exports.checkEquipment = async (req, res) => {
-    try {
-        const equipment = await Equipment.findById(req.params.equipmentId);
-        if (!equipment) return res.status(404).json({ message: 'No equipment found with this ID' });
-
-        equipment.checkLog.push({
-            checkedBy: req.body.checkedBy,
-            date: req.body.date,
-            condition: req.body.condition,
-            notes: req.body.notes,
-        });
-        await equipment.save();
-
-        res.status(200).json(equipment);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
-exports.uncheckEquipment = async (req, res) => {
-    try {
-        const equipment = await Equipment.findById(req.params.equipmentId);
-        if (!equipment) return res.status(404).json({ message: 'No equipment found with this ID' });
-
-        equipment.checkLog.pop();
-        await equipment.save();
-
-        res.status(200).json(equipment);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
 exports.getAllEquipmentLogs = async (req, res) => {
+    try {
+        const equipmentLogs = await EquipmentLog.find();
+        if (!equipmentLogs) {
+            return res.status(404).json({ message: 'No logs found' });
+        }
+        res.status(200).json(equipmentLogs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+exports.getEquipmentLogs = async (req, res) => {
     try {
         const equipmentLogs = await EquipmentLog.find({ equipment: req.params.equipmentId });
         if (!equipmentLogs) {

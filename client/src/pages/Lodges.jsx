@@ -12,7 +12,7 @@ function Lodges({ setOpenSnackbar, setSnackbarMessage }) {
 			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
 				<AddLodgeLogForm />
 			</Grid>
-			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
+			<Grid item xs={12}>
 				<LodgesTable />
 			</Grid>
 		</Grid>

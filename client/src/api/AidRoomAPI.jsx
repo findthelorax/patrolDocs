@@ -43,7 +43,21 @@ export const api = {
             throw error;
         }
     },
-    getAllAidRoomLogs: async (mountainId, aidRoomId) => {
+
+    async getAllAidRoomLogs(mountainId) {
+		try {
+			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/logs`);
+			return response.data;
+		} catch (error) {
+			console.error(
+				`Error fetching first aid room logs mountain with id ${mountainId}`,
+				error
+			);
+			throw error;
+		}
+	},
+
+    getAidRoomLogs: async (mountainId, aidRoomId) => {
         try {
             const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/aidRoom/${aidRoomId}/log`);
             return response.data;

@@ -48,11 +48,19 @@ export const MountainProvider = ({ children }) => {
 	);
 
 	const [trailLogs, isTrailLogsLoading, fetchTrailLogs] = useFetch(trailApi.getAllTrailLogs, selectedMountain?._id);
-	const [equipmentLogs, isEquipmentLogsLoading, fetchEquipmentLogs] = useFetch(equipmentApi.getAllEquipmentLogs, selectedMountain?._id);
+	const [equipmentLogs, isEquipmentLogsLoading, fetchEquipmentLogs] = useFetch(
+		equipmentApi.getAllEquipmentLogs,
+		selectedMountain?._id
+	);
 	const [hutLogs, isHutLogsLoading, fetchHutLogs] = useFetch(hutApi.getAllHutLogs, selectedMountain?._id);
-	const [liftLineChecks, isLiftLineChecksLoading, fetchLiftLineChecks] = useFetch(liftApi.getAllLiftLineChecks, selectedMountain?._id);
-	const [aidRoomLogs, isAidRoomLogsLoading, fetchAidRoomLogs] = useFetch(aidRoomApi.getAllAidRoomLogs, selectedMountain?._id);
-
+	const [liftLineChecks, isLiftLineChecksLoading, fetchLiftLineChecks] = useFetch(
+		liftApi.getAllLiftLineChecks,
+		selectedMountain?._id
+	);
+	const [aidRoomLogs, isAidRoomLogsLoading, fetchAidRoomLogs] = useFetch(
+		aidRoomApi.getAllAidRoomLogs,
+		selectedMountain?._id
+	);
 
 	// const [paperwork, isPaperworkLoading, fetchPaperwork] = useFetch(paperworkApi.getAllPaperwork, selectedMountain?._id);
 	const [patrollers, isPatrollersLoading, fetchPatrollers] = useFetch(
@@ -60,7 +68,7 @@ export const MountainProvider = ({ children }) => {
 		selectedMountain?._id
 	);
 	const [currentDayPatrolDispatcher, setCurrentDayPatrolDispatcher] = useState(null);
-	const [patrolDispatcher, setPatrolDispatcher] = useState([]);
+	const [patrolDispatcher] = useState({});
 	const { selectedDate } = useContext(DateContext);
 
 	const locationTypes = ['Trails', 'Huts', 'First Aid Rooms', 'Other'];
@@ -85,7 +93,8 @@ export const MountainProvider = ({ children }) => {
 		isTrailsLoading ||
 		isTrailLogsLoading ||
 		isPatrollersLoading ||
-		isEquipmentLoading;
+		isEquipmentLoading ||
+		isEquipmentLogsLoading;
 
 	async function handleServiceToggle(item) {
 		const updatedEquipment = { ...item, inService: !item.inService };
@@ -97,18 +106,40 @@ export const MountainProvider = ({ children }) => {
 		}
 	}
 
+	const setPatrolDispatcher = async (dispatcher) => {
+		try {
+			if (selectedMountain) {
+				// Convert the date to a string in the ISO 8601 format
+				const dispatcherWithFormattedDate = {
+					...dispatcher,
+					date: dispatcher.date.toISOString(),
+				};
+				const response = await patrollerApi.createPatrolDispatcherLog(selectedMountain._id, dispatcherWithFormattedDate._id, dispatcherWithFormattedDate);
+				setCurrentDayPatrolDispatcher(response);
+			} else {
+				console.error('No mountain selected');
+			}
+		} catch (error) {
+			console.error(`Error saving patrol dispatcher with id ${dispatcher._id}`, error);
+		}
+	};
+
 	const fetchPatrolDispatcherForDate = useCallback(
 		async (date) => {
-			const formattedDate = date.toISOString().split('T')[0];
+			if (date) {
+				const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
+					date.getDate()
+				).padStart(2, '0')}`;
 
-			try {
-				const response = await patrollerApi.getPatrolDispatcherForDate(selectedMountain._id, formattedDate);
-				setCurrentDayPatrolDispatcher(response);
-			} catch (error) {
-				console.error(
-					`Error fetching patrol dispatcher for date ${formattedDate} for mountain with id ${selectedMountain._id}`,
-					error
-				);
+				try {
+					const response = await patrollerApi.getPatrolDispatcherForDate(selectedMountain._id, formattedDate);
+					setCurrentDayPatrolDispatcher(response);
+				} catch (error) {
+					console.error(
+						`Error fetching patrol dispatcher for date ${formattedDate} for mountain with id ${selectedMountain._id}`,
+						error
+					);
+				}
 			}
 		},
 		[selectedMountain, setCurrentDayPatrolDispatcher]
@@ -124,9 +155,7 @@ export const MountainProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (selectedDate && selectedMountain) {
-			fetchPatrolDispatcherForDate(selectedDate)
-				.then((data) => setPatrolDispatcher(data))
-				.catch((error) => console.error(error));
+			fetchPatrolDispatcherForDate(selectedDate);
 		}
 	}, [selectedDate, selectedMountain, fetchPatrolDispatcherForDate]);
 
@@ -148,6 +177,7 @@ export const MountainProvider = ({ children }) => {
 			fetchTrailLogs();
 			fetchPatrollers();
 			fetchEquipment();
+			fetchEquipmentLogs();
 			fetchPatrolDispatcherForDate(new Date());
 			// fetchPaperwork();
 		}
@@ -165,6 +195,7 @@ export const MountainProvider = ({ children }) => {
 		fetchTrailLogs,
 		fetchPatrollers,
 		fetchEquipment,
+		fetchEquipmentLogs,
 		fetchPatrolDispatcherForDate,
 	]);
 
@@ -204,6 +235,8 @@ export const MountainProvider = ({ children }) => {
 				setPatrolDispatcher,
 				equipment,
 				fetchEquipment,
+				equipmentLogs,
+				fetchEquipmentLogs,
 				handleServiceToggle,
 				locationTypes,
 				locations,

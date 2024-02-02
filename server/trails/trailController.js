@@ -133,6 +133,18 @@ exports.getAllTrailLogs = async (req, res) => {
     }
 };
 
+exports.getTrailLogs = async (req, res) => {
+	try {
+		const trailLogs = await TrailLog.find({ trail: req.params.trailId });
+		if (!trailLogs) {
+			return res.status(404).json({ message: 'No logs found for this trail' });
+		}
+		res.status(200).json(trailLogs);
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+};
+
 exports.getOneTrailLog = async (req, res) => {
     try {
         const trailLog = await TrailLog.findById(req.params.trailLogId);

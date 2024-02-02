@@ -29,7 +29,7 @@ const HutsTable = () => {
     ];
 
     return (
-        <div className="ag-theme-quartz-dark" style={{ height: 400, width: 600 }}>
+        <div className="ag-theme-quartz-dark" style={{ height: '40vh', width: '95%' }}>
             <AgGridReact
                 columnDefs={columnDefs}
                 rowData={huts}

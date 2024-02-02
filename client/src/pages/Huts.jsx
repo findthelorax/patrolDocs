@@ -12,7 +12,7 @@ function Huts({ setOpenSnackbar, setSnackbarMessage }) {
 			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
 				<AddHutLogForm />
 			</Grid>
-			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
+			<Grid item xs={12}>
 				<HutsTable />
 			</Grid>
 		</Grid>

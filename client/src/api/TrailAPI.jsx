@@ -53,7 +53,20 @@ export const api = {
 		}
 	},
 
-	async getAllTrailLogs(mountainId, trailId) {
+	async getAllTrailLogs(mountainId) {
+		try {
+			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/trail/logs`);
+			return response.data;
+		} catch (error) {
+			console.error(
+				`Error fetching trail logs mountain with id ${mountainId}`,
+				error
+			);
+			throw error;
+		}
+	},
+
+	async getTrailLogs(mountainId, trailId) {
 		try {
 			const response = await axios.get(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}/log`);
 			return response.data;

@@ -25,26 +25,31 @@ exports.getHut = async (req, res) => {
 };
 
 exports.createHut = async (req, res) => {
-    const hut = new Hut({
-        name: req.body.name,
-        mountain: req.params.mountainId,
-        area: req.body.areaId,
-        equipment: req.body.equipment,
-    });
     try {
-        const newHut = await hut.save();
+        const newHut = new Hut({
+            ...req.body,
+            mountain: req.params.mountainId,
+        });
+        const hut = await newHut.save();
 
-        // Find the mountain and create the new hut's ID to the huts array
         const mountain = await Mountain.findById(req.params.mountainId);
-        if (!mountain) {
-            return res.status(404).json({ message: 'Cannot find mountain' });
-        }
-        mountain.huts.push(newHut._id);
+        if (!mountain) return res.status(404).json({ message: 'No mountain found with this ID' });
+        mountain.huts.push(hut._id);
         await mountain.save();
 
-        res.status(201).json(newHut);
+        if (req.body.area) {
+            const area = mountain.areas.id(req.body.area);
+            if (!area) return res.status(404).json({ message: 'No area found with this ID' });
+            area.huts.push(hut._id);
+            await mountain.save();
+        }
+
+        res.status(201).json(hut);
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        if (err.code === 11000) {
+            return res.status(400).json({ message: 'A hut with this name already exists' });
+        }
+        res.status(500).json({ message: err.message });
     }
 };
 

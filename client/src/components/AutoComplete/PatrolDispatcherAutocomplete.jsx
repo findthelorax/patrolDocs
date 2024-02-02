@@ -10,15 +10,17 @@ const PatrolDispatcherAutocomplete = () => {
 	const [selectedDispatcher, setSelectedDispatcher] = useState(null);
 	const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
-	// PatrolDispatcherAutocomplete.js
-
 	const handleSelectionChange = async (event, newValue) => {
-		setSelectedDispatcher(newValue);
-		const existingDispatcher = await fetchPatrolDispatcherForDate(selectedDate);
-		if (existingDispatcher) {
-			setOpenConfirmDialog(true);
+		if (patrollers.includes(newValue)) {
+			setSelectedDispatcher(newValue);
+			const existingDispatcher = await fetchPatrolDispatcherForDate(selectedDate);
+			if (existingDispatcher) {
+				setOpenConfirmDialog(true);
+			} else {
+				setPatrolDispatcher({ ...newValue, date: selectedDate });
+			}
 		} else {
-			setPatrolDispatcher({ ...newValue, date: selectedDate });
+			setSelectedDispatcher(null);
 		}
 	};
 
@@ -33,17 +35,22 @@ const PatrolDispatcherAutocomplete = () => {
 	};
 
 	useEffect(() => {
-		setSelectedDispatcher(patrolDispatcher);
-	}, [patrolDispatcher]);
+		if (patrollers.includes(patrolDispatcher)) {
+			setSelectedDispatcher(patrolDispatcher);
+		} else {
+			setSelectedDispatcher(null);
+		}
+	}, [patrolDispatcher, patrollers]);
 
 	return (
 		<>
 			<Autocomplete
 				id="patrol-dispatcher-autocomplete"
 				options={patrollers || []}
-				getOptionLabel={(option) => (option ? `${option.firstName} ${option.lastName}` : '')}
+				getOptionLabel={(option) => (option && option.firstName && option.lastName) ? `${option.firstName} ${option.lastName}` : 'No name'}
 				value={selectedDispatcher}
 				onChange={handleSelectionChange}
+				clearIcon={false}
 				renderInput={(params) => (
 					<TextField
 						{...params}

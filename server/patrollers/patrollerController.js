@@ -22,17 +22,17 @@ exports.getPatroller = async (req, res) => {
     }
 };
 
-exports.addPatroller = async (req, res) => {
+exports.createPatroller = async (req, res) => {
     const patroller = new Patroller(req.body);
     try {
         const newPatroller = await patroller.save();
 
-        // Update the mountains collection
-        await Promise.all(newPatroller.mountains.map(async (mountainId) => {
-            const mountain = await Mountain.findById(mountainId);
-            mountain.patrollers.push(newPatroller._id);
-            await mountain.save();
-        }));
+        const mountain = await Mountain.findById(req.params.mountainId);
+        if (!mountain) {
+            return res.status(404).json({ message: 'Mountain not found' });
+        }
+        mountain.patrollers.push(newPatroller._id);
+        await mountain.save();
 
         res.status(201).json(newPatroller);
     } catch (err) {
@@ -122,7 +122,7 @@ exports.removeMountainFromPatroller = async (req, res) => {
 
 exports.getAllPatrolDispatcherLogs = async (req, res) => {
     try {
-        const logs = await PatrolDispatcherLog.find();
+        const logs = await PatrolDispatcherLog.find({ mountain: req.params.mountainId });
         res.status(200).json(logs);
     } catch (err) {
         res.status(500).json({ message: err.message });

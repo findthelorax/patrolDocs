@@ -11,8 +11,9 @@ const EquipmentLogSchema = new Schema({
 const EquipmentLog = mongoose.model('EquipmentLog', EquipmentLogSchema);
 
 const LocationSchema = new Schema({
-    kind: { type: String, enum: ['Hut', 'Lodge', 'FirstAidRoom', 'Trail', 'Other', 'Available'], required: true },
-    item: { type: Schema.Types.ObjectId, required: true, refPath: 'location.kind' },
+    type: { type: String, enum: ['Hut', 'Lodge', 'FirstAidRoom', 'Trail', 'Other', 'Available'], required: true },
+    name: { type: String, required: true },
+    id: { type: Schema.Types.ObjectId, required: true, refPath: 'location.type' },
 });
 
 const EquipmentSchema = new Schema({
@@ -33,6 +34,7 @@ const EquipmentSchema = new Schema({
     outOfServiceDate: Date,
     checkLog: { type: Schema.Types.ObjectId, ref: 'EquipmentLog' },
     description: String,
+    mountain: { type: Schema.Types.ObjectId, ref: 'Mountain' },
     location: LocationSchema,
 });
 

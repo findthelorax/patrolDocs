@@ -3,11 +3,9 @@ import { Grid } from '@mui/material';
 import AddMountainForm from '../components/Mountain/MountainForm';
 import AddAreaForm from '../components/Areas/AreaForm';
 import AddTrailForm from '../components/Trails/TrailsForm';
-import { AddAidRoomForm, AddAidRoomLogForm } from '../components/AidRooms/AidRoomForm';
-import { AddEquipmentForm, AddEquipmentLogForm } from '../components/Equipment/EquipmentForm';
-import { AddHutForm, AddHutLogForm } from '../components/Huts/HutsForm';
-import { AddLiftForm, AddLineCheckForm } from '../components/Lifts/LiftsForm';
-import { AddLodgeForm, AddLodgeLogForm } from '../components/Lodges/LodgesForm';
+import { AddEquipmentForm } from '../components/Equipment/EquipmentForm';
+import { AddHutForm } from '../components/Huts/HutsForm';
+import { AddLiftForm } from '../components/Lifts/LiftsForm';
 import AddPatrollerForm from '../components/Patrollers/PatrollersForm';
 
 function Dashboard({ setOpenSnackbar, setSnackbarMessage }) {

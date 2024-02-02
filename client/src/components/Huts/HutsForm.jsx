@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
-import { api as hutApi } from '../../api/HutAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
@@ -8,13 +7,13 @@ import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 const AddHutForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
-	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
 			const hut = { name, area: selectedArea._id };
-			await hutApi.createHut(selectedMountain._id, hut);
+			await api.hutApi.createHut(selectedMountain._id, hut);
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
@@ -52,12 +51,12 @@ const AddHutLogForm = () => {
 	const [selectedHut, setSelectedHut] = useState(null);
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, huts } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, huts, api } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			await hutApi.createHutLog(selectedMountain._id, selectedHut._id, { log });
+			await api.hutApi.createHutLog(selectedMountain._id, selectedHut._id, { log });
 			setLog(null);
 			setSelectedHut(null);
 			setSelectedPatroller(null);

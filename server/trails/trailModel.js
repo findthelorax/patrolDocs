@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Conditions = require('../helpers/conditions');
+const CoordinatesSchema = require('../coordinates/coordinatesModel');
 
 const TrailLogSchema = new mongoose.Schema({
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
@@ -19,6 +20,7 @@ const TrailSchema = new mongoose.Schema({
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     status: { type: String, default: 'closed' },
     trailLogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TrailLog' }],
+    coordinates: CoordinatesSchema,
 });
 
 TrailSchema.index({ mountain:1, name: 1, difficulty: 1 }, { unique: true });

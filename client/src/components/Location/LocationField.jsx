@@ -14,7 +14,7 @@ const LocationField = ({ locationType, setLocationType, location, setLocation, s
                 locationType={locationType}
                 setLocationType={setLocationType}
                 setLocation={setLocation}
-                defaultLocationType="Trails"
+                defaultLocationType="Trail"
             />
             {locationType !== 'Other' ? (
                 <MountainAutocomplete

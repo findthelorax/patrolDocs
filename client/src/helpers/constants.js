@@ -34,3 +34,12 @@ export const EquipmentTypes = {
     OxygenKit: 'Oxygen Kit',
     Other: 'Other',
 };
+
+export const locationTypes = ['Trail', 'Hut', 'First Aid Room', 'Other'];
+
+export const getLocations = (trails, huts, aidRooms) => ({
+    Trail: trails,
+    Hut: huts,
+    'First Aid Room': aidRooms,
+    Other: [],
+});

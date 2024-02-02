@@ -24,7 +24,7 @@ const AddAreaForm = () => {
 		try {
 			const area = { name };
 			const mountainId = mountainToUse._id;
-			await api.createArea(mountainId, area);
+			await api.mountainApi.createArea(mountainId, area);
 			setName('');
 			setLocalSelectedMountain(null);
 			fetchMountains();

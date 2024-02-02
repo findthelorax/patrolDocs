@@ -4,7 +4,7 @@ import { Button, Box, Checkbox, FormControlLabel, Card, CardContent } from '@mui
 import { format } from 'date-fns';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerMultiSelectAutocomplete';
 import IncidentField from './IncidentField';
-import LocationField from './LocationField';
+import LocationField from '../Location/LocationField';
 import TimePickerField from './TimePickerField';
 
 const IncidentForm = ({ newRow, setNewRow, handleInputChange, handleCheckboxChange, handleSubmit, handlePatrollerChange, selectedPatrollers, setSelectedPatrollers }) => {

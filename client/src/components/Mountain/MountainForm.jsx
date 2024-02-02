@@ -7,7 +7,7 @@ const AddMountainForm = () => {
     const [name, setName] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState(null);
-    const { fetchMountains, apiModules } = useContext(MountainContext);
+    const { fetchMountains, api } = useContext(MountainContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -19,7 +19,7 @@ const AddMountainForm = () => {
                     state
                 }
             };
-            await apiModules.createMountain(mountain);
+            await api.mountainApi.createMountain(mountain);
             setName('');
             setCity('');
             setState(null);

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const CoordinatesSchema = require('../coordinates/coordinatesModel');
 
 const AidRoomLogSchema = new mongoose.Schema({
     aidRoom: { type: mongoose.Schema.Types.ObjectId, ref: 'AidRoom', required: true },
@@ -21,6 +22,7 @@ const AidRoomSchema = new mongoose.Schema({
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     equipment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Equipment' }],
     paperwork: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Paperwork' }],
+    coordinates: CoordinatesSchema,
     comments: String,
 });
 

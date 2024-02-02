@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, MenuItem } from '@mui/material';
-import { api as trailApi } from '../../api/TrailAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
@@ -9,13 +8,13 @@ const AddTrailForm = ({ setOpenSnackbar, setSnackbarMessage }) => {
 	const [selectedArea, setSelectedArea] = useState(null);
 	const [difficulty, setDifficulty] = useState('');
 	const [type, setType] = useState('');
-	const { selectedMountain, areas } = useContext(MountainContext);
+	const { selectedMountain, areas, api } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
 			const trail = { name, areaId: selectedArea._id, difficulty, type };
-			await trailApi.createTrail(selectedMountain._id, trail);
+			await api.trailApi.createTrail(selectedMountain._id, trail);
 			setName('');
 			setSelectedArea(null);
 			setDifficulty('');

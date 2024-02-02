@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
-import { api as lodgeApi } from '../../api/LodgeAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
@@ -8,13 +7,13 @@ import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 const AddLodgeForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
-	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
 			const lodge = { name, area: selectedArea._id };
-			await lodgeApi.createLodge(selectedMountain._id, lodge);
+			await api.lodgeApi.createLodge(selectedMountain._id, lodge);
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
@@ -49,15 +48,15 @@ const AddLodgeForm = () => {
 
 const AddLodgeLogForm = () => {
 	const [log, setLog] = useState('');
-	const [selectedLodge, setSelectedLodge] = useState('');
+	const [selectedLodge, setSelectedLodge] = useState(null);
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, lodges } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, lodges, api } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			await lodgeApi.createLodgeLog(selectedMountain._id, selectedLodge._id, { log });
+			await api.lodgeApi.createLodgeLog(selectedMountain._id, selectedLodge._id, { log });
 			setLog('');
 			setSelectedLodge('');
 			setSelectedPatroller(null);

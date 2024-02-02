@@ -22,7 +22,7 @@ function SearchAppBar({ setOpenSnackbar, setSnackbarMessage }) {
 		>
 			<Toolbar sx={{ display: 'flex' }}>
 				<Box sx={{ display: 'flex' }}>
-					<DarkModeButton />,
+					<DarkModeButton />
 					<Box sx={{ marginLeft: 2 }}>
 						<DatePickerMobile openDatePicker={openDatePicker} setOpenDatePicker={setOpenDatePicker} />
 					</Box>

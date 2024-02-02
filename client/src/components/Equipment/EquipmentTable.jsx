@@ -18,13 +18,16 @@ function EquipmentTable() {
 	}
 
 	const columnDefs = [
-		{ headerName: 'Name', field: 'name', width: 150},
 		{ headerName: 'Type', field: 'type', width: 150 },
 		{ headerName: 'ID Number', field: 'idNumber', width: 150 },
 		{ headerName: 'In Service', field: 'inServiceDate', width: 150 },
 		{ headerName: 'Out of Service', field: 'outOfServiceDate', width: 150 },
 		{ headerName: 'Description', field: 'description', width: 200 },
-		{ headerName: 'Location', field: 'location', width: 150 },
+		{
+			headerName: 'Location',
+			valueGetter: (params) => `${params.data.location.type}, ${params.data.location.name}`,
+			width: 150,
+		},
 		{ headerName: 'Action', field: 'action', width: 100 },
 		{
 			headerName: 'Service',
@@ -39,10 +42,7 @@ function EquipmentTable() {
 
 	return (
 		<div className="ag-theme-quartz-dark" style={{ height: '500px', width: '100%', marginLeft: 20, marginTop: 20 }}>
-			<AgGridReact
-				columnDefs={columnDefs}
-				rowData={equipment}
-			/>
+			<AgGridReact columnDefs={columnDefs} rowData={equipment} />
 		</div>
 	);
 }

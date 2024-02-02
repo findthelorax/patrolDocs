@@ -4,7 +4,7 @@ import { api as equipmentApi } from '../../api/EquipmentAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
-import LocationTypeAutocomplete from '../AutoComplete/LocationTypeAutocomplete';
+import LocationField from '../Location/EquipmentLocationField';
 import { EquipmentTypes } from '../../helpers/constants';
 
 const AddEquipmentForm = () => {
@@ -14,15 +14,15 @@ const AddEquipmentForm = () => {
 	const [locationType, setLocationType] = useState(null);
 	const [location, setLocation] = useState(null);
 	const [otherLocation, setOtherLocation] = useState('');
-	const { selectedMountain, fetchMountains, locations } = useContext(MountainContext);
-	const [selectedLocation, setSelectedLocation] = useState(null);
+	const { selectedMountain, fetchMountains } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const locationValue = locationType === 'Other' ? otherLocation : location;
+			const locationValue = locationType === 'Other' ? otherLocation : { type: locationType, name: location.name, id: location._id};
 			const equipment = { type, idNumber, description, location: locationValue };
-			await equipmentApi.createEquipment(selectedMountain.id, equipment);
+			console.log("🚀 ~ file: EquipmentForm.jsx:25 ~ handleSubmit ~ equipment:", equipment)
+			await equipmentApi.createEquipment(selectedMountain._id, equipment);
 			setType('');
 			setIDNumber('');
 			setDescription('');
@@ -70,26 +70,14 @@ const AddEquipmentForm = () => {
 							required
 							multiline
 						/>
-						<LocationTypeAutocomplete
+						<LocationField
 							locationType={locationType}
 							setLocationType={setLocationType}
+							location={location}
 							setLocation={setLocation}
+							otherLocation={otherLocation}
+							setOtherLocation={setOtherLocation}
 						/>
-						{locationType !== 'Other' ? (
-							<MountainAutocomplete
-								options={Array.isArray(locations) ? locations : []}
-								selectedValue={selectedLocation}
-								setSelectedValue={setSelectedLocation}
-								label="Location"
-							/>
-						) : (
-							<TextField
-								label="Other Location"
-								value={otherLocation}
-								onChange={(e) => setOtherLocation(e.target.value)}
-								required
-							/>
-						)}
 						<Button type="submit" variant="contained">
 							Add Equipment
 						</Button>

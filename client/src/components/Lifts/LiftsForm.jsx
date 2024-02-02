@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
-import { api as liftApi } from '../../api/LiftAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
@@ -8,14 +7,13 @@ import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 const AddLiftForm = ({ coordinates }) => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
-	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
 			const lift = { name, area: selectedArea._id, coordinates };
-			console.log("🚀 ~ file: LiftsForm.jsx:18 ~ handleSubmit ~ lift:", lift)
-			await liftApi.createLift(selectedMountain._id, lift);
+			await api.liftApi.createLift(selectedMountain._id, lift);
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
@@ -52,13 +50,13 @@ const AddLineCheckForm = () => {
 	const [description, setDescription] = useState('');
 	const [selectedLift, setSelectedLift] = useState(null);
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, lifts } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, lifts, api } = useContext(MountainContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
 			const lineCheck = { description };
-			await liftApi.createLineCheck(selectedMountain._id, selectedLift.id, lineCheck);
+			await api.liftApi.createLineCheck(selectedMountain._id, selectedLift.id, lineCheck);
 			setDescription('');
 			setSelectedLift(null);
 			setSelectedPatroller(null);

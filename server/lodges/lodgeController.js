@@ -26,11 +26,11 @@ exports.getOneLodge = async (req, res) => {
 };
 
 exports.createLodge = async (req, res) => {
+	console.log('🚀 ~ file: lodgeController.js:29 ~ exports.createLodge= ~ req:', req.body);
 	try {
 		const mountain = await Mountain.findById(req.params.mountainId);
 		const existingLodge = await Lodge.findOne({
 			name: req.body.name,
-			difficulty: req.body.difficulty,
 			mountain: mountain._id,
 		});
 
@@ -42,8 +42,8 @@ exports.createLodge = async (req, res) => {
 		newLodge.mountain = mountain._id;
 		await newLodge.save();
 
-		if (req.params.areaId) {
-			const area = mountain.areas.id(req.params.areaId);
+		if (req.body.area) {
+			const area = mountain.areas.id(req.body.area);
 			if (area) {
 				area.lodges.push(newLodge._id);
 			} else {

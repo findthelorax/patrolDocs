@@ -16,7 +16,7 @@ const AddEquipmentForm = () => {
 	const [location, setLocation] = useState(null);
 	const [otherLocation, setOtherLocation] = useState('');
 	const { selectedMountain, fetchMountains } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -32,12 +32,14 @@ const AddEquipmentForm = () => {
 			setLocation(null);
 			setOtherLocation('');
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Equipment created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating equipment', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating equipment');
+			setOpenSnackbar(true);
 		}
 	};
 
@@ -64,7 +66,7 @@ const AddEquipmentForm = () => {
 							onChange={(e) => setIDNumber(e.target.value)}
 							required
 							onKeyDown={(event) => {
-								if (!/[0-9]/.test(event.key)) {
+								if (!/[0-9]/.test(event.key) && event.key !== 'Tab') {
 									event.preventDefault();
 								}
 							}}
@@ -98,7 +100,7 @@ const AddEquipmentLogForm = () => {
 	const [log, setLog] = useState('');
 	const [equipmentS, setEquipmentS] = useState(null);
 	const { selectedMountain, fetchMountains, equipment } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 	const [selectedEquipment, setSelectedEquipment] = useState(null);
 
 	const handleSubmit = async (event) => {
@@ -108,12 +110,14 @@ const AddEquipmentLogForm = () => {
 			setLog('');
 			setEquipmentS(null);
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Equipment log created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating equipment log', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating equipment log');
+			setOpenSnackbar(true);
 		}
 	};
 

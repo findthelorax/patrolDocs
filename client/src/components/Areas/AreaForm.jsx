@@ -8,7 +8,7 @@ const AddAreaForm = () => {
 	const [name, setName] = useState('');
 	const [localSelectedMountain, setLocalSelectedMountain] = useState(null);
 	const { mountains, fetchMountains, api, selectedMountain } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -26,10 +26,12 @@ const AddAreaForm = () => {
 			setName('');
 			setLocalSelectedMountain(null);
 			fetchMountains();
+			setSnackbarSeverity('success');
 			setSnackbarMessage(`Area ${name} created successfully!`);
 			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating area', error);
+			setSnackbarSeverity('error');
 			setSnackbarMessage(`Error creating ${name}`);
 			setOpenSnackbar(true);
 		}

@@ -9,7 +9,7 @@ const AddLodgeForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -19,12 +19,14 @@ const AddLodgeForm = () => {
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Lodge created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating lodge', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating lodge');
+			setOpenSnackbar(true);
 		}
 	};
 
@@ -58,7 +60,7 @@ const AddLodgeLogForm = () => {
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
 	const { selectedMountain, fetchMountains, lodges, api } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -68,12 +70,14 @@ const AddLodgeLogForm = () => {
 			setSelectedLodge('');
 			setSelectedPatroller(null);
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Lodge log created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating lodge log', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating lodge log');
+			setOpenSnackbar(true);
 		}
 	};
 

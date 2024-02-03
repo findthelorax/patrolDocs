@@ -9,7 +9,7 @@ const AddLiftForm = ({ coordinates }) => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -19,12 +19,14 @@ const AddLiftForm = ({ coordinates }) => {
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Lift created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating lift', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating lift');
+			setOpenSnackbar(true);
 		}
 	};
 
@@ -57,7 +59,7 @@ const AddLineCheckForm = () => {
 	const [selectedLift, setSelectedLift] = useState(null);
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
 	const { selectedMountain, fetchMountains, lifts, api } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -68,12 +70,14 @@ const AddLineCheckForm = () => {
 			setSelectedLift(null);
 			setSelectedPatroller(null);
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Line check created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating line check', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating line check');
+			setOpenSnackbar(true);
 		}
 	};
 

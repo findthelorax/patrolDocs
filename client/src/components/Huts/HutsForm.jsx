@@ -9,7 +9,7 @@ const AddHutForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -19,12 +19,14 @@ const AddHutForm = () => {
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Hut created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating hut', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating hut');
+			setOpenSnackbar(true);
 		}
 	};
 
@@ -58,7 +60,7 @@ const AddHutLogForm = () => {
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
 	const { selectedMountain, fetchMountains, huts, api } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -68,12 +70,14 @@ const AddHutLogForm = () => {
 			setSelectedHut(null);
 			setSelectedPatroller(null);
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Hut log created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating hut log', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating hut log');
+			setOpenSnackbar(true);
 		}
 	};
 

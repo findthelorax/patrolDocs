@@ -98,16 +98,6 @@ export const MountainProvider = ({ children }) => {
 		isEquipmentLoading ||
 		isEquipmentLogsLoading;
 
-	async function handleServiceToggle(item) {
-		const updatedEquipment = { ...item, inService: !item.inService };
-		try {
-			await equipmentApi.updateEquipment(selectedMountain._id, item._id, updatedEquipment);
-			fetchEquipment();
-		} catch (error) {
-			console.error(`Error toggling service status for equipment with id ${item._id}`, error);
-		}
-	}
-
 	const setPatrolDispatcher = async (dispatcher) => {
 		try {
 			if (selectedMountain) {
@@ -130,23 +120,39 @@ export const MountainProvider = ({ children }) => {
 		}
 	};
 
-	async function handleLiftToggle(lift) {
-		const updatedLift = { ...lift, isOpen: !lift.isOpen };
+	async function handleUpdate(api, updateMethod, fetchMethod, id, updatedData) {
 		try {
-			await liftApi.updateLift(selectedMountain._id, lift._id, updatedLift);
-			fetchLifts();
+			await api[updateMethod](selectedMountain._id, id, updatedData);
+			fetchMethod();
 		} catch (error) {
-			console.error(`Error toggling status for lift with id ${lift._id}`, error);
+			console.error(`Error updating entity with id ${id}`, error);
 		}
 	}
 
+	async function handleToggle(api, updateMethod, fetchMethod, item, toggleField) {
+		const updatedItem = { ...item, [toggleField]: !item[toggleField] };
+		handleUpdate(api, updateMethod, fetchMethod, item._id, updatedItem);
+	}
+	
+	async function handleServiceToggle(item) {
+		handleToggle(equipmentApi, 'updateEquipment', fetchEquipment, item, 'inService');
+	}
+
+	async function handleLiftToggle(lift) {
+		handleToggle(liftApi, 'updateLift', fetchLifts, lift, 'isOpen');
+	}
+
 	async function handleTrailToggle(trail) {
-		const updatedTrail = { ...trail, isOpen: !trail.isOpen };
-		try {
-			await trailApi.updateTrail(selectedMountain._id, trail._id, updatedTrail);
-			fetchTrails();
-		} catch (error) {
-			console.error(`Error toggling status for trail with id ${trail._id}`, error);
+		handleToggle(trailApi, 'updateTrail', fetchTrails, trail, 'isOpen');
+	}
+
+	async function handleTrailLogCreateOrUpdate(trailId, logData) {
+		const logDataWithDate = { ...logData, date: selectedDate };
+		const existingTrailLog = trailLogs.find((log) => log.trailId === trailId);
+		if (existingTrailLog) {
+			handleUpdate(trailApi, 'updateTrailLog', fetchTrailLogs, trailId, logDataWithDate);
+		} else {
+			handleUpdate(trailApi, 'createTrailLog', fetchTrailLogs, trailId, logDataWithDate);
 		}
 	}
 
@@ -170,26 +176,6 @@ export const MountainProvider = ({ children }) => {
 		},
 		[selectedMountain, setCurrentDayPatrolDispatcher]
 	);
-
-	async function handleTrailLogCreateOrUpdate(trailId, logData) {
-		console.log('🚀 ~ file: MountainContext.jsx:176 ~ handleTrailLogCreateOrUpdate ~ logData:', logData);
-		console.log('🚀 ~ file: MountainContext.jsx:176 ~ handleTrailLogCreateOrUpdate ~ trailId:', trailId);
-		const logDataWithDate = { ...logData, date: selectedDate };
-		try {
-			// Check if a trail log for the given trailId already exists
-			const existingTrailLog = trailLogs.find((log) => log.trailId === trailId);
-			if (existingTrailLog) {
-				// If it exists, update it
-				await trailApi.updateTrailLog(selectedMountain._id, trailId, logDataWithDate);
-			} else {
-				// If it doesn't exist, create a new one
-				await trailApi.createTrailLog(selectedMountain._id, trailId, logDataWithDate);
-			}
-			fetchTrailLogs();
-		} catch (error) {
-			console.error(`Error creating or updating trail log for trail with id ${trailId}`, error);
-		}
-	}
 
 	useEffect(() => {
 		const storedMountainId = localStorage.getItem('selectedMountainId');

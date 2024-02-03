@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const AreaSchema = new Schema({
     name: { type: String, required: true, unique: true },
     description: String,
+    status: { type: String, required: true, enum: ['open', 'closed', 'unknown'], default: 'unknown'},
     lifts: [{ type: Schema.Types.ObjectId, ref: 'Lift' }],
     trails: [{ type: Schema.Types.ObjectId, ref: 'Trail' }],
     huts: [{ type: Schema.Types.ObjectId, ref: 'Hut' }],
@@ -27,6 +28,19 @@ const MountainSchema = new Schema({
     equipment: [{ type: Schema.Types.ObjectId, ref: 'Equipment' }],
     patrollers: [{ type: Schema.Types.ObjectId, ref: 'Patroller' }],
 });
+
+AreaSchema.methods.updateStatus = function(newStatus) {
+    this.status = newStatus;
+    const updatePromises = [];
+
+    ['lifts', 'trails', 'huts', 'lodges', 'aidRooms', 'equipment'].forEach(field => {
+        this[field].forEach(item => {
+            updatePromises.push(item.update({ status: newStatus }));
+        });
+    });
+
+    return Promise.all(updatePromises);
+};
 
 const Mountain = mongoose.model('Mountain', MountainSchema);
 

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
+import { SnackbarContext } from '../../contexts/SnackbarContext';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 
@@ -8,6 +9,7 @@ const AddLiftForm = ({ coordinates }) => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
+	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -17,8 +19,12 @@ const AddLiftForm = ({ coordinates }) => {
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
+			setOpenSnackbar(true);
+			setSnackbarMessage('Lift created successfully');
 		} catch (error) {
 			console.error('Error creating lift', error);
+			setOpenSnackbar(true);
+			setSnackbarMessage('Error creating lift');
 		}
 	};
 
@@ -51,6 +57,7 @@ const AddLineCheckForm = () => {
 	const [selectedLift, setSelectedLift] = useState(null);
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
 	const { selectedMountain, fetchMountains, lifts, api } = useContext(MountainContext);
+	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -61,8 +68,12 @@ const AddLineCheckForm = () => {
 			setSelectedLift(null);
 			setSelectedPatroller(null);
 			fetchMountains();
+			setOpenSnackbar(true);
+			setSnackbarMessage('Line check created successfully');
 		} catch (error) {
 			console.error('Error creating line check', error);
+			setOpenSnackbar(true);
+			setSnackbarMessage('Error creating line check');
 		}
 	};
 

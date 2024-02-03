@@ -1,12 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, createContext } from 'react';
 
-export const DateContext = React.createContext({
-    selectedDate: null,
-    setSelectedDate: () => {},
-    openDatePicker: false,
-    setOpenDatePicker: () => {},
-    handleDateChange: () => {},
-});
+export const DateContext = createContext();
 
 export const DateProvider = ({ children }) => {
     const [selectedDate, setSelectedDate] = useState(new Date(new Date().setHours(0, 0, 0, 0)));

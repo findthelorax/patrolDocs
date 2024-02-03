@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
+import { SnackbarContext } from '../../contexts/SnackbarContext';
 
-const AppBarMountainAutocomplete = ({ selectedMountain, setSelectedMountain, setOpenSnackbar, setSnackbarMessage }) => {
+const AppBarMountainAutocomplete = ({ selectedMountain, setSelectedMountain}) => {
 	const { mountains } = useContext(MountainContext);
+	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleMountainChange = (event, newValue) => {
 		if (newValue) {

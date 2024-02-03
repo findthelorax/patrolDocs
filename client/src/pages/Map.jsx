@@ -4,7 +4,7 @@ import MountainMap from '../components/Mountain/MountainMap';
 // import MountainMapBox from '../components/Mountain/MountainMapBox';
 // import MountainMapGoogle from '../components/Mountain/MountainMap';
 
-function Map({ setOpenSnackbar, setSnackbarMessage }) {
+function Map() {
 	return (
 		<Grid container rowSpacing={3} columnSpacing={3} sx={{ pt: 8 }}>
 			{/* <Grid item xs={12}>

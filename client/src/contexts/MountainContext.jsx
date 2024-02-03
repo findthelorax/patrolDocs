@@ -19,9 +19,9 @@ export const MountainProvider = ({ children }) => {
 	const [currentDayPatrolDispatcher, setCurrentDayPatrolDispatcher] = useState(null);
 	const [patrolDispatcher] = useState({});
 
-	const useMountainData = (api, method, id) => {
-		const [data, isLoading, fetchData] = useApiData(api[method], id);
-		return [data, isLoading, fetchData];
+	const useMountainData = (api, method, id, date) => {
+		const [data, isLoading, fetchData, setData] = useApiData(api[method], id, date);
+		return [data, isLoading, fetchData, setData];
 	};
 
 	const [mountains, isMountainsLoading, fetchMountains] = useMountainData(mountainApi, 'getAllMountains');
@@ -41,11 +41,6 @@ export const MountainProvider = ({ children }) => {
 		selectedMountain?._id
 	);
 
-	const [trailLogs, isTrailLogsLoading, fetchTrailLogs] = useMountainData(
-		trailApi,
-		'getAllTrailLogs',
-		selectedMountain?._id
-	);
 	const [equipmentLogs, isEquipmentLogsLoading, fetchEquipmentLogs] = useMountainData(
 		equipmentApi,
 		'getAllEquipmentLogs',
@@ -62,7 +57,12 @@ export const MountainProvider = ({ children }) => {
 		'getAllAidRoomLogs',
 		selectedMountain?._id
 	);
-
+	const [trailLogs, isTrailLogsLoading, fetchTrailLogs] = useMountainData(
+		trailApi,
+		'getAllTrailLogs',
+		selectedMountain?._id,
+		selectedDate
+	);
 	const [patrollers, isPatrollersLoading, fetchPatrollers] = useMountainData(
 		patrollerApi,
 		'getAllPatrollers',
@@ -130,6 +130,26 @@ export const MountainProvider = ({ children }) => {
 		}
 	};
 
+	async function handleLiftToggle(lift) {
+		const updatedLift = { ...lift, isOpen: !lift.isOpen };
+		try {
+			await liftApi.updateLift(selectedMountain._id, lift._id, updatedLift);
+			fetchLifts();
+		} catch (error) {
+			console.error(`Error toggling status for lift with id ${lift._id}`, error);
+		}
+	}
+
+	async function handleTrailToggle(trail) {
+		const updatedTrail = { ...trail, isOpen: !trail.isOpen };
+		try {
+			await trailApi.updateTrail(selectedMountain._id, trail._id, updatedTrail);
+			fetchTrails();
+		} catch (error) {
+			console.error(`Error toggling status for trail with id ${trail._id}`, error);
+		}
+	}
+
 	const fetchPatrolDispatcherForDate = useCallback(
 		async (date) => {
 			if (date) {
@@ -151,6 +171,26 @@ export const MountainProvider = ({ children }) => {
 		[selectedMountain, setCurrentDayPatrolDispatcher]
 	);
 
+	async function handleTrailLogCreateOrUpdate(trailId, logData) {
+		console.log('🚀 ~ file: MountainContext.jsx:176 ~ handleTrailLogCreateOrUpdate ~ logData:', logData);
+		console.log('🚀 ~ file: MountainContext.jsx:176 ~ handleTrailLogCreateOrUpdate ~ trailId:', trailId);
+		const logDataWithDate = { ...logData, date: selectedDate };
+		try {
+			// Check if a trail log for the given trailId already exists
+			const existingTrailLog = trailLogs.find((log) => log.trailId === trailId);
+			if (existingTrailLog) {
+				// If it exists, update it
+				await trailApi.updateTrailLog(selectedMountain._id, trailId, logDataWithDate);
+			} else {
+				// If it doesn't exist, create a new one
+				await trailApi.createTrailLog(selectedMountain._id, trailId, logDataWithDate);
+			}
+			fetchTrailLogs();
+		} catch (error) {
+			console.error(`Error creating or updating trail log for trail with id ${trailId}`, error);
+		}
+	}
+
 	useEffect(() => {
 		const storedMountainId = localStorage.getItem('selectedMountainId');
 		if (storedMountainId) {
@@ -160,17 +200,11 @@ export const MountainProvider = ({ children }) => {
 	}, [mountains]);
 
 	useEffect(() => {
-		if (selectedDate && selectedMountain) {
-			fetchPatrolDispatcherForDate(selectedDate);
-		}
-	}, [selectedDate, selectedMountain, fetchPatrolDispatcherForDate]);
-
-	useEffect(() => {
 		fetchMountains();
 	}, [fetchMountains]);
 
 	useEffect(() => {
-		if (selectedMountain) {
+		if (selectedMountain && selectedDate) {
 			fetchAreas();
 			fetchHuts();
 			fetchHutLogs();
@@ -184,10 +218,11 @@ export const MountainProvider = ({ children }) => {
 			fetchPatrollers();
 			fetchEquipment();
 			fetchEquipmentLogs();
-			fetchPatrolDispatcherForDate(new Date());
+			fetchPatrolDispatcherForDate(selectedDate);
 		}
 	}, [
 		selectedMountain,
+		selectedDate,
 		fetchAreas,
 		fetchHuts,
 		fetchHutLogs,
@@ -226,12 +261,15 @@ export const MountainProvider = ({ children }) => {
 				fetchLodges,
 				lifts,
 				fetchLifts,
+				handleLiftToggle,
 				liftLineChecks,
 				fetchLiftLineChecks,
 				trails,
 				fetchTrails,
+				handleTrailToggle,
 				trailLogs,
 				fetchTrailLogs,
+				handleTrailLogCreateOrUpdate,
 				patrollers,
 				fetchPatrollers,
 				currentDayPatrolDispatcher,

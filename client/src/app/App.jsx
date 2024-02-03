@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MountainProvider } from '../contexts/MountainContext';
-import { DateProvider } from '../contexts/DateContext'; // Import DateProvider instead of DateContext
+import { DateProvider } from '../contexts/DateContext';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { lightTheme, darkTheme } from '../theme/theme';
 import { ThemeContext } from '../contexts/ThemeContext';
+import { SnackbarProvider } from '../contexts/SnackbarContext';
 
 import MainLayout from '../pages/MainLayout';
 
@@ -17,17 +18,19 @@ function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<ThemeContext.Provider value={{ darkMode, setDarkMode }}>
-				<MountainProvider>
+			<SnackbarProvider>
+				<ThemeContext.Provider value={{ darkMode, setDarkMode }}>
 					<DateProvider>
-						<Router>
-							<Routes>
-								<Route path="*" element={<MainLayout />} />
-							</Routes>
-						</Router>
+						<MountainProvider>
+							<Router>
+								<Routes>
+									<Route path="*" element={<MainLayout />} />
+								</Routes>
+							</Router>
+						</MountainProvider>
 					</DateProvider>
-				</MountainProvider>
-			</ThemeContext.Provider>
+				</ThemeContext.Provider>
+			</SnackbarProvider>
 		</ThemeProvider>
 	);
 }

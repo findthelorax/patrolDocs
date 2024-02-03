@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
+import { SnackbarContext } from '../../contexts/SnackbarContext';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 
@@ -8,6 +9,7 @@ const AddHutForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
+	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -17,8 +19,12 @@ const AddHutForm = () => {
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
+			setOpenSnackbar(true);
+			setSnackbarMessage('Hut created successfully');
 		} catch (error) {
 			console.error('Error creating hut', error);
+			setOpenSnackbar(true);
+			setSnackbarMessage('Error creating hut');
 		}
 	};
 
@@ -52,6 +58,7 @@ const AddHutLogForm = () => {
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
 	const { selectedMountain, fetchMountains, huts, api } = useContext(MountainContext);
+	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -61,8 +68,12 @@ const AddHutLogForm = () => {
 			setSelectedHut(null);
 			setSelectedPatroller(null);
 			fetchMountains();
+			setOpenSnackbar(true);
+			setSnackbarMessage('Hut log created successfully');
 		} catch (error) {
 			console.error('Error creating hut log', error);
+			setOpenSnackbar(true);
+			setSnackbarMessage('Error creating hut log');
 		}
 	};
 

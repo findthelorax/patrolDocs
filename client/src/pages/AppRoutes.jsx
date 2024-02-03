@@ -12,6 +12,7 @@ import Lodges from './Lodges';
 import Huts from './Huts';
 import FirstAidRooms from './FirstAidRooms';
 import Logs from './Logs';
+import Settings from './Settings';
 
 const routes = [
 	{ path: '/dashboard', component: Dashboard },
@@ -26,16 +27,17 @@ const routes = [
 	{ path: '/lodges', component: Lodges },
 	{ path: '/equipment', component: Equipment },
 	{ path: '/logs', component: Logs },
+	{ path: '/settings', component: Settings },
 	{ path: '*', component: Dashboard },
 ];
 
-const AppRoutes = ({ setOpenSnackbar, setSnackbarMessage }) => (
+const AppRoutes = () => (
 	<Routes>
 		{routes.map(({ path, component: Component }) => (
 			<Route
 				key={path}
 				path={path}
-				element={<Component setOpenSnackbar={setOpenSnackbar} setSnackbarMessage={setSnackbarMessage} />}
+				element={<Component />}
 			/>
 		))}
 	</Routes>

@@ -10,7 +10,7 @@ import TimePickerField from './TimePickerField';
 const IncidentForm = ({ newRow, setNewRow, handleInputChange, handleCheckboxChange, handleSubmit, handlePatrollerChange, selectedPatrollers, setSelectedPatrollers }) => {
 	// eslint-disable-next-line
 	const [gridApi, setGridApi] = useState(null);
-	const [locationType, setLocationType] = useState('Trails');
+	const [locationType, setLocationType] = useState('Trail');
 	const [location, setLocation] = useState(null);
 	const [otherLocation, setOtherLocation] = useState('');
 

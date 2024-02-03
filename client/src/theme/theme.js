@@ -117,7 +117,7 @@ const styleOverrides = {
 			styleOverrides: {
 				root: {
 					'&:nth-of-type(odd)': {
-						backgroundColor: '#d3cdcd',
+						backgroundColor: '#ed7cfc',
 					},
 					'&.open': {
 						backgroundColor: 'lightgreen',

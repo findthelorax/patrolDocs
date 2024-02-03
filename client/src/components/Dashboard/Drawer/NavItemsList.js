@@ -93,5 +93,11 @@ export const SettingsListItems = () => (
 			</ListItemIcon>
 			<ListItemText primary="Logs" />
 		</ListItemButton>
+		<ListItemButton component={Link} to="/settings">
+			<ListItemIcon>
+				<PiReadCvLogoDuotone />
+			</ListItemIcon>
+			<ListItemText primary="Settings" />
+		</ListItemButton>
 	</>
 );

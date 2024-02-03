@@ -1,13 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Card, CardContent, Stack } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
-import StateAutocomplete from '../AutoComplete/StatesAutocomplete'; // import the StateAutocomplete component
+import { SnackbarContext } from '../../contexts/SnackbarContext';
+import StateAutocomplete from '../AutoComplete/StatesAutocomplete';
 
 const AddMountainForm = () => {
     const [name, setName] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState(null);
     const { fetchMountains, api } = useContext(MountainContext);
+    const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -24,8 +26,12 @@ const AddMountainForm = () => {
             setCity('');
             setState(null);
             fetchMountains();
+            setOpenSnackbar(true);
+            setSnackbarMessage('Mountain created successfully');
         } catch (error) {
             console.error('Error creating mountain', error);
+            setOpenSnackbar(true);
+            setSnackbarMessage('Error creating mountain');
         }
     };
 

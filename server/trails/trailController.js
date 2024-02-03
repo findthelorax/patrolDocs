@@ -42,8 +42,10 @@ exports.createTrail = async (req, res) => {
 		newTrail.mountain = mountain._id;
 		await newTrail.save();
 
-		if (req.params.areaId) {
-			const area = mountain.areas.id(req.params.areaId);
+		const areaId = req.params.areaId || req.body.areaId;
+
+		if (areaId) {
+			const area = mountain.areas.id(areaId);
 			if (area) {
 				area.trails.push(newTrail._id);
 			} else {
@@ -64,16 +66,13 @@ exports.createTrail = async (req, res) => {
 };
 
 exports.updateTrail = async (req, res) => {
-	try {
-		const mountain = await Mountain.findById(req.params.mountainId);
-		const area = mountain.areas.id(req.params.areaId);
-		const trail = area.trails.id(req.params.trailId);
-		trail.set(req.body);
-		await mountain.save();
-		res.status(200).json(mountain);
-	} catch (err) {
-		res.status(400).json({ message: err.message });
-	}
+    try {
+        const updateTrail = await Trail.findByIdAndUpdate(req.params.trailId, req.body, { new: true });
+        if (!updateTrail) return res.status(404).json({ message: 'No trail found with this ID' });
+        res.status(200).json(updateTrail);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 };
 
 exports.deleteTrail = async (req, res) => {
@@ -125,17 +124,17 @@ exports.deleteTrailFromArea = async (req, res) => {
 
 // Trail Logs
 exports.getAllTrailLogs = async (req, res) => {
-    try {
-        const trailLogs = await TrailLog.find();
-        res.status(200).json(trailLogs);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+	try {
+		const trailLogs = await TrailLog.find({ mountain: req.params.mountainId });
+		res.status(200).json(trailLogs);
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
 };
 
 exports.getTrailLogs = async (req, res) => {
 	try {
-		const trailLogs = await TrailLog.find({ trail: req.params.trailId });
+		const trailLogs = await TrailLog.find({ mountain: req.params.mountainId, trail: req.params.trailId });
 		if (!trailLogs) {
 			return res.status(404).json({ message: 'No logs found for this trail' });
 		}
@@ -146,41 +145,47 @@ exports.getTrailLogs = async (req, res) => {
 };
 
 exports.getOneTrailLog = async (req, res) => {
-    try {
-        const trailLog = await TrailLog.findById(req.params.trailLogId);
-        if (!trailLog) {
-            return res.status(404).json({ message: 'Trail log not found' });
-        }
-        res.status(200).json(trailLog);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+	try {
+		const trailLog = await TrailLog.findOne({ mountain: req.params.mountainId, trail: req.params.trailId, _id: req.params.trailLogId });
+		if (!trailLog) {
+			return res.status(404).json({ message: 'Trail log not found' });
+		}
+		res.status(200).json(trailLog);
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
 };
 
 exports.createTrailLog = async (req, res) => {
-    try {
-        const trailLog = new TrailLog(req.body);
-        const newTrailLog = await trailLog.save();
-        res.status(201).json(newTrailLog);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
+	console.log("🚀 ~ file: trailController.js:160 ~ exports.createTrailLog= ~ req.body:", req.body)
+	console.log("🚀 ~ file: trailController.js:160 ~ exports.createTrailLog= ~ req.params:", req.params)
+	try {
+		const trailLog = new TrailLog({
+			...req.body,
+			trail: req.params.trailId,
+			mountain: req.params.mountainId
+		});
+		const newTrailLog = await trailLog.save();
+		res.status(201).json(newTrailLog);
+	} catch (err) {
+		res.status(400).json({ message: err.message });
+	}
 };
 
 exports.updateTrailLog = async (req, res) => {
-    try {
-        const trailLog = await TrailLog.findByIdAndUpdate(req.params.trailLogId, req.body, { new: true });
-        res.status(200).json(trailLog);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
+	try {
+		const trailLog = await TrailLog.updateOne({ mountain: req.params.mountainId, trail: req.params.trailId, _id: req.params.trailLogId }, req.body);
+		res.status(200).json({ message: 'Updated trail log' });
+	} catch (err) {
+		res.status(400).json({ message: err.message });
+	}
 };
 
 exports.deleteTrailLog = async (req, res) => {
-    try {
-        await TrailLog.findByIdAndDelete(req.params.trailLogId);
-        res.status(200).json({ message: 'Deleted Trail Log' });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+	try {
+		await TrailLog.deleteOne({ mountain: req.params.mountainId, trail: req.params.trailId, _id: req.params.trailLogId });
+		res.status(200).json({ message: 'Deleted trail log' });
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
 };

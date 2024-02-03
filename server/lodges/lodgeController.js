@@ -26,7 +26,6 @@ exports.getOneLodge = async (req, res) => {
 };
 
 exports.createLodge = async (req, res) => {
-	console.log('🚀 ~ file: lodgeController.js:29 ~ exports.createLodge= ~ req:', req.body);
 	try {
 		const mountain = await Mountain.findById(req.params.mountainId);
 		const existingLodge = await Lodge.findOne({

@@ -28,10 +28,10 @@ const IncidentTable = () => {
 		setRowData(rowData.filter((row) => row.id !== deletedRowId));
 	};
 	const locationOptions = [
-		...(trails ? trails.map((option) => `Trails/${option.name}`) : []),
-		...(huts ? huts.map((option) => `Huts/${option.name}`) : []),
-		...(lodges ? lodges.map((option) => `Lodges/${option.name}`) : []),
-		...(lifts ? lifts.map((option) => `Lifts/${option.name}`) : []),
+		...(trails ? trails.map((option) => `Trail/${option.name}`) : []),
+		...(huts ? huts.map((option) => `Hut/${option.name}`) : []),
+		...(lodges ? lodges.map((option) => `Lodge/${option.name}`) : []),
+		...(lifts ? lifts.map((option) => `Lift/${option.name}`) : []),
 	];
 
 	const columnDefs = [

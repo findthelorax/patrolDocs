@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, Container } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
+import { SnackbarContext } from '../../contexts/SnackbarContext';
 import { api as patrollerApi } from '../../api/PatrollerAPI';
 
 const AddPatrollerForm = () => {
@@ -9,6 +10,7 @@ const AddPatrollerForm = () => {
 	const [position, setPosition] = useState('');
     // eslint-disable-next-line
     const { selectedMountain, fetchPatrollers } = useContext(MountainContext);
+    const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -19,8 +21,12 @@ const AddPatrollerForm = () => {
 			setLastName('');
 			setPosition('');
 			fetchPatrollers();
+            setOpenSnackbar(true);
+            setSnackbarMessage('Patroller created successfully');
 		} catch (error) {
 			console.error('Error creating patroller', error);
+            setOpenSnackbar(true);
+            setSnackbarMessage('Error creating patroller');
 		}
 	};
 

@@ -1,14 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, MenuItem } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
+import { SnackbarContext } from '../../contexts/SnackbarContext';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
-const AddTrailForm = ({ setOpenSnackbar, setSnackbarMessage }) => {
+const AddTrailForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
 	const [difficulty, setDifficulty] = useState('');
 	const [type, setType] = useState('');
 	const { selectedMountain, areas, api } = useContext(MountainContext);
+	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();

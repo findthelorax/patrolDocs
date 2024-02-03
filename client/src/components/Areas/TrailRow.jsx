@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { MountainContext } from '../../contexts/MountainContext';
 import { Autocomplete, TableCell, TableRow, TextField, Box, IconButton } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Conditions } from '../../helpers/constants';
 import TimeUpdateDialog from '../DatePickers/TimeUpdateDialog';
+import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 
 function TrailRow({ trail, patrollers }) {
 	const [openingTime, setOpeningTime] = useState('');
 	const [condition, setCondition] = useState('Closed');
-	const [selectedPatroller, setSelectedPatroller] = useState('');
-	const [closingPatroller, setClosingPatroller] = useState('');
+	const [selectedPatroller, setSelectedPatroller] = useState(null);
+	const [closingPatroller, setClosingPatroller] = useState(null);
 	const [proposedTime, setProposedTime] = useState('');
 	const [openDialog, setOpenDialog] = useState(false);
+	const { handleTrailLogCreateOrUpdate } = useContext(MountainContext);
 
 	const handleTimeClick = () => {
 		const currentTime = new Date();
@@ -37,25 +40,29 @@ function TrailRow({ trail, patrollers }) {
 
 	const handleTimeChange = (event) => {
 		setOpeningTime(event.target.value);
+		handleTrailLogCreateOrUpdate(trail._id, { openingTime: event.target.value });
 	};
 
 	const handleConditionChange = (event, newValue) => {
 		setCondition(newValue);
+		handleTrailLogCreateOrUpdate(trail._id, { condition: newValue });
 	};
 
-	const handlePatrollerChange = (event) => {
-		setSelectedPatroller(event.target.value);
+	const handlePatrollerChange = (newValue) => {
+		setSelectedPatroller(newValue ? newValue._id : null);
+		handleTrailLogCreateOrUpdate(trail._id, { openingPatroller: newValue ? newValue._id : null });
 	};
 
-	const handleClosingPatrollerChange = (event) => {
-		setClosingPatroller(event.target.value);
+	const handleClosingPatrollerChange = (newValue) => {
+		setClosingPatroller(newValue ? newValue._id : null);
+		handleTrailLogCreateOrUpdate(trail._id, { closingPatroller: newValue ? newValue._id : null });
 	};
 
 	return (
 		<>
 			<TableRow key={trail._id}>
-				<TableCell >{trail.name}</TableCell>
-				<TableCell style={{ width: '100px' }} >
+				<TableCell>{trail.name}</TableCell>
+				<TableCell style={{ width: '100px' }}>
 					<Box display="flex" alignItems="center">
 						<IconButton onClick={handleTimeClick}>
 							<AccessTimeIcon />
@@ -64,25 +71,17 @@ function TrailRow({ trail, patrollers }) {
 					</Box>
 				</TableCell>
 				<TableCell>
-				<Autocomplete
-                        value={patrollers.find((patroller) => patroller._id === selectedPatroller)}
-                        onChange={(event, newValue) => {
-                            handlePatrollerChange(newValue ? newValue._id : '');
-                        }}
-						autoHighlight
-						autoSelect
-						noOptionsText="No patrollers available"
-                        options={patrollers}
-                        getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
+					<PatrollerAutocomplete
+						selectedPatroller={patrollers.find((patroller) => patroller._id === selectedPatroller) || null}
+						setSelectedPatroller={handlePatrollerChange}
+					/>
 				</TableCell>
 				<TableCell>
-				<Autocomplete
-                        value={condition}
+					<Autocomplete
+						value={condition}
 						onChange={handleConditionChange}
-                        options={Object.values(Conditions)}
-                        renderInput={(params) => <TextField {...params} />}
+						options={Object.values(Conditions)}
+						renderInput={(params) => <TextField {...params} />}
 						renderOption={(props, option, { selected }) => (
 							<Box component="li" {...props}>
 								{option === 'Powder' && '❆'}
@@ -95,20 +94,12 @@ function TrailRow({ trail, patrollers }) {
 								{option}
 							</Box>
 						)}
-                    />
+					/>
 				</TableCell>
 				<TableCell>
-					<Autocomplete
-						value={patrollers.find((patroller) => patroller._id === closingPatroller)}
-						onChange={(event, newValue) => {
-							handleClosingPatrollerChange(newValue ? newValue._id : '');
-						}}
-						autoHighlight
-						autoSelect
-						noOptionsText="No patrollers available"
-						options={patrollers}
-						getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-						renderInput={(params) => <TextField {...params} />}
+					<PatrollerAutocomplete
+						selectedPatroller={patrollers.find((patroller) => patroller._id === closingPatroller) || null}
+						setSelectedPatroller={handleClosingPatrollerChange}
 					/>
 				</TableCell>
 			</TableRow>

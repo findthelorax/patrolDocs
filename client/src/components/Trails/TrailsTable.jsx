@@ -1,80 +1,54 @@
-import React, { useContext, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, SvgIcon } from '@mui/material';
-import { FaSnowplow, FaTree } from "react-icons/fa";
+import React, { useContext, useEffect, useState } from 'react';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { MountainContext } from '../../contexts/MountainContext';
+import StatusToggleButton from '../ToggleButton/StatusToggleButton';
 
-const GreenCircle = (props) => (
-	<SvgIcon {...props}>
-		<circle cx="12" cy="12" r="8" fill="green" />
-	</SvgIcon>
-);
+const TrailsTable = () => {
+	const { trails, areas } = useContext(MountainContext);
+	const [gridApi, setGridApi] = useState(null);
 
-const BlueSquare = (props) => (
-	<SvgIcon {...props}>
-		<rect width="16" height="16" fill="blue" />
-	</SvgIcon>
-);
+	const areaMap = areas.reduce((map, area) => ({ ...map, [area._id]: area.name }), {});
 
-const BlackDiamond = (props) => (
-	<SvgIcon {...props}>
-		<polygon points="12,2 22,22 2,22" fill="black" />
-	</SvgIcon>
-);
-
-const DoubleBlackDiamond = (props) => (
-	<SvgIcon {...props}>
-		<polygon points="7,2 17,22 2,22" fill="black" />
-		<polygon points="17,2 27,22 12,22" fill="black" />
-	</SvgIcon>
-);
-
-function TrailsTable() {
-	const { trails, fetchTrails, selectedMountain } = useContext(MountainContext);
+	const columnDefs = [
+		{ headerName: 'Trail Name', field: 'name' },
+		{
+			headerName: 'Area',
+			field: 'area',
+			valueGetter: (params) => areaMap[params.data.area],
+		},
+		{ headerName: 'Difficulty', field: 'difficulty' },
+		{ headerName: 'Type', field: 'type' },
+		{ headerName: 'Condition', field: 'condition' },
+		{
+			headerName: 'Status',
+			field: 'status',
+			cellRenderer: 'statusToggleButton',
+			cellRendererParams: { type: 'trail' },
+		},
+	];
 
 	useEffect(() => {
-		if (selectedMountain) {
-			fetchTrails();
+		if (gridApi) {
+			gridApi.setGridOption('rowData', trails);
 		}
-	}, [selectedMountain, fetchTrails]);
+	}, [trails, gridApi]);
+
+	const onGridReady = (params) => {
+		setGridApi(params.api);
+	};
 
 	return (
-		<TableContainer component={Paper}>
-			<Table sx={{ minWidth: 650 }} aria-label="simple table">
-				<TableHead>
-					<TableRow>
-						<TableCell>Trail Name</TableCell>
-						<TableCell align="right">Difficulty</TableCell>
-						<TableCell align="right">Status</TableCell>
-						<TableCell align="right">Condition</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{trails.map((trail) => (
-                        <TableRow key={trail.name} className={trail.status === 'Open' ? 'open' : 'closed'}>
-							<TableCell component="th" scope="row">
-								{trail.name}
-							</TableCell>
-							<TableCell align="right">
-								{trail.difficulty}
-								{trail.difficulty === 'Green' && <GreenCircle />}
-								{trail.difficulty === 'Difficult' && <BlueSquare />}
-								{trail.difficulty === 'Hard' && <BlackDiamond />}
-								{trail.difficulty === 'Very Hard' && <DoubleBlackDiamond />}
-							</TableCell>
-							<TableCell align="right">
-								{trail.condition}
-								{trail.condition === 'Glades' && <FaTree />}
-								{trail.condition === 'Moguls' && <BlueSquare />}
-								{trail.condition === 'Groomed' && <FaSnowplow />}
-								{trail.condition === 'Natural' && <DoubleBlackDiamond />}
-							</TableCell>
-							<TableCell align="right">{trail.status}</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-		</TableContainer>
+		<div className="ag-theme-quartz-dark" style={{ height: '40vh', width: '95%' }}>
+			<AgGridReact
+				columnDefs={columnDefs}
+				rowData={trails}
+				components={{ statusToggleButton: StatusToggleButton }}
+				onGridReady={onGridReady}
+			/>
+		</div>
 	);
-}
+};
 
 export default TrailsTable;

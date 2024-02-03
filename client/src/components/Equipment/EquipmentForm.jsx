@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, Select, MenuItem, Typography } from '@mui/material';
 import { api as equipmentApi } from '../../api/EquipmentAPI';
 import { MountainContext } from '../../contexts/MountainContext';
+import { SnackbarContext } from '../../contexts/SnackbarContext';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 import LocationField from '../Location/EquipmentLocationField';
@@ -15,6 +16,7 @@ const AddEquipmentForm = () => {
 	const [location, setLocation] = useState(null);
 	const [otherLocation, setOtherLocation] = useState('');
 	const { selectedMountain, fetchMountains } = useContext(MountainContext);
+	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -30,8 +32,12 @@ const AddEquipmentForm = () => {
 			setLocation(null);
 			setOtherLocation('');
 			fetchMountains();
+			setOpenSnackbar(true);
+			setSnackbarMessage('Equipment created successfully');
 		} catch (error) {
 			console.error('Error creating equipment', error);
+			setOpenSnackbar(true);
+			setSnackbarMessage('Error creating equipment');
 		}
 	};
 
@@ -92,6 +98,7 @@ const AddEquipmentLogForm = () => {
 	const [log, setLog] = useState('');
 	const [equipmentS, setEquipmentS] = useState(null);
 	const { selectedMountain, fetchMountains, equipment } = useContext(MountainContext);
+	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 	const [selectedEquipment, setSelectedEquipment] = useState(null);
 
 	const handleSubmit = async (event) => {
@@ -101,8 +108,12 @@ const AddEquipmentLogForm = () => {
 			setLog('');
 			setEquipmentS(null);
 			fetchMountains();
+			setOpenSnackbar(true);
+			setSnackbarMessage('Equipment log created successfully');
 		} catch (error) {
 			console.error('Error creating equipment log', error);
+			setOpenSnackbar(true);
+			setSnackbarMessage('Error creating equipment log');
 		}
 	};
 

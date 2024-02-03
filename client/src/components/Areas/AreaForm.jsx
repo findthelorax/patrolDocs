@@ -1,16 +1,14 @@
 import React, { useState, useContext } from 'react';
-import { TextField, Button, Box, Card, CardContent, Stack, FormControl, Snackbar, Alert } from '@mui/material';
+import { TextField, Button, Box, Card, CardContent, Stack, FormControl } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
+import { SnackbarContext } from '../../contexts/SnackbarContext';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
 const AddAreaForm = () => {
 	const [name, setName] = useState('');
 	const [localSelectedMountain, setLocalSelectedMountain] = useState(null);
 	const { mountains, fetchMountains, api, selectedMountain } = useContext(MountainContext);
-	const [openSnackbar, setOpenSnackbar] = useState(false);
-	const [snackbarMessage, setSnackbarMessage] = useState('');
-
-	const handleCloseSnackbar = () => setOpenSnackbar(false);
+	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -57,14 +55,6 @@ const AddAreaForm = () => {
 					</Stack>
 				</Box>
 			</CardContent>
-			<Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-				<Alert
-					onClose={handleCloseSnackbar}
-					severity={snackbarMessage.startsWith('Error') ? 'error' : 'success'}
-				>
-					{snackbarMessage}
-				</Alert>
-			</Snackbar>
 		</Card>
 	);
 };

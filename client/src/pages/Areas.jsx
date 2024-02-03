@@ -5,7 +5,7 @@ import AreaTabs from '../components/Areas/AreaTabs';
 import AreaTable from '../components/Areas/AreaTable';
 import useAreaHandlers from '../hooks/useAreaHandlers';
 
-function Areas({ setOpenSnackbar, setSnackbarMessage }) {
+function Areas() {
 	const { areas, trails, patrollers, isLoading } = useContext(MountainContext);
 	const { value, handleTabChange } = useAreaHandlers();
 

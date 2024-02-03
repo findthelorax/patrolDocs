@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Box, useTheme } from '@mui/material';
 import SearchAppBar from '../components/Dashboard/AppBar/AppBar';
 import { PermanentDrawerLeft } from '../components/Dashboard/Drawer/Drawer';
 import Footer from '../components/Dashboard/Footer/Footer';
-import SnackbarAlert from '../components/SnackbarAlert/SnackbarAlert';
 import AppRoutes from './AppRoutes';
+import { SnackbarContext } from '../contexts/SnackbarContext'; // Import SnackbarContext
 
 function MainLayout() {
 	const theme = useTheme();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-	const [openSnackbar, setOpenSnackbar] = useState(false);
-	const [snackbarMessage, setSnackbarMessage] = useState('');
+	 // eslint-disable-next-line
+	const { openSnackbar, setOpenSnackbar, snackbarMessage, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleDrawerToggle = () => {
 		setIsDrawerOpen(!isDrawerOpen);
@@ -38,13 +38,10 @@ function MainLayout() {
 					<SearchAppBar
 						open={isDrawerOpen}
 						handleDrawerToggle={handleDrawerToggle}
-						setOpenSnackbar={setOpenSnackbar}
-						setSnackbarMessage={setSnackbarMessage}
 					/>
 					<Box component="main" sx={theme.layoutStyles.main}>
-					<AppRoutes setOpenSnackbar={setOpenSnackbar} setSnackbarMessage={setSnackbarMessage} />
+						<AppRoutes />
 					</Box>
-					<SnackbarAlert open={openSnackbar} handleClose={handleCloseSnackbar} message={snackbarMessage} />
 				</Box>
 			</Box>
 			<Footer />

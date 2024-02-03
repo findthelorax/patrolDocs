@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import { AddAidRoomForm, AddAidRoomLogForm } from '../components/AidRooms/AidRoomForm';
 import AidRoomsTable from '../components/AidRooms/AidRoomsTable';
 
-function FirstAidRooms({ setOpenSnackbar, setSnackbarMessage }) {
+function FirstAidRooms() {
 	return (
 		<Grid container rowSpacing={3} columnSpacing={3} sx={{ pt: 8 }}>
 			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>

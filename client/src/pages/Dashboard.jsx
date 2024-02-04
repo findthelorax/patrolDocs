@@ -13,7 +13,9 @@ function Dashboard() {
 				<TrailStatsCard />
 			</Grid>
 			<Grid item xs={12} sm={6}>
-				Add Button to open/close trails
+				Incident Logs
+				Area Trail Checks
+
 			</Grid>
 		</Grid>
 	);

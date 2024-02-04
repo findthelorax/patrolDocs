@@ -1,23 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, MenuItem } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 import { SnackbarContext } from '../../contexts/SnackbarContext';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
 const AddTrailForm = () => {
-	const [name, setName] = useState('');
+	const nameRef = useRef();
 	const [selectedArea, setSelectedArea] = useState(null);
 	const [difficulty, setDifficulty] = useState('');
 	const [type, setType] = useState('');
-	const { selectedMountain, areas, api } = useContext(MountainContext);
+	const { selectedMountain, areas, api, handleCreateTrail } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
+			const name = nameRef.current.value;
 			const trail = { name, areaId: selectedArea._id, difficulty, type };
-			await api.trailApi.createTrail(selectedMountain._id, trail);
-			setName('');
+			await handleCreateTrail(trail);
+			nameRef.current.value = '';
 			setSelectedArea(null);
 			setDifficulty('');
 			setType('');
@@ -37,7 +38,7 @@ const AddTrailForm = () => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+						<TextField label="Name" inputRef={nameRef} required />
 						<MountainAutocomplete
 							options={areas}
 							selectedValue={selectedArea}

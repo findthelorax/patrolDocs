@@ -3,7 +3,7 @@ const IP = process.env.REACT_APP_IP;
 const PORT = process.env.REACT_APP_BACKEND_PORT;
 
 export const api = {
-	async createTrail(mountainId, trail) {
+	async create(mountainId, trail) {
 		try {
 			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/trail`, trail);
 			return response.data;

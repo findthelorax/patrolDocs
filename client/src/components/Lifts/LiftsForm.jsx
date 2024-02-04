@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 import { SnackbarContext } from '../../contexts/SnackbarContext';
@@ -6,7 +6,7 @@ import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 
 const AddLiftForm = ({ coordinates }) => {
-	const [name, setName] = useState('');
+	const nameRef = useRef();
 	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
@@ -14,9 +14,10 @@ const AddLiftForm = ({ coordinates }) => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
+			const name = nameRef.current.value;
 			const lift = { name, area: selectedArea._id, coordinates };
 			await api.liftApi.createLift(selectedMountain._id, lift);
-			setName('');
+			nameRef.current.value = '';
 			setSelectedArea(null);
 			fetchMountains();
 			setSnackbarSeverity('success');
@@ -35,7 +36,7 @@ const AddLiftForm = ({ coordinates }) => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+						<TextField label="Name" inputRef={nameRef} required />
 						<FormControl fullWidth required>
 							<MountainAutocomplete
 								options={areas}
@@ -55,7 +56,7 @@ const AddLiftForm = ({ coordinates }) => {
 };
 
 const AddLineCheckForm = () => {
-	const [description, setDescription] = useState('');
+	const descriptionRef = useRef();
 	const [selectedLift, setSelectedLift] = useState(null);
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
 	const { selectedMountain, fetchMountains, lifts, api } = useContext(MountainContext);
@@ -64,9 +65,10 @@ const AddLineCheckForm = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
+			const description = descriptionRef.current.value;
 			const lineCheck = { description };
 			await api.liftApi.createLineCheck(selectedMountain._id, selectedLift.id, lineCheck);
-			setDescription('');
+			descriptionRef.current.value = '';
 			setSelectedLift(null);
 			setSelectedPatroller(null);
 			fetchMountains();
@@ -86,7 +88,7 @@ const AddLineCheckForm = () => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-					<MountainAutocomplete
+						<MountainAutocomplete
 							options={lifts}
 							selectedValue={selectedLift}
 							setSelectedValue={setSelectedLift}
@@ -95,14 +97,9 @@ const AddLineCheckForm = () => {
 						<PatrollerAutocomplete
 							selectedPatroller={selectedPatroller}
 							setSelectedPatroller={setSelectedPatroller}
-						/>						
-						<TextField
-							label="Description"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-							required
-							multiline
 						/>
+                        <TextField label="Description" inputRef={descriptionRef} required multiline />
+
 						<Button type="submit" variant="contained">
 							Add Line Check
 						</Button>

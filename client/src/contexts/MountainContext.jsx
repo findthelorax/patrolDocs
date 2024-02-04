@@ -129,21 +129,59 @@ export const MountainProvider = ({ children }) => {
 		}
 	}
 
-	async function handleToggle(api, updateMethod, fetchMethod, item, toggleField) {
-		const updatedItem = { ...item, [toggleField]: !item[toggleField] };
-		handleUpdate(api, updateMethod, fetchMethod, item._id, updatedItem);
+	async function handleCreateEntity(api, fetchMethod, newEntity) {
+		try {
+			await api.create(selectedMountain._id, newEntity);
+			fetchMethod();
+		} catch (error) {
+			console.error(`Error creating new entity`, error);
+		}
 	}
-	
+
+	async function handleToggleEntity(api, fetchMethod, entity, toggleField) {
+		const updatedEntity = { ...entity, [toggleField]: !entity[toggleField] };
+		handleUpdate(api, 'update', fetchMethod, entity._id, updatedEntity);
+	}
+
 	async function handleServiceToggle(item) {
-		handleToggle(equipmentApi, 'updateEquipment', fetchEquipment, item, 'inService');
+		handleToggleEntity(equipmentApi, fetchEquipment, item, 'inService');
 	}
 
 	async function handleLiftToggle(lift) {
-		handleToggle(liftApi, 'updateLift', fetchLifts, lift, 'isOpen');
+		handleToggleEntity(liftApi, fetchLifts, lift, 'isOpen');
 	}
 
 	async function handleTrailToggle(trail) {
-		handleToggle(trailApi, 'updateTrail', fetchTrails, trail, 'isOpen');
+		handleToggleEntity(trailApi, fetchTrails, trail, 'isOpen');
+	}
+
+	async function handleCreateTrail(newTrail) {
+		console.log("🚀 ~ file: MountainContext.jsx:159 ~ handleCreateTrail ~ newTrail:", newTrail)
+		handleCreateEntity(trailApi, fetchTrails, newTrail);
+	}
+
+	async function handleCreateLodge(newLodge) {
+		handleCreateEntity(lodgeApi, fetchLodges, newLodge);
+	}
+
+	async function handleCreateHut(newHut) {
+		handleCreateEntity(hutApi, fetchHuts, newHut);
+	}
+
+	async function handleCreateLift(newLift) {
+		handleCreateEntity(liftApi, fetchLifts, newLift);
+	}
+
+	async function handleCreateAidRoom(newAidRoom) {
+		handleCreateEntity(aidRoomApi, fetchAidRooms, newAidRoom);
+	}
+
+	async function handleCreateEquipment(newEquipment) {
+		handleCreateEntity(equipmentApi, fetchEquipment, newEquipment);
+	}
+
+	async function handleCreatePatroller(newPatroller) {
+		handleCreateEntity(patrollerApi, fetchPatrollers, newPatroller);
 	}
 
 	async function handleTrailLogCreateOrUpdate(trailId, logData) {
@@ -252,6 +290,13 @@ export const MountainProvider = ({ children }) => {
 				fetchLiftLineChecks,
 				trails,
 				fetchTrails,
+				handleCreateTrail,
+				handleCreateLodge,
+				handleCreateHut,
+				handleCreateLift,
+				handleCreateAidRoom,
+				handleCreateEquipment,
+				handleCreatePatroller,
 				handleTrailToggle,
 				trailLogs,
 				fetchTrailLogs,

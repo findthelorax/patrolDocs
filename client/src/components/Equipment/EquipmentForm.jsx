@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, Select, MenuItem, Typography } from '@mui/material';
 import { api as equipmentApi } from '../../api/EquipmentAPI';
 import { MountainContext } from '../../contexts/MountainContext';
@@ -10,8 +10,8 @@ import { EquipmentTypes } from '../../helpers/constants';
 
 const AddEquipmentForm = () => {
 	const [type, setType] = useState('');
-	const [idNumber, setIDNumber] = useState('');
-	const [description, setDescription] = useState('');
+	const idNumber = useRef();
+	const description = useRef();
 	const [locationType, setLocationType] = useState(null);
 	const [location, setLocation] = useState(null);
 	const [otherLocation, setOtherLocation] = useState('');
@@ -20,25 +20,23 @@ const AddEquipmentForm = () => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		const locationValue = locationType === 'Other' ? otherLocation : { type: locationType, name: location.name, id: location._id};
+		const equipment = { type, idNumber: idNumber.current.value, description: description.current.value, location: locationValue };
 		try {
-			const locationValue = locationType === 'Other' ? otherLocation : { type: locationType, name: location.name, id: location._id};
-			const equipment = { type, idNumber, description, location: locationValue };
-			console.log("🚀 ~ file: EquipmentForm.jsx:25 ~ handleSubmit ~ equipment:", equipment)
 			await equipmentApi.createEquipment(selectedMountain._id, equipment);
 			setType('');
-			setIDNumber('');
-			setDescription('');
+			idNumber.current.value = '';
+			description.current.value = '';
 			setLocationType(null);
 			setLocation(null);
 			setOtherLocation('');
 			fetchMountains();
 			setSnackbarSeverity('success');
-			setSnackbarMessage('Equipment created successfully');
+			setSnackbarMessage(`${equipment.name}:${equipment.idNumber} created successfully`);
 			setOpenSnackbar(true);
 		} catch (error) {
-			console.error('Error creating equipment', error);
 			setSnackbarSeverity('error');
-			setSnackbarMessage('Error creating equipment');
+			setSnackbarMessage(`Error creating ${equipment.name}:${equipment.idNumber}`);
 			setOpenSnackbar(true);
 		}
 	};
@@ -62,8 +60,7 @@ const AddEquipmentForm = () => {
 						</Select>
 						<TextField
 							label="IDNumber"
-							value={idNumber}
-							onChange={(e) => setIDNumber(e.target.value)}
+							inputRef={idNumber}
 							required
 							onKeyDown={(event) => {
 								if (!/[0-9]/.test(event.key) && event.key !== 'Tab') {
@@ -71,13 +68,8 @@ const AddEquipmentForm = () => {
 								}
 							}}
 						/>
-						<TextField
-							label="Description"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-							required
-							multiline
-						/>
+                        <TextField label="Description" inputRef={description} required multiline />
+
 						<LocationField
 							locationType={locationType}
 							setLocationType={setLocationType}

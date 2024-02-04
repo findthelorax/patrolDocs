@@ -5,19 +5,20 @@ const CoordinatesSchema = require('../coordinates/coordinatesModel');
 const TrailLogSchema = new mongoose.Schema({
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
     trail: { type: mongoose.Schema.Types.ObjectId, ref: 'Trail', required: true },
+    area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     date: { type: Date, default: Date.now, index: true },
     status: { type: Boolean, default: false },
-    checkedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Patroller', default: null },
+    patrollers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Patroller' }],
     condition: { type: String, enum: Object.values(Conditions) },
     comments: String,
 });
 
 const TrailSchema = new mongoose.Schema({
-    mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
     name: { type: String, required: true, unique: true },
+    mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
+    area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     difficulty: { type: String, enum: ['green', 'blue', 'black', 'double black'] },
     type: { type: String, enum: ['glades', 'moguls', 'natural', 'race', 'park', 'groomed'] },
-    area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     status: { type: String, required: true, enum: ['open', 'closed', 'unknown'], default: 'unknown'},
     trailLogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TrailLog' }],
     coordinates: CoordinatesSchema,

@@ -25,7 +25,9 @@ function StatusToggleButton({ value, data, type }) {
 
 	return (
 		<div>
-			<span style={{ marginRight: 10 }}>{value === 'open' ? 'Open' : 'Closed'}</span>
+			<span style={{ marginRight: 10, display: 'inline-block', width: '60px' }}>
+				{value === 'open' ? 'Open' : value === 'closed' ? 'Closed' : 'Unknown'}
+			</span>
 			<Button
 				variant="contained"
 				color="primary"

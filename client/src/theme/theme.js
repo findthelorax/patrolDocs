@@ -41,6 +41,15 @@ const layoutStyles = {
 
 const styleOverrides = {
 	components: {
+		MuiListItemButton: {
+			styleOverrides: {
+				root: {
+					'&.Mui-selected.Mui-selected': {
+						backgroundColor: ' #C70039 ',
+					},
+				},
+			},
+		},
 		MuiOutlinedInput: {
 			styleOverrides: {
 				root: {
@@ -163,7 +172,9 @@ const darkTheme = createTheme({
 			default: '#333333',
 		},
 	},
-	...styleOverrides,
+	components: {
+		...styleOverrides.components,
+	},
 	layoutStyles,
 });
 

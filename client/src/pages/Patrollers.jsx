@@ -9,7 +9,7 @@ function Patrollers() {
 			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
 				<AddPatrollerForm />
 			</Grid>
-			<Grid item xs={12} sm={9} md={6} lg={4} xl={3}>
+			<Grid item xs={12}>
 				<PatrollersTable />
 			</Grid>
 		</Grid>

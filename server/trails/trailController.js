@@ -40,14 +40,14 @@ exports.createTrail = async (req, res) => {
 
 		const newTrail = new Trail(req.body);
 		newTrail.mountain = mountain._id;
-		await newTrail.save();
 
-		const areaId = req.params.areaId || req.body.areaId;
+		const areaId = req.body.areaId;
 
 		if (areaId) {
 			const area = mountain.areas.id(areaId);
 			if (area) {
 				area.trails.push(newTrail._id);
+				newTrail.area = areaId;
 			} else {
 				return res.status(404).json({ message: 'Area not found' });
 			}
@@ -55,7 +55,9 @@ exports.createTrail = async (req, res) => {
 			mountain.trails.push(newTrail._id);
 		}
 
+		await newTrail.save();
 		await mountain.save();
+
 		res.status(201).json(newTrail);
 	} catch (err) {
 		if (err.name === 'MongoError' && err.code === 11000) {

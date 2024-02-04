@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
 import { api as aidRoomApi } from '../../api/AidRoomAPI';
 import { MountainContext } from '../../contexts/MountainContext';
@@ -7,24 +7,25 @@ import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
 const AddAidRoomForm = () => {
-	const [name, setName] = useState('');
+	const nameRef = useRef();
 	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		const name = nameRef.current.value;
+		const aidRoom = { name, area: selectedArea._id };
 		try {
-			const aidRoom = { name, area: selectedArea._id };
 			await aidRoomApi.createAidRoom(selectedMountain._id, aidRoom);
-			setName('');
+			nameRef.current.value = '';
 			setSelectedArea(null);
 			fetchMountains();
 			setSnackbarSeverity('success');
-			setSnackbarMessage('Aid room created successfully');
+			setSnackbarMessage(`${aidRoom.name} created successfully`);
 			setOpenSnackbar(true);
 		} catch (error) {
-			console.error('Error creating aidRoom', error);
+			console.error(`Error creating ${aidRoom.name}`, error);
 			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating aid room');
 			setOpenSnackbar(true);
@@ -36,7 +37,7 @@ const AddAidRoomForm = () => {
 			<CardContent>
 				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
 					<Stack spacing={2}>
-						<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+						<TextField label="Name" inputRef={nameRef} required />
 						<FormControl fullWidth required>
 							<MountainAutocomplete
 								options={areas}

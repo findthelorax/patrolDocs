@@ -1,73 +1,58 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, Container } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 import { SnackbarContext } from '../../contexts/SnackbarContext';
 import { api as patrollerApi } from '../../api/PatrollerAPI';
 
 const AddPatrollerForm = () => {
-	const [firstName, setFirstName] = useState('');
-	const [lastName, setLastName] = useState('');
-	const [position, setPosition] = useState('');
-    // eslint-disable-next-line
-    const { selectedMountain, fetchPatrollers } = useContext(MountainContext);
-    const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
+	const firstNameRef = useRef();
+	const lastNameRef = useRef();
+	const positionRef = useRef();
+	// eslint-disable-next-line
+	const { selectedMountain, fetchPatrollers } = useContext(MountainContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		const firstName = firstNameRef.current.value;
+		const lastName = lastNameRef.current.value;
+		const position = positionRef.current.value;
+		const patroller = { firstName, lastName, position };
 		try {
-			const patroller = { firstName, lastName, position };
-            await patrollerApi.createPatroller(selectedMountain._id, patroller);
-			setFirstName('');
-			setLastName('');
-			setPosition('');
+			await patrollerApi.createPatroller(selectedMountain._id, patroller);
+			firstNameRef.current.value = '';
+			lastNameRef.current.value = '';
+			positionRef.current.value = '';
 			fetchPatrollers();
-            setSnackbarSeverity('success');
-            setSnackbarMessage('Patroller created successfully');
-            setOpenSnackbar(true);
+			setSnackbarSeverity('success');
+			setSnackbarMessage(`${firstName} ${lastName} created successfully`);
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating patroller', error);
-            setOpenSnackbar(true);
-            setSnackbarMessage('Error creating patroller');
+			setOpenSnackbar(true);
+			setSnackbarMessage(`Error creating ${firstName} ${lastName}`);
 		}
 	};
 
 	return (
 		<Card>
-        <CardContent>
-            <Container maxWidth="sm">
-                <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
-                    <Stack spacing={2}>
-                        <TextField
-                            fullWidth
-                            label="First Name"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            required
-                        />
-                        <TextField
-                            fullWidth
-                            label="Last Name"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            required
-                        />
-                        <TextField
-                            fullWidth
-                            label="Position"
-                            value={position}
-                            onChange={(e) => setPosition(e.target.value)}
-                            required
-                        />
-                        <Box mt={2}>
-                            <Button type="submit" variant="contained" fullWidth>
-                                Add Patroller
-                            </Button>
-                        </Box>
-                    </Stack>
-                </Box>
-            </Container>
-        </CardContent>
-    </Card>
+			<CardContent>
+				<Container maxWidth="sm">
+					<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
+						<Stack spacing={2}>
+							<TextField label="First Name" inputRef={firstNameRef} required />
+							<TextField label="Last Name" inputRef={lastNameRef} required />
+							<TextField label="Position" inputRef={positionRef} required />
+							<Box mt={2}>
+								<Button type="submit" variant="contained" fullWidth>
+									Add Patroller
+								</Button>
+							</Box>
+						</Stack>
+					</Box>
+				</Container>
+			</CardContent>
+		</Card>
 	);
 };
 

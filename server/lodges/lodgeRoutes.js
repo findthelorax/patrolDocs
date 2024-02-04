@@ -8,7 +8,7 @@ router.route('/mountain/:mountainId/lodge')
     .post(lodgeController.createLodge);
 
 router.route('/mountain/:mountainId/lodge/:lodgeId')
-    .get(lodgeController.getOneLodge)
+    .get(lodgeController.getLodge)
     .put(lodgeController.updateLodge)
     .delete(lodgeController.deleteLodge);
 

@@ -5,13 +5,14 @@ import { SnackbarContext } from '../../contexts/SnackbarContext';
 
 const AppBarMountainAutocomplete = ({ selectedMountain, setSelectedMountain}) => {
 	const { mountains } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleMountainChange = (event, newValue) => {
 		if (newValue) {
 			setSelectedMountain(newValue);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage(`Mountain changed to ${newValue.name}`);
+			setOpenSnackbar(true);
 			localStorage.setItem('selectedMountainId', newValue._id);
 		}
 	};

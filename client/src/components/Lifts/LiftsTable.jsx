@@ -3,7 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { MountainContext } from '../../contexts/MountainContext';
-import StatusToggleButton from '../ToggleButton/StatusToggleButton';
+import StatusToggleButton from '../Toggles/StatusToggleButton';
 
 const LiftsTable = () => {
 	const { lifts, areas } = useContext(MountainContext);

@@ -10,7 +10,7 @@ const AddPatrollerForm = () => {
 	const [position, setPosition] = useState('');
     // eslint-disable-next-line
     const { selectedMountain, fetchPatrollers } = useContext(MountainContext);
-    const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+    const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -21,8 +21,9 @@ const AddPatrollerForm = () => {
 			setLastName('');
 			setPosition('');
 			fetchPatrollers();
-            setOpenSnackbar(true);
+            setSnackbarSeverity('success');
             setSnackbarMessage('Patroller created successfully');
+            setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating patroller', error);
             setOpenSnackbar(true);

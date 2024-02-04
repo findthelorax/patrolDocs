@@ -10,7 +10,7 @@ const AddTrailForm = () => {
 	const [difficulty, setDifficulty] = useState('');
 	const [type, setType] = useState('');
 	const { selectedMountain, areas, api } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -21,10 +21,12 @@ const AddTrailForm = () => {
 			setSelectedArea(null);
 			setDifficulty('');
 			setType('');
+			setSnackbarSeverity('success');
 			setSnackbarMessage(`${trail.name} created successfully`);
 			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating trail', error);
+			setSnackbarSeverity('error');
 			setSnackbarMessage(`Error creating trail`);
 			setOpenSnackbar(true);
 		}

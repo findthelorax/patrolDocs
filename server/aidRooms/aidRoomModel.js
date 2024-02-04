@@ -22,6 +22,7 @@ const AidRoomSchema = new mongoose.Schema({
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     equipment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Equipment' }],
     paperwork: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Paperwork' }],
+    status: { type: String, required: true, enum: ['open', 'closed', 'unknown'], default: 'unknown'},
     coordinates: CoordinatesSchema,
     comments: String,
 });

@@ -5,7 +5,7 @@ const LodgeSchema = new mongoose.Schema({
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     name: { type: String, required: true, unique: true },
-    status: { type: String, default: 'closed' },
+    status: { type: String, required: true, enum: ['open', 'closed', 'unknown'], default: 'unknown'},
     coordinates: CoordinatesSchema,
 });
 

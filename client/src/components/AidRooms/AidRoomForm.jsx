@@ -10,7 +10,7 @@ const AddAidRoomForm = () => {
 	const [name, setName] = useState('');
 	const [selectedArea, setSelectedArea] = useState(null);
 	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -20,12 +20,14 @@ const AddAidRoomForm = () => {
 			setName('');
 			setSelectedArea(null);
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Aid room created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating aidRoom', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating aid room');
+			setOpenSnackbar(true);
 		}
 	};
 
@@ -59,7 +61,7 @@ const AddAidRoomLogForm = () => {
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
 	const { selectedMountain, fetchMountains, aidRooms } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -69,12 +71,14 @@ const AddAidRoomLogForm = () => {
 			setSelectedFirstAidRoom(null);
 			setSelectedPatroller(null);
 			fetchMountains();
-			setOpenSnackbar(true);
+			setSnackbarSeverity('success');
 			setSnackbarMessage('Aid room log created successfully');
+			setOpenSnackbar(true);
 		} catch (error) {
 			console.error('Error creating aidRoom log', error);
-			setOpenSnackbar(true);
+			setSnackbarSeverity('error');
 			setSnackbarMessage('Error creating aid room log');
+			setOpenSnackbar(true);
 		}
 	};
 

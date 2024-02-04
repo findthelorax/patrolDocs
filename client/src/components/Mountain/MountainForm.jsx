@@ -9,7 +9,7 @@ const AddMountainForm = () => {
     const [city, setCity] = useState('');
     const [state, setState] = useState(null);
     const { fetchMountains, api } = useContext(MountainContext);
-    const { setOpenSnackbar, setSnackbarMessage } = useContext(SnackbarContext);
+    const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -26,12 +26,14 @@ const AddMountainForm = () => {
             setCity('');
             setState(null);
             fetchMountains();
-            setOpenSnackbar(true);
+            setSnackbarSeverity('success');
             setSnackbarMessage('Mountain created successfully');
+            setOpenSnackbar(true);
         } catch (error) {
             console.error('Error creating mountain', error);
-            setOpenSnackbar(true);
+            setSnackbarSeverity('error');
             setSnackbarMessage('Error creating mountain');
+            setOpenSnackbar(true);
         }
     };
 

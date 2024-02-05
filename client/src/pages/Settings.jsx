@@ -20,25 +20,25 @@ function Settings() {
 				<AddAreaForm />
 			</Grid>
 			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+				<AddLiftForm />
+			</Grid>
+			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
 				<AddTrailForm />
 			</Grid>
 			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-				<AddEquipmentForm />
+				<AddAidRoomForm />
 			</Grid>
 			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
 				<AddHutForm />
 			</Grid>
 			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-				<AddLiftForm />
-			</Grid>
-			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-				<AddPatrollerForm />
-			</Grid>
-			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
 				<AddLodgeForm />
 			</Grid>
 			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-				<AddAidRoomForm />
+				<AddEquipmentForm />
+			</Grid>
+			<Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+				<AddPatrollerForm />
 			</Grid>
 		</Grid>
 	);

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
@@ -8,7 +8,6 @@ import ConditionSelectRenderer from '../Toggles/ConditionsSelector';
 
 const TrailLogsTable = () => {
 	const { areas, trailLogs, trails, patrollers, api } = useContext(MountainContext);
-	const [gridApi, setGridApi] = useState(null);
 
 	const areaMap = areas.reduce((map, area) => ({ ...map, [area._id]: area.name }), {});
 	const trailMap = trails.reduce((map, trail) => ({ ...map, [trail._id]: trail.name }), {});
@@ -59,16 +58,6 @@ const TrailLogsTable = () => {
 		},
 	];
 
-	useEffect(() => {
-		if (gridApi) {
-			gridApi.setGridOption('rowData', trails);
-		}
-	}, [trails, gridApi]);
-
-	const onGridReady = (params) => {
-		setGridApi(params.api);
-	};
-
 	return (
 		<div className="ag-theme-quartz-dark" style={{ height: '40vh', width: '60.65%' }}>
 			<AgGridReact
@@ -78,7 +67,6 @@ const TrailLogsTable = () => {
 					statusToggleButton: StatusToggleButton,
 					conditionSelectRenderer: ConditionSelectRenderer,
 				}}
-				onGridReady={onGridReady}
 			/>
 		</div>
 	);

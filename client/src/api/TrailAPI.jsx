@@ -3,7 +3,7 @@ const IP = process.env.REACT_APP_IP;
 const PORT = process.env.REACT_APP_BACKEND_PORT;
 
 export const api = {
-	async create(mountainId, trail) {
+	async createTrail(mountainId, trail) {
 		try {
 			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/trail`, trail);
 			return response.data;
@@ -80,10 +80,7 @@ export const api = {
 	},
 
 	async createTrailLog(mountainId, trailId, log) {
-		console.log("🚀 ~ file: TrailAPI.jsx:83 ~ createTrailLog ~ log:", log)
-		console.log("🚀 ~ file: TrailAPI.jsx:83 ~ createTrailLog ~ trailId:", trailId)
 		console.dir(trailId);
-		console.log("🚀 ~ file: TrailAPI.jsx:83 ~ createTrailLog ~ mountainId:", mountainId)
 		try {
 			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}/log`, log);
 			return response.data;
@@ -110,10 +107,6 @@ export const api = {
 	},
 
 	async updateTrailLog(mountainId, trailId, logId, updatedLog) {
-		console.log("🚀 ~ file: TrailAPI.jsx:109 ~ updateTrailLog ~ updatedLog:", updatedLog)
-		console.log("🚀 ~ file: TrailAPI.jsx:109 ~ updateTrailLog ~ logId:", logId)
-		console.log("🚀 ~ file: TrailAPI.jsx:109 ~ updateTrailLog ~ trailId:", trailId)
-		console.log("🚀 ~ file: TrailAPI.jsx:109 ~ updateTrailLog ~ mountainId:", mountainId)
 		try {
 			const response = await axios.put(
 				`${IP}:${PORT}/mountain/${mountainId}/trail/${trailId}/log/${logId}`,

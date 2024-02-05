@@ -3,7 +3,7 @@ import { Autocomplete, TextField } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 
 const LocationTypeAutocomplete = ({ locationType, setLocationType, setLocation, defaultLocationType }) => {
-	const { locationTypes = [] } = useContext(MountainContext);
+	const { locationTypes } = useContext(MountainContext);
 	const [localLocationType, setLocalLocationType] = useState(defaultLocationType || null);
 	
 	useEffect(() => {

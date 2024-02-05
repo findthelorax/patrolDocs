@@ -11,6 +11,7 @@ const MountainAutocomplete = ({ options, selectedValue, setSelectedValue, label 
 			onChange={(event, newValue) => {
 				setSelectedValue(newValue);
 			}}
+			isOptionEqualToValue={(option, value) => option._id === value._id}
 			autoHighlight
 			autoSelect
 			noOptionsText={`No ${label.toLowerCase()}s available`}

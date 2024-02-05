@@ -8,6 +8,7 @@ import { api as aidRoomApi } from '../api/AidRoomAPI';
 // import { api as paperworkApi } from '../api/PaperworkAPI';
 import { api as patrollerApi } from '../api/PatrollerAPI';
 import { api as trailApi } from '../api/TrailAPI';
+import { api as incidentLogApi } from '../api/IncidentLogAPI';
 import { DateContext } from './DateContext';
 import { useApiData } from './useApiData';
 import { locationTypes, getLocations } from '../helpers/constants';
@@ -18,6 +19,18 @@ export const MountainProvider = ({ children }) => {
 	const { selectedDate } = useContext(DateContext);
 	const [currentDayPatrolDispatcher, setCurrentDayPatrolDispatcher] = useState(null);
 	const [patrolDispatcher] = useState({});
+
+	const api = {
+		mountainApi,
+		equipmentApi,
+		hutApi,
+		liftApi,
+		lodgeApi,
+		aidRoomApi,
+		patrollerApi,
+		trailApi,
+		incidentLogApi,
+	};
 
 	const useMountainData = (api, method, id, date) => {
 		const [data, isLoading, fetchData, setData] = useApiData(api[method], id, date);
@@ -69,18 +82,7 @@ export const MountainProvider = ({ children }) => {
 		selectedMountain?._id
 	);
 
-	const locations = getLocations(trails, huts, aidRooms);
-
-	const api = {
-		mountainApi,
-		equipmentApi,
-		hutApi,
-		liftApi,
-		lodgeApi,
-		aidRoomApi,
-		patrollerApi,
-		trailApi,
-	};
+	const locations = getLocations(trails, aidRooms, lodges, lifts, huts, []);
 
 	const isLoading =
 		isMountainsLoading ||
@@ -98,28 +100,6 @@ export const MountainProvider = ({ children }) => {
 		isEquipmentLoading ||
 		isEquipmentLogsLoading;
 
-	const setPatrolDispatcher = async (dispatcher) => {
-		try {
-			if (selectedMountain) {
-				// Convert the date to a string in the ISO 8601 format
-				const dispatcherWithFormattedDate = {
-					...dispatcher,
-					date: dispatcher.date.toISOString(),
-				};
-				const response = await patrollerApi.createPatrolDispatcherLog(
-					selectedMountain._id,
-					dispatcherWithFormattedDate._id,
-					dispatcherWithFormattedDate
-				);
-				setCurrentDayPatrolDispatcher(response);
-			} else {
-				console.error('No mountain selected');
-			}
-		} catch (error) {
-			console.error(`Error saving patrol dispatcher with id ${dispatcher._id}`, error);
-		}
-	};
-
 	async function handleUpdate(api, updateMethod, fetchMethod, id, updatedData) {
 		try {
 			await api[updateMethod](selectedMountain._id, id, updatedData);
@@ -129,9 +109,9 @@ export const MountainProvider = ({ children }) => {
 		}
 	}
 
-	async function handleCreateEntity(api, fetchMethod, newEntity) {
+	async function handleCreateEntity(createFunction, fetchMethod, newEntity, ...args) {
 		try {
-			await api.create(selectedMountain._id, newEntity);
+			await createFunction(...args, newEntity);
 			fetchMethod();
 		} catch (error) {
 			console.error(`Error creating new entity`, error);
@@ -156,32 +136,69 @@ export const MountainProvider = ({ children }) => {
 	}
 
 	async function handleCreateTrail(newTrail) {
-		console.log("🚀 ~ file: MountainContext.jsx:159 ~ handleCreateTrail ~ newTrail:", newTrail)
-		handleCreateEntity(trailApi, fetchTrails, newTrail);
+		handleCreateEntity(trailApi.createTrail, fetchTrails, newTrail, selectedMountain._id);
 	}
 
 	async function handleCreateLodge(newLodge) {
-		handleCreateEntity(lodgeApi, fetchLodges, newLodge);
+		handleCreateEntity(lodgeApi.createLodge, fetchLodges, newLodge, selectedMountain._id);
 	}
 
 	async function handleCreateHut(newHut) {
-		handleCreateEntity(hutApi, fetchHuts, newHut);
+		handleCreateEntity(hutApi.createHut, fetchHuts, newHut, selectedMountain._id);
 	}
 
 	async function handleCreateLift(newLift) {
-		handleCreateEntity(liftApi, fetchLifts, newLift);
+		handleCreateEntity(liftApi.createLift, fetchLifts, newLift, selectedMountain._id);
 	}
 
 	async function handleCreateAidRoom(newAidRoom) {
-		handleCreateEntity(aidRoomApi, fetchAidRooms, newAidRoom);
+		handleCreateEntity(aidRoomApi.createAidRoom, fetchAidRooms, newAidRoom, selectedMountain._id);
 	}
 
 	async function handleCreateEquipment(newEquipment) {
-		handleCreateEntity(equipmentApi, fetchEquipment, newEquipment);
+		handleCreateEntity(equipmentApi.createEquipment, fetchEquipment, newEquipment, selectedMountain._id);
 	}
 
 	async function handleCreatePatroller(newPatroller) {
-		handleCreateEntity(patrollerApi, fetchPatrollers, newPatroller);
+		handleCreateEntity(patrollerApi.createPatroller, fetchPatrollers, newPatroller, selectedMountain._id);
+	}
+
+	async function handleCreateHutLog(hutId, newHutLog) {
+		handleCreateEntity(hutApi.createHutLog, fetchHutLogs, hutId, newHutLog, selectedMountain._id);
+	}
+
+	async function handleCreateAidRoomLog(aidRoomId, newAidRoomLog) {
+		handleCreateEntity(
+			aidRoomApi.createAidRoomLog,
+			fetchAidRoomLogs,
+			aidRoomId,
+			newAidRoomLog,
+			selectedMountain._id
+		);
+	}
+
+	async function handleCreateTrailLog(trailId, newTrailLog) {
+		handleCreateEntity(trailApi.createTrailLog, fetchTrailLogs, trailId, newTrailLog, selectedMountain._id);
+	}
+
+	async function handleCreateEquipmentLog(equipmentId, newEquipmentLog) {
+		handleCreateEntity(
+			equipmentApi.createEquipmentLog,
+			fetchEquipmentLogs,
+			equipmentId,
+			newEquipmentLog,
+			selectedMountain._id
+		);
+	}
+
+	async function handleCreateLineCheck(liftId, newLineCheck) {
+		handleCreateEntity(
+			liftApi.createLiftLineCheck,
+			fetchLiftLineChecks,
+			liftId,
+			newLineCheck,
+			selectedMountain._id
+		);
 	}
 
 	async function handleTrailLogCreateOrUpdate(trailId, logData) {
@@ -190,31 +207,57 @@ export const MountainProvider = ({ children }) => {
 		if (existingTrailLog) {
 			handleUpdate(trailApi, 'updateTrailLog', fetchTrailLogs, trailId, logDataWithDate);
 		} else {
-			handleUpdate(trailApi, 'createTrailLog', fetchTrailLogs, trailId, logDataWithDate);
+			handleCreateEntity(trailApi.createTrailLog, fetchTrailLogs, logDataWithDate, selectedMountain._id, trailId);
 		}
 	}
 
 	const fetchPatrolDispatcherForDate = useCallback(
 		async (date) => {
-			if (date) {
+			if (date && selectedMountain) {
 				const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
 					date.getDate()
 				).padStart(2, '0')}`;
 
 				try {
 					const response = await patrollerApi.getPatrolDispatcherForDate(selectedMountain._id, formattedDate);
+					console.log("🚀 ~ file: MountainContext.jsx:223 ~ fetchPatrolDispatcherForDate response:", response)
 					setCurrentDayPatrolDispatcher(response);
 				} catch (error) {
-					console.error(
-						`Error fetching patrol dispatcher for date ${formattedDate} for mountain with id ${selectedMountain._id}`,
-						error
-					);
+					if (error.response && error.response.status === 404) {
+						console.log('No patrol dispatcher found for this date');
+						console.log(error.response.data.message);
+						setCurrentDayPatrolDispatcher(null);
+					} else {
+						console.error(
+							`Error fetching patrol dispatcher for date ${formattedDate} for mountain with id ${selectedMountain._id}`,
+							error
+						);
+					}
 				}
 			}
 		},
 		[selectedMountain, setCurrentDayPatrolDispatcher]
 	);
 
+	const setPatrolDispatcher = async (dispatcher) => {
+		try {
+			if (selectedMountain) {
+				let date = new Date(dispatcher.date);
+				date.setHours(0, 0, 0, 0);
+
+				const response = await patrollerApi.createPatrolDispatcherLog(selectedMountain._id, dispatcher._id, {
+					date: date.toISOString(),
+				});
+				console.log("🚀 ~ file: MountainContext.jsx:245 ~ setPatrolDispatcher ~ response:", response)
+				setCurrentDayPatrolDispatcher(response);
+			} else {
+				console.error('No mountain selected');
+			}
+		} catch (error) {
+			console.error(`Error saving patrol dispatcher with id ${dispatcher._id}`, error);
+		}
+	};
+	
 	useEffect(() => {
 		const storedMountainId = localStorage.getItem('selectedMountainId');
 		if (storedMountainId) {
@@ -291,11 +334,16 @@ export const MountainProvider = ({ children }) => {
 				trails,
 				fetchTrails,
 				handleCreateTrail,
+				handleCreateTrailLog,
 				handleCreateLodge,
 				handleCreateHut,
+				handleCreateHutLog,
 				handleCreateLift,
+				handleCreateLineCheck,
 				handleCreateAidRoom,
+				handleCreateAidRoomLog,
 				handleCreateEquipment,
+				handleCreateEquipmentLog,
 				handleCreatePatroller,
 				handleTrailToggle,
 				trailLogs,

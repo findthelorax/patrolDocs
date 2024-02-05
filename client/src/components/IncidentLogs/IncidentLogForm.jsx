@@ -1,23 +1,32 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Button, Box, Checkbox, FormControlLabel, Card, CardContent } from '@mui/material';
+import { MountainContext } from '../../contexts/MountainContext';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerMultiSelectAutocomplete';
-import IncidentField from './IncidentField';
+import IncidentField from '../Incidents/IncidentField';
 import LocationField from '../Location/LocationField';
-import TimePickerField from './TimePickerField';
+import TimePickerField from '../Incidents/TimePickerField';
+import { useFetchLogs } from '../../hooks/usseFetchLogs';
 
-const IncidentForm = ({
-	newRow,
-	setNewRow,
-	handleSubmit,
-	selectedPatrollers,
-	setSelectedPatrollers,
-}) => {
+const IncidentForm = () => {
+	const { selectedMountain, api } = useContext(MountainContext);
 	// eslint-disable-next-line
 	const [gridApi, setGridApi] = useState(null);
 	const [locationType, setLocationType] = useState('Trail');
 	const [location, setLocation] = useState(null);
 	const [otherLocation, setOtherLocation] = useState('');
+	const [selectedPatrollers, setSelectedPatrollers] = useState([]);
+	const { rowData, setRowData } = useFetchLogs(selectedMountain);
+	const [newRow, setNewRow] = useState({
+		callTime: '',
+		incident: '',
+		location: '',
+		patrollers: '',
+		onSceneTime: '',
+		stableTime: '',
+		transportTime: '',
+		dryRun: false,
+	});
 
 	const handleTimeChange = (name, time) => {
 		if (time !== null) {
@@ -32,28 +41,48 @@ const IncidentForm = ({
 			}));
 		}
 	};
-	
-	const handleTimestamp = (field) => {
-		const timestamp = new Date();
-		const formattedTimestamp = timestamp.toLocaleTimeString('en-US', {
-			hour: '2-digit',
-			minute: '2-digit',
-			second: '2-digit',
-		});
 
-		// If there is already a timestamp, ask the user for confirmation before overwriting it
-		if (newRow[field] && !window.confirm('Are you sure you want to overwrite the existing timestamp?')) {
+	const handleSubmit = async () => {
+		if (
+			!(newRow.callTime instanceof Date && !isNaN(newRow.callTime)) ||
+			(!newRow.dryRun &&
+				(!(newRow.onSceneTime instanceof Date && !isNaN(newRow.onSceneTime)) ||
+					!(newRow.stableTime instanceof Date && !isNaN(newRow.stableTime)) ||
+					!(newRow.transportTime instanceof Date && !isNaN(newRow.transportTime))))
+		) {
+			alert('Please enter a valid date.');
 			return;
 		}
 
+		const patrollers = selectedPatrollers.map((patroller) => patroller._id);
+
 		setNewRow((prevState) => ({
 			...prevState,
-			[field]: formattedTimestamp,
+			patrollers: patrollers,
 		}));
 
-		return formattedTimestamp;
+		try {
+			if (selectedMountain && selectedMountain._id) {
+				await api.createLog(selectedMountain._id, { ...newRow, patrollers });
+			}
+		} catch (error) {
+			console.error('Error creating log', error);
+		}
+
+		setRowData((prevState) => [newRow, ...prevState]);
+		setSelectedPatrollers([]);
+		setNewRow({
+			callTime: '',
+			incident: '',
+			location: '',
+			patrollers: '',
+			onSceneTime: '',
+			stableTime: '',
+			transportTime: '',
+			dryRun: false,
+		});
 	};
-	
+
 	const handlePatrollerChange = (event, newValue) => {
 		setSelectedPatrollers(newValue);
 		const patrollersString = newValue.map((patroller) => `${patroller.firstName} ${patroller.lastName}`).join(', ');
@@ -85,15 +114,22 @@ const IncidentForm = ({
 		}));
 	};
 
-	const clearForm = () => {
-		setNewRow({
-			dryRun: false,
-		});
-		setLocationType('Trail');
-		setLocation(null);
-		setOtherLocation('');
-		setSelectedPatrollers([]);
-	};
+const clearForm = () => {
+    setNewRow({
+        callTime: '',
+        incident: '',
+        location: '',
+        patrollers: '',
+        onSceneTime: '',
+        stableTime: '',
+        transportTime: '',
+        dryRun: false,
+    });
+    setLocationType('Trail');
+    setLocation(null);
+    setOtherLocation('');
+    setSelectedPatrollers([]);
+};
 
 	return (
 		<Card>

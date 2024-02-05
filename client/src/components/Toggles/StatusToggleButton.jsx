@@ -6,7 +6,7 @@ function StatusToggleButton({ value, data, type }) {
 	const context = useContext(MountainContext);
 
 	const toggleStatus = async () => {
-		const updatedItem = { ...data, status: data.status === 'open' ? 'closed' : 'open' };
+		const updatedItem = { ...data, status: data.status === 'Open' ? 'Closed' : 'Open' };
 		try {
 			if (type === 'lift') {
 				await context.api.liftApi.updateLift(data.mountain, data._id, updatedItem);
@@ -26,7 +26,7 @@ function StatusToggleButton({ value, data, type }) {
 	return (
 		<div>
 			<span style={{ marginRight: 10, display: 'inline-block', width: '60px' }}>
-				{value === 'open' ? 'Open' : value === 'closed' ? 'Closed' : 'Unknown'}
+				{value === 'Open' ? 'Open' : value === 'Closed' ? 'Closed' : 'Unknown'}
 			</span>
 			<Button
 				variant="contained"
@@ -35,7 +35,7 @@ function StatusToggleButton({ value, data, type }) {
 				size="small"
 				style={{ fontSize: 12, paddingLeft: 5, paddingRight: 10 }}
 			>
-				{value === 'open' ? `Close ${type}` : `Open ${type}`}
+				{value === 'Open' ? `Close ${type}` : `Open ${type}`}
 			</Button>
 		</div>
 	);

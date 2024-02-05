@@ -16,10 +16,10 @@ const AidRoomsTable = () => {
             field: "area",
             valueGetter: params => areaMap[params.data.area]
         },
-        { 
+        {
             headerName: "Equipment", 
             field: "equipment",
-            valueGetter: params => params.data.equipment.join(', ')
+            valueGetter: params => params.data.equipment.map(equip => `${equip.type} #${equip.idNumber}`).join(', ')
         },
         { 
             headerName: "Paperwork", 

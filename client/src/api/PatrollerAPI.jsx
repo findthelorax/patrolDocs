@@ -80,8 +80,11 @@ export const api = {
 	},
 
 	async createPatrolDispatcherLog(mountainId, patrollerId, date) {
+		console.log("🚀 ~ file: PatrollerAPI.jsx:83 ~ createPatrolDispatcherLog ~ mountainId:", mountainId)
+		console.log("🚀 ~ file: PatrollerAPI.jsx:83 ~ createPatrolDispatcherLog ~ patrollerId:", patrollerId)
+		console.log("🚀 ~ file: PatrollerAPI.jsx:83 ~ createPatrolDispatcherLog ~ date:", date)
 		try {
-			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/patroller/${patrollerId}/dispatcher`, date.date);
+			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/patroller/${patrollerId}/dispatcher`, date);
 			return response.data;
 		} catch (error) {
 			console.error(`Error creating log for patroller with id ${patrollerId}`, error);

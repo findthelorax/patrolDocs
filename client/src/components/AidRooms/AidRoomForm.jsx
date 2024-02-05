@@ -1,6 +1,5 @@
 import React, { useState, useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
-import { api as aidRoomApi } from '../../api/AidRoomAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 import { SnackbarContext } from '../../contexts/SnackbarContext';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
@@ -9,7 +8,7 @@ import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 const AddAidRoomForm = () => {
 	const nameRef = useRef();
 	const [selectedArea, setSelectedArea] = useState(null);
-	const { selectedMountain, fetchMountains, areas } = useContext(MountainContext);
+	const { fetchMountains, areas, handleCreateAidRoom } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
@@ -17,7 +16,7 @@ const AddAidRoomForm = () => {
 		const name = nameRef.current.value;
 		const aidRoom = { name, area: selectedArea._id };
 		try {
-			await aidRoomApi.createAidRoom(selectedMountain._id, aidRoom);
+			await handleCreateAidRoom(aidRoom);
 			nameRef.current.value = '';
 			setSelectedArea(null);
 			fetchMountains();
@@ -61,13 +60,13 @@ const AddAidRoomLogForm = () => {
 	const [selectedFirstAidRoom, setSelectedFirstAidRoom] = useState(null);
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, aidRooms } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, aidRooms, handleCreateAidRoomLog } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			await aidRoomApi.createAidRoomLog(selectedMountain._id, selectedFirstAidRoom._id, { log });
+			await handleCreateAidRoomLog(selectedMountain._id, selectedFirstAidRoom._id, { log });
 			setLog('');
 			setSelectedFirstAidRoom(null);
 			setSelectedPatroller(null);

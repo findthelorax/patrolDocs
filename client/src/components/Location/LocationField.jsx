@@ -1,11 +1,11 @@
+import { useContext } from 'react';
 import { Box, TextField } from '@mui/material';
+import { MountainContext } from '../../contexts/MountainContext';
 import LocationTypeAutocomplete from '../AutoComplete/LocationTypeAutocomplete';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
-import { useContext } from 'react';
-import { MountainContext } from '../../contexts/MountainContext';
 
 const LocationField = ({ locationType, setLocationType, location, setLocation, setNewRow, otherLocation, setOtherLocation }) => {
-    const { locations } = useContext(MountainContext);
+    const { locations, locationTypes } = useContext(MountainContext);
     const locationsArray = locations[locationType] || [];
 
     return (
@@ -14,6 +14,7 @@ const LocationField = ({ locationType, setLocationType, location, setLocation, s
                 locationType={locationType}
                 setLocationType={setLocationType}
                 setLocation={setLocation}
+                options={locationTypes}
                 defaultLocationType="Trail"
             />
             {locationType !== 'Other' ? (

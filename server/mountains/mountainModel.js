@@ -22,11 +22,12 @@ const MountainSchema = new Schema({
     areas: [AreaSchema],
     lifts: [{ type: Schema.Types.ObjectId, ref: 'Lift' }],
     trails: [{ type: Schema.Types.ObjectId, ref: 'Trail' }],
-    huts: [{ type: Schema.Types.ObjectId, ref: 'Hut' }],
     lodges: [{ type: Schema.Types.ObjectId, ref: 'Lodge' }],
+    huts: [{ type: Schema.Types.ObjectId, ref: 'Hut' }],
     aidRooms: [{ type: Schema.Types.ObjectId, ref: 'AidRoom' }],
     equipment: [{ type: Schema.Types.ObjectId, ref: 'Equipment' }],
     patrollers: [{ type: Schema.Types.ObjectId, ref: 'Patroller' }],
+    incidentLogs: [{ type: Schema.Types.ObjectId, ref: 'IncidentLog' }],
 });
 
 AreaSchema.methods.updateStatus = function(newStatus) {

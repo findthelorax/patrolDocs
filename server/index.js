@@ -10,7 +10,7 @@ const trailRoutes = require('./trails/trailRoutes');
 const aidRoomRoutes = require('./aidRooms/aidRoomRoutes');
 const patrollerRoutes = require('./patrollers/patrollerRoutes');
 
-const incidentRoutes = require('./incidents/incidentRoutes');
+const incidentLogRoutes = require('./incidents/incidentLogRoutes');
 const equipmentRoutes = require('./equipment/equipmentRoutes');
 const paperworkRoutes = require('./equipment/paperworkRoutes');
 
@@ -43,7 +43,7 @@ app.use(liftRoutes);
 app.use(trailRoutes);
 app.use(aidRoomRoutes);
 app.use(equipmentRoutes);
-app.use(incidentRoutes);
+app.use(incidentLogRoutes);
 app.use(paperworkRoutes);
 
 app.use(patrollerRoutes);

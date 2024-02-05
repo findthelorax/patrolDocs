@@ -2,14 +2,13 @@ import React, { useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, Container } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 import { SnackbarContext } from '../../contexts/SnackbarContext';
-import { api as patrollerApi } from '../../api/PatrollerAPI';
 
 const AddPatrollerForm = () => {
 	const firstNameRef = useRef();
 	const lastNameRef = useRef();
 	const positionRef = useRef();
 	// eslint-disable-next-line
-	const { selectedMountain, fetchPatrollers } = useContext(MountainContext);
+	const { fetchPatrollers, handleCreatePatroller } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
@@ -19,7 +18,7 @@ const AddPatrollerForm = () => {
 		const position = positionRef.current.value;
 		const patroller = { firstName, lastName, position };
 		try {
-			await patrollerApi.createPatroller(selectedMountain._id, patroller);
+			await handleCreatePatroller(patroller);
 			firstNameRef.current.value = '';
 			lastNameRef.current.value = '';
 			positionRef.current.value = '';

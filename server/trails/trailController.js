@@ -159,8 +159,6 @@ exports.getOneTrailLog = async (req, res) => {
 };
 
 exports.createTrailLog = async (req, res) => {
-	console.log("🚀 ~ file: trailController.js:160 ~ exports.createTrailLog= ~ req.body:", req.body)
-	console.log("🚀 ~ file: trailController.js:160 ~ exports.createTrailLog= ~ req.params:", req.params)
 	try {
 		const trailLog = new TrailLog({
 			...req.body,

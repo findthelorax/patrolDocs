@@ -35,11 +35,13 @@ export const EquipmentTypes = {
     Other: 'Other',
 };
 
-export const locationTypes = ['Trail', 'Hut', 'First Aid Room', 'Other'];
+export const locationTypes = ['Trail', 'First Aid Room', 'Lodge', 'Lift', 'Hut', 'Other'];
 
-export const getLocations = (trails, huts, aidRooms) => ({
+export const getLocations = (trails, aidRooms, lodges, lifts, huts, others) => ({
     Trail: trails,
-    Hut: huts,
     'First Aid Room': aidRooms,
-    Other: [],
+    Lodge: lodges,
+    Lift: lifts,
+    Hut: huts,
+    Other: others,
 });

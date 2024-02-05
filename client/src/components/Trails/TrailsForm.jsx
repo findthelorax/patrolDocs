@@ -9,14 +9,14 @@ const AddTrailForm = () => {
 	const [selectedArea, setSelectedArea] = useState(null);
 	const [difficulty, setDifficulty] = useState('');
 	const [type, setType] = useState('');
-	const { selectedMountain, areas, api, handleCreateTrail } = useContext(MountainContext);
+	const { areas, handleCreateTrail } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		const name = nameRef.current.value;
+		const trail = { name, areaId: selectedArea._id, difficulty, type };
 		try {
-			const name = nameRef.current.value;
-			const trail = { name, areaId: selectedArea._id, difficulty, type };
 			await handleCreateTrail(trail);
 			nameRef.current.value = '';
 			setSelectedArea(null);
@@ -28,7 +28,7 @@ const AddTrailForm = () => {
 		} catch (error) {
 			console.error('Error creating trail', error);
 			setSnackbarSeverity('error');
-			setSnackbarMessage(`Error creating trail`);
+			setSnackbarMessage(`Error creating ${trail.name}`);
 			setOpenSnackbar(true);
 		}
 	};
@@ -52,18 +52,18 @@ const AddTrailForm = () => {
 							onChange={(e) => setDifficulty(e.target.value)}
 							required
 						>
-							<MenuItem value={'green'}>Green</MenuItem>
-							<MenuItem value={'blue'}>Blue</MenuItem>
-							<MenuItem value={'black'}>Black</MenuItem>
-							<MenuItem value={'double black'}>Double Black</MenuItem>
+							<MenuItem value={'Green'}>Green</MenuItem>
+							<MenuItem value={'Blue'}>Blue</MenuItem>
+							<MenuItem value={'Black'}>Black</MenuItem>
+							<MenuItem value={'Double Black'}>Double Black</MenuItem>
 						</TextField>
 						<TextField select label="Type" value={type} onChange={(e) => setType(e.target.value)} required>
-							<MenuItem value={'glades'}>Glades</MenuItem>
-							<MenuItem value={'moguls'}>Moguls</MenuItem>
-							<MenuItem value={'natural'}>Natural</MenuItem>
-							<MenuItem value={'race'}>Race</MenuItem>
-							<MenuItem value={'park'}>Park</MenuItem>
-							<MenuItem value={'groomed'}>Groomed</MenuItem>
+							<MenuItem value={'Glades'}>Glades</MenuItem>
+							<MenuItem value={'Moguls'}>Moguls</MenuItem>
+							<MenuItem value={'Natural'}>Natural</MenuItem>
+							<MenuItem value={'Race'}>Race</MenuItem>
+							<MenuItem value={'Park'}>Park</MenuItem>
+							<MenuItem value={'Groomed'}>Groomed</MenuItem>
 						</TextField>
 						<Button type="submit" variant="contained">
 							Add Trail

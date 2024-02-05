@@ -8,7 +8,7 @@ import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 const AddLiftForm = ({ coordinates }) => {
 	const nameRef = useRef();
 	const [selectedArea, setSelectedArea] = useState(null);
-	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
+	const { fetchMountains, areas, handleCreateLift } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
@@ -16,7 +16,7 @@ const AddLiftForm = ({ coordinates }) => {
 		try {
 			const name = nameRef.current.value;
 			const lift = { name, area: selectedArea._id, coordinates };
-			await api.liftApi.createLift(selectedMountain._id, lift);
+			await handleCreateLift(lift);
 			nameRef.current.value = '';
 			setSelectedArea(null);
 			fetchMountains();
@@ -59,7 +59,7 @@ const AddLineCheckForm = () => {
 	const descriptionRef = useRef();
 	const [selectedLift, setSelectedLift] = useState(null);
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, lifts, api } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, lifts, handleCreateLineCheck } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
@@ -67,7 +67,7 @@ const AddLineCheckForm = () => {
 		try {
 			const description = descriptionRef.current.value;
 			const lineCheck = { description };
-			await api.liftApi.createLineCheck(selectedMountain._id, selectedLift.id, lineCheck);
+			await handleCreateLineCheck(selectedMountain._id, selectedLift.id, lineCheck);
 			descriptionRef.current.value = '';
 			setSelectedLift(null);
 			setSelectedPatroller(null);

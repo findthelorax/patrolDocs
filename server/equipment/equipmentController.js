@@ -1,4 +1,5 @@
 const { Equipment, EquipmentLog } = require('./equipmentModel');
+const mongoose = require('mongoose');
 
 exports.getAllEquipment = async (req, res) => {
     try {
@@ -20,6 +21,7 @@ exports.getEquipment = async (req, res) => {
 };
 
 exports.createEquipment = async (req, res) => {
+    console.log("🚀 ~ file: equipmentController.js:23 ~ exports.createEquipment= ~ req.body:", req.body)
     const equipment = new Equipment({
         ...req.body,
         mountain: req.params.mountainId,
@@ -27,6 +29,25 @@ exports.createEquipment = async (req, res) => {
 
     try {
         const newEquipment = await equipment.save();
+
+        // find the correct model based on the location type
+        const Model = mongoose.model(req.body.location.type);
+        if (!Model) {
+            return res.status(400).json({ message: 'Invalid location type' });
+        }
+
+        // find the document
+        const document = await Model.findById(req.body.location.id);
+        if (!document) {
+            return res.status(404).json({ message: 'Document not found' });
+        }
+
+        // add the new equipment's id to the document's equipment list
+        document.equipment.push(newEquipment._id);
+
+        // save the changes to the document
+        await document.save();
+
         res.status(201).json(newEquipment);
     } catch (err) {
         if (err.code === 11000) {

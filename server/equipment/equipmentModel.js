@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const LocationSchema = require('../location/locationModel');
 
 const EquipmentLogSchema = new Schema({
     equipment: { type: Schema.Types.ObjectId, ref: 'Equipment' },
@@ -9,12 +10,6 @@ const EquipmentLogSchema = new Schema({
 });
 
 const EquipmentLog = mongoose.model('EquipmentLog', EquipmentLogSchema);
-
-const LocationSchema = new Schema({
-    type: { type: String, enum: ['Hut', 'Lodge', 'FirstAidRoom', 'Trail', 'Other', 'Available'], required: true },
-    name: { type: String, required: true },
-    id: { type: Schema.Types.ObjectId, required: true, refPath: 'location.type' },
-});
 
 const EquipmentSchema = new Schema({
     name: String,

@@ -6,7 +6,8 @@ const LiftSchema = new mongoose.Schema({
 	name: { type: String, required: true, unique: true },
 	mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain' },
 	area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
-    status: { type: String, required: true, enum: ['open', 'closed', 'unknown'], default: 'unknown'},
+	equipment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Equipment' }],
+    status: { type: String, required: true, enum: ['Open', 'Closed', 'Unknown'], default: 'Unknown'},
 	coordinates: CoordinatesSchema,
 });
 

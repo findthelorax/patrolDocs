@@ -64,7 +64,6 @@ export const api = {
 	},
 
 	async createArea(mountainId, area) {
-		console.log("🚀 ~ file: MountainAPI.jsx:67 ~ createArea ~ area:", area)
 		try {
 			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/areas`, area);
 			return response.data;

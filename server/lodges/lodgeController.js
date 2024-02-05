@@ -3,7 +3,7 @@ const { Lodge } = require('./lodgeModel');
 
 exports.getAllLodges = async (req, res) => {
 	try {
-		const lodges = await Lodge.find({ mountain: req.params.mountainId });
+		const lodges = await Lodge.find({ mountain: req.params.mountainId }).populate('equipment');
 		res.status(200).json(lodges);
 	} catch (err) {
 		res.status(500).json({ message: err.message });
@@ -12,7 +12,7 @@ exports.getAllLodges = async (req, res) => {
 
 exports.getLodge = async (req, res) => {
 	try {
-		const lodge = await Lodge.findOne({ _id: req.params.lodgeId, mountain: req.params.mountainId });
+		const lodge = await Lodge.findOne({ _id: req.params.lodgeId, mountain: req.params.mountainId }).populate('equipment');
 		if (!lodge) return res.status(404).json({ message: 'No lodge found with this ID' });
 		res.status(200).json(lodge);
 	} catch (err) {

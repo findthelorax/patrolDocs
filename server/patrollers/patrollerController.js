@@ -152,27 +152,42 @@ exports.getPatrolDispatcherLog = async (req, res) => {
 
 exports.getPatrolDispatcherForDate = async (req, res) => {
     try {
-        const date = new Date(req.params.date);
-        const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        const end = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-        const dispatcher = await PatrolDispatcherLog.find({
+        const date = new Date(req.params.date + 'T00:00:00Z');
+        const start = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+        const end = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1));
+        const dispatcher = await PatrolDispatcherLog.findOne({
             mountain: req.params.mountainId,
             date: { $gte: start, $lt: end }
         }).populate('patroller');
-        res.status(200).json(dispatcher);
+        if (dispatcher) {
+            res.status(200).json(dispatcher);
+        } else {
+            res.status(404).json({ message: 'No patrol dispatcher found for this date' });
+        }
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
 
 exports.createPatrolDispatcherLog = async (req, res) => {
-
     try {
-        const log = new PatrolDispatcherLog({ mountain: req.params.mountainId, patroller: req.params.patrollerId, ...req.body.date});
-        const savedLog = await log.save();
-        res.status(201).json(savedLog);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+        // Get the date from req.body and set the time to midnight
+        let date = new Date(req.body.date);
+        date.setHours(0, 0, 0, 0);
+
+        // Create a new patrol dispatcher log with the date
+        const patrolDispatcherLog = new PatrolDispatcherLog({
+            mountain: req.params.mountainId,
+            patroller: req.params.patrollerId,
+            date: date
+        });
+
+        // Save the patrol dispatcher log and send the response
+        const savedPatrolDispatcherLog = await patrolDispatcherLog.save();
+        res.json(savedPatrolDispatcherLog);
+    } catch (error) {
+        console.error(`Error creating patrol dispatcher log`, error);
+        res.status(500).send(error);
     }
 };
 

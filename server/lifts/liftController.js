@@ -3,7 +3,7 @@ const { Mountain } = require('../mountains/mountainModel');
 
 exports.getAllLifts = async (req, res) => {
     try {
-        const lifts = await Lift.find({ mountain: req.params.mountainId });
+        const lifts = await Lift.find({ mountain: req.params.mountainId }).populate('equipment');
         res.status(200).json(lifts);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -12,7 +12,7 @@ exports.getAllLifts = async (req, res) => {
 
 exports.getLift = async (req, res) => {
     try {
-        const lift = await Lift.findOne({ _id: req.params.liftId, mountain: req.params.mountainId });
+        const lift = await Lift.findOne({ _id: req.params.liftId, mountain: req.params.mountainId }).populate('equipment');
         if (!lift) return res.status(404).json({ message: 'No lift found with this ID' });
         res.status(200).json(lift);
     } catch (err) {

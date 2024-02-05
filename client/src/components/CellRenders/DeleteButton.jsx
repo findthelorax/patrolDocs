@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
-import { api } from '../../../api/IncidentLogAPI';
+import { api } from '../../api/IncidentLogAPI';
 import { useState } from 'react';
-import ConfirmationDialog from '../../Dashboard/ConfirmationDialog';
+import ConfirmationDialog from '../Dashboard/ConfirmationDialog';
 
 const DeleteButton = (props) => {
     const [open, setOpen] = useState(false);

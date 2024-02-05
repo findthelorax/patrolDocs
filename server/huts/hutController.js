@@ -4,7 +4,7 @@ const { Mountain } = require('../mountains/mountainModel');
 exports.getAllHuts = async (req, res) => {
     try {
         const mountainId = req.params.mountainId;
-        const huts = await Hut.find({ mountain: mountainId });
+        const huts = await Hut.find({ mountain: mountainId }).populate('equipment');
         res.status(200).json(huts);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -13,7 +13,7 @@ exports.getAllHuts = async (req, res) => {
 
 exports.getHut = async (req, res) => {
     try {
-        const hut = await Hut.findById(req.params.hutId);
+        const hut = await Hut.findById(req.params.hutId).populate('equipment');
         if (hut) {
             res.status(200).json(hut);
         } else {

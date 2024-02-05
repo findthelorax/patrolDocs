@@ -1,21 +1,23 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const LocationSchema = require('../location/locationModel');
 
-const IncidentSchema = new Schema({
-    time: Date,
-    type: String,
+const IncidentLogSchema = new Schema({
     mountain: { type: mongoose.Schema.Types.ObjectId, ref: 'Mountain', required: true },
-    area: { type: Schema.Types.ObjectId, ref: 'Area' },
-    trail: { type: Schema.Types.ObjectId, ref: 'Trail' },
     patrollers: [{ type: Schema.Types.ObjectId, ref: 'Patroller', required: true }],
+    location: LocationSchema,
+    callTime: Date,
+    incident: String,
     onSceneTime: Date,
     stableTime: Date,
     transportTime: Date,
-    isDryRun: { type: Boolean, default: false },
+    dryRun: { type: Boolean, default: false },
 });
 
-IncidentSchema.pre('save', function(next) {
-    if (this.isDryRun) {
+IncidentLogSchema.index({ mountain: 1, 'location.id': 1, callTime: 1 }, { unique: true });
+
+IncidentLogSchema.pre('save', function(next) {
+    if (this.dryRun) {
         this.onSceneTime = null;
         this.stableTime = null;
         this.transportTime = null;
@@ -23,6 +25,6 @@ IncidentSchema.pre('save', function(next) {
     next();
 });
 
-const IncidentLog = mongoose.model('IncidentLog', IncidentSchema);
+const IncidentLog = mongoose.model('IncidentLog', IncidentLogSchema);
 
 module.exports = IncidentLog;

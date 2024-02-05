@@ -1,6 +1,5 @@
 import React, { useState, useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, Select, MenuItem, Typography } from '@mui/material';
-import { api as equipmentApi } from '../../api/EquipmentAPI';
 import { MountainContext } from '../../contexts/MountainContext';
 import { SnackbarContext } from '../../contexts/SnackbarContext';
 import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
@@ -15,7 +14,7 @@ const AddEquipmentForm = () => {
 	const [locationType, setLocationType] = useState(null);
 	const [location, setLocation] = useState(null);
 	const [otherLocation, setOtherLocation] = useState('');
-	const { selectedMountain, fetchMountains } = useContext(MountainContext);
+	const { fetchMountains, handleCreateEquipment } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
@@ -23,7 +22,7 @@ const AddEquipmentForm = () => {
 		const locationValue = locationType === 'Other' ? otherLocation : { type: locationType, name: location.name, id: location._id};
 		const equipment = { type, idNumber: idNumber.current.value, description: description.current.value, location: locationValue };
 		try {
-			await equipmentApi.createEquipment(selectedMountain._id, equipment);
+			await handleCreateEquipment(equipment);
 			setType('');
 			idNumber.current.value = '';
 			description.current.value = '';
@@ -32,11 +31,11 @@ const AddEquipmentForm = () => {
 			setOtherLocation('');
 			fetchMountains();
 			setSnackbarSeverity('success');
-			setSnackbarMessage(`${equipment.name}:${equipment.idNumber} created successfully`);
+			setSnackbarMessage(`${equipment.type}:${equipment.idNumber} created successfully`);
 			setOpenSnackbar(true);
 		} catch (error) {
 			setSnackbarSeverity('error');
-			setSnackbarMessage(`Error creating ${equipment.name}:${equipment.idNumber}`);
+			setSnackbarMessage(`Error creating ${equipment.type}:${equipment.idNumber}`);
 			setOpenSnackbar(true);
 		}
 	};
@@ -91,14 +90,14 @@ const AddEquipmentForm = () => {
 const AddEquipmentLogForm = () => {
 	const [log, setLog] = useState('');
 	const [equipmentS, setEquipmentS] = useState(null);
-	const { selectedMountain, fetchMountains, equipment } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, equipment, handleCreateEquipmentLog } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 	const [selectedEquipment, setSelectedEquipment] = useState(null);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			await equipmentApi.createEquipmentLog(selectedMountain.id, equipmentS.id, { log });
+			await handleCreateEquipmentLog(selectedMountain.id, equipmentS.id, { log });
 			setLog('');
 			setEquipmentS(null);
 			fetchMountains();

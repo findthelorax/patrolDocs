@@ -42,12 +42,25 @@ const PatrolDispatcherAutocomplete = () => {
 		}
 	}, [patrolDispatcher, patrollers]);
 
+	useEffect(() => {
+		const fetchDispatcher = async () => {
+			const existingDispatcher = await fetchPatrolDispatcherForDate(selectedDate);
+			if (existingDispatcher && patrollers.some(patroller => patroller._id === existingDispatcher.patroller._id)) {
+				setSelectedDispatcher(existingDispatcher.patroller);
+			}
+		};
+
+		fetchDispatcher();
+	}, [selectedDate, fetchPatrolDispatcherForDate, patrollers]);
+
 	return (
 		<>
 			<Autocomplete
 				id="patrol-dispatcher-autocomplete"
 				options={patrollers || []}
-				getOptionLabel={(option) => (option && option.firstName && option.lastName) ? `${option.firstName} ${option.lastName}` : 'No name'}
+				getOptionLabel={(option) =>
+					option && option.firstName && option.lastName ? `${option.firstName} ${option.lastName}` : 'No name'
+				}
 				value={selectedDispatcher}
 				onChange={handleSelectionChange}
 				clearIcon={false}

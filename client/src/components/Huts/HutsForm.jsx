@@ -8,7 +8,7 @@ import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 const AddHutForm = () => {
 	const nameRef = useRef();
 	const [selectedArea, setSelectedArea] = useState(null);
-	const { selectedMountain, fetchMountains, areas, api } = useContext(MountainContext);
+	const { fetchMountains, areas, handleCreateHut } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
@@ -16,7 +16,7 @@ const AddHutForm = () => {
 		const name = nameRef.current.value;
 		const hut = { name, area: selectedArea._id };
 		try {
-			await api.hutApi.createHut(selectedMountain._id, hut);
+			await handleCreateHut(hut);
 			setSelectedArea(null);
 			fetchMountains();
 			setSnackbarSeverity('success');
@@ -60,13 +60,13 @@ const AddHutLogForm = () => {
 	const [selectedHut, setSelectedHut] = useState(null);
 	// eslint-disable-next-line
 	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, huts, api } = useContext(MountainContext);
+	const { selectedMountain, fetchMountains, huts, handleCreateHutLog } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			await api.hutApi.createHutLog(selectedMountain._id, selectedHut._id, { log });
+			await handleCreateHutLog(selectedMountain._id, selectedHut._id, { log });
 			setLog(null);
 			setSelectedHut(null);
 			setSelectedPatroller(null);

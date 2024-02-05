@@ -15,7 +15,7 @@ const PatrollerSchema = new Schema({
 });
 
 PatrollerSchema.index({ firstName: 1, lastName: 1 }, { unique: true });
-PatrolDispatcherLogSchema.index({ patroller: 1, date: 1 }, { unique: true });
+PatrolDispatcherLogSchema.index({ mountain: 1, date: 1 }, { unique: true });
 
 const Patroller = mongoose.model('Patroller', PatrollerSchema);
 const PatrolDispatcherLog = mongoose.model('PatrolDispatcherLog', PatrolDispatcherLogSchema);

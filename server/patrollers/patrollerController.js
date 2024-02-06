@@ -162,7 +162,7 @@ exports.getPatrolDispatcherForDate = async (req, res) => {
         if (dispatcher) {
             res.status(200).json(dispatcher);
         } else {
-            res.status(404).json({ message: 'No patrol dispatcher found for this date' });
+            res.status(200).json({ message: `No patrol dispatcher found for ${date}.` });
         }
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -186,7 +186,7 @@ exports.createPatrolDispatcherLog = async (req, res) => {
         const savedPatrolDispatcherLog = await patrolDispatcherLog.save();
         res.json(savedPatrolDispatcherLog);
     } catch (error) {
-        console.error(`Error creating patrol dispatcher log`, error);
+        console.error(`Error creating patrol dispatcher log for ${date}`, error);
         res.status(500).send(error);
     }
 };

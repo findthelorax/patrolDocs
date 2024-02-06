@@ -33,11 +33,11 @@ function SearchAppBar({ setOpenSnackbar, setSnackbarMessage }) {
 					setOpenSnackbar={setOpenSnackbar}
 					setSnackbarMessage={setSnackbarMessage}
 				/>
-				<Box sx={{ ml: 'auto' }}>
-					<PatrolDispatcherAutocomplete />
-				</Box>
 				<Box sx={{ ml: 2 }}>
 					<PatrolDispatcherDisplay />
+				</Box>
+				<Box sx={{ ml: 'auto' }}>
+					<PatrolDispatcherAutocomplete />
 				</Box>
 				<Box sx={{ display: 'flex', ml: 'auto' }}>
 					<IconButton color="inherit" component={Link} to="/notifications">

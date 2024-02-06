@@ -2,7 +2,6 @@ import React, { useState, useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, FormControl } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 import { SnackbarContext } from '../../contexts/SnackbarContext';
-import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
 import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 
 const AddAidRoomForm = () => {
@@ -55,60 +54,4 @@ const AddAidRoomForm = () => {
 	);
 };
 
-const AddAidRoomLogForm = () => {
-	const [log, setLog] = useState('');
-	const [selectedFirstAidRoom, setSelectedFirstAidRoom] = useState(null);
-	// eslint-disable-next-line
-	const [selectedPatroller, setSelectedPatroller] = useState(null);
-	const { selectedMountain, fetchMountains, aidRooms, handleCreateAidRoomLog } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
-
-	const handleSubmit = async (event) => {
-		event.preventDefault();
-		try {
-			await handleCreateAidRoomLog(selectedMountain._id, selectedFirstAidRoom._id, { log });
-			setLog('');
-			setSelectedFirstAidRoom(null);
-			setSelectedPatroller(null);
-			fetchMountains();
-			setSnackbarSeverity('success');
-			setSnackbarMessage('Aid room log created successfully');
-			setOpenSnackbar(true);
-		} catch (error) {
-			console.error('Error creating aidRoom log', error);
-			setSnackbarSeverity('error');
-			setSnackbarMessage('Error creating aid room log');
-			setOpenSnackbar(true);
-		}
-	};
-
-	return (
-		<Card>
-			<CardContent>
-				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
-					<Stack spacing={2}>
-						<MountainAutocomplete
-							options={aidRooms}
-							selectedValue={selectedFirstAidRoom}
-							setSelectedValue={setSelectedFirstAidRoom}
-							label="First Aid Room"
-						/>
-						<PatrollerAutocomplete />
-						<TextField
-							label="Log"
-							value={log}
-							onChange={(e) => setLog(e.target.value)}
-							required
-							multiline
-						/>
-						<Button type="submit" variant="contained">
-							Add First Aid Room Log
-						</Button>
-					</Stack>
-				</Box>
-			</CardContent>
-		</Card>
-	);
-};
-
-export { AddAidRoomForm, AddAidRoomLogForm };
+export default AddAidRoomForm;

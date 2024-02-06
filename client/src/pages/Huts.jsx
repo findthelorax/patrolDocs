@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { AddHutForm, AddHutLogForm } from '../components/Huts/HutsForm';
+import AddHutForm from '../components/Huts/HutsForm';
+import AddHutLogForm from '../components/Huts/HutLogForm';
 import HutsTable from '../components/Huts/HutsTable';
 
 function Huts() {

@@ -2,8 +2,6 @@ import React, { useState, useContext, useRef } from 'react';
 import { TextField, Button, Box, Stack, Card, CardContent, Select, MenuItem, Typography } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 import { SnackbarContext } from '../../contexts/SnackbarContext';
-import PatrollerAutocomplete from '../AutoComplete/PatrollerAutocomplete';
-import MountainAutocomplete from '../AutoComplete/MountainAutocomplete';
 import LocationField from '../Location/EquipmentLocationField';
 import { EquipmentTypes } from '../../helpers/constants';
 
@@ -87,58 +85,4 @@ const AddEquipmentForm = () => {
 	);
 };
 
-const AddEquipmentLogForm = () => {
-	const [log, setLog] = useState('');
-	const [equipmentS, setEquipmentS] = useState(null);
-	const { selectedMountain, fetchMountains, equipment, handleCreateEquipmentLog } = useContext(MountainContext);
-	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
-	const [selectedEquipment, setSelectedEquipment] = useState(null);
-
-	const handleSubmit = async (event) => {
-		event.preventDefault();
-		try {
-			await handleCreateEquipmentLog(selectedMountain.id, equipmentS.id, { log });
-			setLog('');
-			setEquipmentS(null);
-			fetchMountains();
-			setSnackbarSeverity('success');
-			setSnackbarMessage('Equipment log created successfully');
-			setOpenSnackbar(true);
-		} catch (error) {
-			console.error('Error creating equipment log', error);
-			setSnackbarSeverity('error');
-			setSnackbarMessage('Error creating equipment log');
-			setOpenSnackbar(true);
-		}
-	};
-
-	return (
-		<Card>
-			<CardContent>
-				<Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
-					<Stack spacing={2}>
-						<MountainAutocomplete
-							options={equipment}
-							selectedValue={selectedEquipment}
-							setSelectedValue={setSelectedEquipment}
-							label="Equipment"
-						/>
-						<PatrollerAutocomplete />
-						<TextField
-							label="Log"
-							value={log}
-							onChange={(e) => setLog(e.target.value)}
-							required
-							multiline
-						/>
-						<Button type="submit" variant="contained">
-							Add Equipment Log
-						</Button>
-					</Stack>
-				</Box>
-			</CardContent>
-		</Card>
-	);
-};
-
-export { AddEquipmentForm, AddEquipmentLogForm };
+export default AddEquipmentForm;

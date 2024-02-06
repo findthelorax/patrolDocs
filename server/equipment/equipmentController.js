@@ -21,7 +21,6 @@ exports.getEquipment = async (req, res) => {
 };
 
 exports.createEquipment = async (req, res) => {
-    console.log("🚀 ~ file: equipmentController.js:23 ~ exports.createEquipment= ~ req.body:", req.body)
     const equipment = new Equipment({
         ...req.body,
         mountain: req.params.mountainId,

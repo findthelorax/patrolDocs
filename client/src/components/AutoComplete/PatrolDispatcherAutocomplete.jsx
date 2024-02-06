@@ -4,7 +4,7 @@ import { DateContext } from '../../contexts/DateContext';
 import { Autocomplete, TextField, Dialog, DialogTitle, DialogActions, Button } from '@mui/material';
 
 const PatrolDispatcherAutocomplete = () => {
-	const { patrollers, patrolDispatcher, fetchPatrolDispatcherForDate, setPatrolDispatcher } =
+	const { patrollers, fetchPatrolDispatcherForDate, currentDayPatrolDispatcher, setPatrolDispatcher } =
 		useContext(MountainContext);
 	const { selectedDate } = useContext(DateContext);
 	const [selectedDispatcher, setSelectedDispatcher] = useState(null);
@@ -17,7 +17,7 @@ const PatrolDispatcherAutocomplete = () => {
 			if (existingDispatcher) {
 				setOpenConfirmDialog(true);
 			} else {
-				setPatrolDispatcher({ ...newValue, date: selectedDate });
+				setPatrolDispatcher({ ...newValue});
 			}
 		} else {
 			setSelectedDispatcher(null);
@@ -25,33 +25,14 @@ const PatrolDispatcherAutocomplete = () => {
 	};
 
 	const handleConfirmChange = () => {
-		setPatrolDispatcher({ ...selectedDispatcher, date: selectedDate });
+		setPatrolDispatcher({ ...selectedDispatcher});
 		setOpenConfirmDialog(false);
 	};
 
 	const handleCancelChange = () => {
-		setSelectedDispatcher(patrolDispatcher);
+		setPatrolDispatcher(currentDayPatrolDispatcher);
 		setOpenConfirmDialog(false);
 	};
-
-	useEffect(() => {
-		if (patrollers.includes(patrolDispatcher)) {
-			setSelectedDispatcher(patrolDispatcher);
-		} else {
-			setSelectedDispatcher(null);
-		}
-	}, [patrolDispatcher, patrollers]);
-
-	useEffect(() => {
-		const fetchDispatcher = async () => {
-			const existingDispatcher = await fetchPatrolDispatcherForDate(selectedDate);
-			if (existingDispatcher && patrollers.some(patroller => patroller._id === existingDispatcher.patroller._id)) {
-				setSelectedDispatcher(existingDispatcher.patroller);
-			}
-		};
-
-		fetchDispatcher();
-	}, [selectedDate, fetchPatrolDispatcherForDate, patrollers]);
 
 	return (
 		<>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { AddAidRoomForm, AddAidRoomLogForm } from '../components/AidRooms/AidRoomForm';
+import AddAidRoomForm from '../components/AidRooms/AidRoomForm';
+import AddAidRoomLogForm from '../components/AidRooms/AidRoomLogForm';
 import AidRoomsTable from '../components/AidRooms/AidRoomsTable';
 
 function FirstAidRooms() {

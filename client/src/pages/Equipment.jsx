@@ -1,7 +1,8 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import EquipmentTable from '../components/Equipment/EquipmentTable';
-import { AddEquipmentForm, AddEquipmentLogForm } from '../components/Equipment/EquipmentForm';
+import AddEquipmentForm from '../components/Equipment/EquipmentForm';
+import AddEquipmentLogForm from '../components/Equipment/EquipmentLogForm';
 
 function Equipment() {
     return (

@@ -3,12 +3,12 @@ import { Grid } from '@mui/material';
 import AddMountainForm from '../components/Mountain/MountainForm';
 import AddAreaForm from '../components/Areas/AreaForm';
 import AddTrailForm from '../components/Trails/TrailsForm';
-import { AddEquipmentForm } from '../components/Equipment/EquipmentForm';
-import { AddHutForm } from '../components/Huts/HutsForm';
+import AddEquipmentForm from '../components/Equipment/EquipmentForm';
+import AddHutForm from '../components/Huts/HutsForm';
 import { AddLiftForm } from '../components/Lifts/LiftsForm';
 import AddPatrollerForm from '../components/Patrollers/PatrollersForm';
 import { AddLodgeForm } from '../components/Lodges/LodgesForm';
-import { AddAidRoomForm } from '../components/AidRooms/AidRoomForm';
+import AddAidRoomForm from '../components/AidRooms/AidRoomForm';
 
 function Settings() {
 	return (

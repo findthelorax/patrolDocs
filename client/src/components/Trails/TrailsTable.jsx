@@ -15,6 +15,7 @@ const TrailsTable = () => {
 		{
 			headerName: 'Area',
 			field: 'area',
+			sort: 'asc',
 			valueGetter: (params) => areaMap[params.data.area],
 		},
 		{ headerName: 'Difficulty', field: 'difficulty' },

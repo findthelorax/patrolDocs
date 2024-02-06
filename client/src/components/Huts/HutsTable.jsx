@@ -26,6 +26,11 @@ const HutsTable = () => {
             field: "paperwork",
             valueGetter: params => params.data.paperwork.join(', ')
         },
+        {
+			headerName: 'Location',
+			field: 'coordinates',
+			valueFormatter: (params) => (params.value ? `${params.value.lat}, ${params.value.lng}` : 'No coordinates'),
+		},
     ];
 
     return (

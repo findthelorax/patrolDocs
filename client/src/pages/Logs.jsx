@@ -6,9 +6,9 @@ import HutLogsTable from '../components/Huts/HutLogsTable';
 import EquipmentLogsTable from '../components/Equipment/EquipmentLogsTable';
 import AidRoomLogsTable from '../components/AidRooms/AidRoomLogsTable';
 import { AddLineCheckForm } from '../components/Lifts//LiftsForm';
-import { AddHutLogForm } from '../components/Huts/HutsForm';
-import { AddEquipmentLogForm } from '../components/Equipment/EquipmentForm';
-import { AddAidRoomLogForm } from '../components/AidRooms/AidRoomForm';
+import AddHutLogForm from '../components/Huts/HutLogForm';
+import AddEquipmentLogForm from '../components/Equipment/EquipmentForm';
+import AddAidRoomLogForm from '../components/AidRooms/AidRoomForm';
 
 function Logs() {
 	return (

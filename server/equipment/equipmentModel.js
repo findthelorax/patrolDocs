@@ -4,9 +4,9 @@ const LocationSchema = require('../location/locationModel');
 
 const EquipmentLogSchema = new Schema({
     equipment: { type: Schema.Types.ObjectId, ref: 'Equipment' },
-    checked: { type: Boolean, default: false },
     checkedOn: Date,
     checkedBy: { type: Schema.Types.ObjectId, ref: 'Patroller' },
+    notes: String,
 });
 
 const EquipmentLog = mongoose.model('EquipmentLog', EquipmentLogSchema);

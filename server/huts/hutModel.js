@@ -18,6 +18,7 @@ const HutLogSchema = new mongoose.Schema({
 			cleanedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Patroller' },
 		},
 	],
+	notes: String,
 });
 
 const HutSchema = new mongoose.Schema({

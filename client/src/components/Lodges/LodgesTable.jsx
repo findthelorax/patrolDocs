@@ -28,6 +28,11 @@ const LodgesTable = () => {
             field: "equipment",
             valueGetter: params => params.data.equipment.map(equip => `${equip.type} #${equip.idNumber}`).join(', ')
         },
+        {
+			headerName: 'Location',
+			field: 'coordinates',
+			valueFormatter: (params) => (params.value ? `${params.value.lat}, ${params.value.lng}` : 'No coordinates'),
+		},
     ];
 
     return (

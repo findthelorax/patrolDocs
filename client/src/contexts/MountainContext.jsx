@@ -18,7 +18,6 @@ export const MountainProvider = ({ children }) => {
 	const [selectedMountain, setSelectedMountain] = useState(null);
 	const { selectedDate } = useContext(DateContext);
 	const [currentDayPatrolDispatcher, setCurrentDayPatrolDispatcher] = useState(null);
-	const [patrolDispatcher] = useState({});
 
 	const api = {
 		mountainApi,
@@ -221,10 +220,13 @@ export const MountainProvider = ({ children }) => {
 				try {
 					const response = await patrollerApi.getPatrolDispatcherForDate(selectedMountain._id, formattedDate);
 					console.log("🚀 ~ file: MountainContext.jsx:223 ~ fetchPatrolDispatcherForDate response:", response)
-					setCurrentDayPatrolDispatcher(response);
+					if (response.patroller) {
+						setCurrentDayPatrolDispatcher(response);
+					} else {
+						setCurrentDayPatrolDispatcher('');
+					}
 				} catch (error) {
 					if (error.response && error.response.status === 404) {
-						console.log('No patrol dispatcher found for this date');
 						console.log(error.response.data.message);
 						setCurrentDayPatrolDispatcher(null);
 					} else {
@@ -353,7 +355,6 @@ export const MountainProvider = ({ children }) => {
 				fetchPatrollers,
 				currentDayPatrolDispatcher,
 				fetchPatrolDispatcherForDate,
-				patrolDispatcher,
 				setPatrolDispatcher,
 				equipment,
 				fetchEquipment,

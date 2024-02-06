@@ -15,6 +15,9 @@ function Dashboard() {
 			<Grid item xs={12} sm={6}>
 				Incident Logs
 				Area Trail Checks
+				Sort Trails, etc by Area(dropdown/hide in agGrid?)
+				Open/Close a whole area
+				
 
 			</Grid>
 		</Grid>

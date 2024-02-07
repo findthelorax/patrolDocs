@@ -3,8 +3,8 @@ import { Autocomplete, TextField } from '@mui/material';
 import { MountainContext } from '../../contexts/MountainContext';
 import { SnackbarContext } from '../../contexts/SnackbarContext';
 
-const AppBarMountainAutocomplete = ({ selectedMountain, setSelectedMountain}) => {
-	const { mountains } = useContext(MountainContext);
+const AppBarMountainAutocomplete = () => {
+	const { mountains, selectedMountain, setSelectedMountain } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleMountainChange = (event, newValue) => {

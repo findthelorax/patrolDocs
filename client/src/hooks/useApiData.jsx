@@ -23,5 +23,5 @@ export const useApiData = (apiFunc, id) => {
         }
     }, [id, fetchData]);
 
-    return [data, isLoading, fetchData, error];
+    return [data, isLoading, fetchData, error, setData];
 };

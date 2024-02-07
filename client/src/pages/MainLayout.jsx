@@ -1,26 +1,16 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import SearchAppBar from '../components/Dashboard/AppBar/AppBar';
 import { PermanentDrawerLeft } from '../components/Dashboard/Drawer/Drawer';
 import Footer from '../components/Dashboard/Footer/Footer';
 import AppRoutes from './AppRoutes';
-import { SnackbarContext } from '../contexts/SnackbarContext'; // Import SnackbarContext
 
 function MainLayout() {
 	const theme = useTheme();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-	 // eslint-disable-next-line
-	const { openSnackbar, setOpenSnackbar, snackbarMessage, setSnackbarMessage } = useContext(SnackbarContext);
 
 	const handleDrawerToggle = () => {
 		setIsDrawerOpen(!isDrawerOpen);
-	};
-
-	const handleCloseSnackbar = (event, reason) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-		setOpenSnackbar(false);
 	};
 
 	const drawerWidth = 240;

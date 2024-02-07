@@ -4,6 +4,8 @@ const PORT = process.env.REACT_APP_BACKEND_PORT;
 
 export const api = {
 	async createLodge(mountainId, lodge) {
+		console.log("🚀 ~ file: LodgeAPI.jsx:7 ~ createLodge ~ lodge:", lodge)
+		console.log("🚀 ~ file: LodgeAPI.jsx:7 ~ createLodge ~ mountainId:", mountainId)
 		try {
 			const response = await axios.post(`${IP}:${PORT}/mountain/${mountainId}/lodge`, lodge);
 			return response.data;

@@ -11,7 +11,7 @@ const LodgesTable = () => {
     const areaMap = areas.reduce((map, area) => ({ ...map, [area._id]: area.name }), {});
     
     const columnDefs = [
-        { headerName: "Name", field: "name" },
+        { headerName: "Lodge Name", field: "name" },
         { 
             headerName: "Area", 
             field: "area",
@@ -22,6 +22,10 @@ const LodgesTable = () => {
             field: "status",
             cellRenderer: 'statusToggleButton',
             cellRendererParams: { type: 'lodge' },
+        },
+        { 
+            headerName: "Hours", 
+            field: "hours",
         },
         {
             headerName: "Equipment", 

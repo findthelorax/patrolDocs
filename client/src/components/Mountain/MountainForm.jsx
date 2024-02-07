@@ -8,7 +8,7 @@ const AddMountainForm = () => {
 	const nameRef = useRef();
     const cityRef = useRef();
 	const [state, setState] = useState(null);
-	const { fetchMountains, apis } = useContext(MountainContext);
+	const { fetchMountains, api } = useContext(MountainContext);
 	const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(SnackbarContext);
 
 	const handleSubmit = async (event) => {
@@ -23,7 +23,7 @@ const AddMountainForm = () => {
 			},
 		};
 		try {
-			await apis.mountainApi.createMountain(mountain);
+			await api.mountainApi.createMountain(mountain);
             nameRef.current.value = '';
             cityRef.current.value = '';
 			setState(null);

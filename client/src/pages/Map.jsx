@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-// import MountainMap from '../components/Mountain/MountainMap';
+import MountainMap from '../components/Mountain/MountainMap';
 // import MountainMapBox from '../components/Mountain/MountainMapBox';
 // import MountainMapGoogle from '../components/Mountain/MountainMap';
 
@@ -10,9 +10,9 @@ function Map() {
 			{/* <Grid item xs={12}>
 				<MountainMapBox />
 			</Grid> */}
-			{/* <Grid item xs={12}>
+			<Grid item xs={12}>
 				<MountainMap />
-			</Grid> */}
+			</Grid>
 			{/* <Grid item xs={12}>
 				<MountainMapGoogle />
 			</Grid> */}

@@ -8,6 +8,7 @@ import { api as mountainApi } from './MountainAPI';
 import { api as paperworkApi } from './PaperworkAPI';
 import { api as patrollerApi } from './PatrollerAPI';
 import { api as trailApi } from './TrailAPI';
+import { api as dispatcherApi } from './DispatcherAPI';
 
 export const apis = {
     aidRoomApi,
@@ -19,5 +20,6 @@ export const apis = {
     mountainApi,
     paperworkApi,
     patrollerApi,
+    dispatcherApi,
     trailApi
 };

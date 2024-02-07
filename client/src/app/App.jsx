@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MountainProvider } from '../contexts/MountainContext';
-// import { DateProvider } from '../contexts/DateContext';
+import { DateProvider } from '../contexts/DateContext';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { lightTheme, darkTheme } from '../theme/theme';
@@ -20,7 +20,7 @@ function App() {
 			<CssBaseline />
 			<SnackbarProvider>
 				<ThemeContext.Provider value={{ darkMode, setDarkMode }}>
-					{/* <DateProvider> */}
+					<DateProvider>
 						<MountainProvider>
 							<Router>
 								<Routes>
@@ -28,7 +28,7 @@ function App() {
 								</Routes>
 							</Router>
 						</MountainProvider>
-					{/* </DateProvider> */}
+					</DateProvider>
 				</ThemeContext.Provider>
 			</SnackbarProvider>
 		</ThemeProvider>

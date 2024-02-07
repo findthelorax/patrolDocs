@@ -9,13 +9,13 @@ function StatusToggleButton({ value, data, type }) {
 		const updatedItem = { ...data, status: data.status === 'Open' ? 'Closed' : 'Open' };
 		try {
 			if (type === 'lift') {
-				await context.api.liftApi.updateLift(data.mountain, data._id, updatedItem);
+				await context.apis.liftApi.updateLift(data.mountain, data._id, updatedItem);
 				context.fetchLifts();
 			} else if (type === 'trail') {
-				await context.api.trailApi.updateTrail(data.mountain, data._id, updatedItem);
+				await context.apis.trailApi.updateTrail(data.mountain, data._id, updatedItem);
 				context.fetchTrails();
 			} else if (type === 'lodge') {
-				await context.api.lodgeApi.updateLodge(data.mountain, data._id, updatedItem);
+				await context.apis.lodgeApi.updateLodge(data.mountain, data._id, updatedItem);
 				context.fetchLodges();
 			}
 		} catch (error) {

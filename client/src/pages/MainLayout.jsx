@@ -8,6 +8,7 @@ import AppRoutes from './AppRoutes';
 function MainLayout() {
 	const theme = useTheme();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+	 // eslint-disable-next-line
 
 	const handleDrawerToggle = () => {
 		setIsDrawerOpen(!isDrawerOpen);

@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import { Snackbar, Alert } from '@mui/material';
-import { alpha } from '@mui/system';
+// import { alpha } from '@mui/system';
 
 export const SnackbarContext = createContext();
 
@@ -29,10 +29,11 @@ export const SnackbarProvider = ({ children }) => {
                     severity={snackbarSeverity} 
                     variant="filled"
                     sx={{ 
-                        bgcolor: snackbarSeverity === 'success' ? alpha('rgb(144, 238, 144)', 0.8) : alpha('rgb(255, 204, 204)', 0.8), 
-                        borderColor: snackbarSeverity === 'success' ? 'darkgreen' : 'darkred',
-                        borderWidth: '1px',
-                        borderStyle: 'solid'
+                        bgcolor: snackbarSeverity === 'success' ? 'rgb(144, 238, 144)' : 'rgb(255, 204, 204)', 
+                        borderColor: snackbarSeverity === 'success' ? '#00ff00' : '#ff0000',
+                        borderWidth: '2px',
+                        borderStyle: 'solid',
+                        color: 'black'
                     }}
                 >
                     {snackbarMessage}

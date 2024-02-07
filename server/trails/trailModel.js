@@ -8,7 +8,8 @@ const TrailLogSchema = new mongoose.Schema({
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     date: { type: Date, default: Date.now, index: true },
     status: { type: String, required: true, enum: ['Open', 'Closed', 'Unknown'], default: 'Unknown'},
-    patrollers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Patroller' }],
+    openingPatroller: { type: mongoose.Schema.Types.ObjectId, ref: 'Patroller' },
+    closingPatroller: { type: mongoose.Schema.Types.ObjectId, ref: 'Patroller' },
     condition: { type: String, enum: Object.values(Conditions) },
     comments: String,
 });

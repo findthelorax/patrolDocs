@@ -9,6 +9,7 @@ const liftRoutes = require('./lifts/liftRoutes');
 const trailRoutes = require('./trails/trailRoutes');
 const aidRoomRoutes = require('./aidRooms/aidRoomRoutes');
 const patrollerRoutes = require('./patrollers/patrollerRoutes');
+const dispatcherRoutes = require('./dispatchers/dispatcherRoutes');
 
 const incidentLogRoutes = require('./incidents/incidentLogRoutes');
 const equipmentRoutes = require('./equipment/equipmentRoutes');
@@ -47,6 +48,7 @@ app.use(incidentLogRoutes);
 app.use(paperworkRoutes);
 
 app.use(patrollerRoutes);
+app.use(dispatcherRoutes);
 
 app.listen(BPORT, () => {
 	console.log(`Server is running on ${IP}:${BPORT}`);
